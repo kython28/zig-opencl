@@ -10,16 +10,16 @@ Additionally, this wrapper was created with minimal abstraction. It is primarily
 
 ### Table of Contents
 
-- [Functions for Platform Operations](docs/platform.md)
-- [Functions for Creating and Managing Devices](docs/device.md)
-- [Functions for Context Management](docs/context.md)
-- [Functions for Event Management](docs/event.md)
-- [Functions for Command Queues](docs/command_queue.md)
-- [Functions for Program Management](docs/program.md)
-- [Functions for Kernel Management](docs/kernel.md)
-- [Utility Functions](docs/utils.md)
-- [Error Handling](docs/errors_handling.md)
-- [Examples](docs/examples.md)
+- [Functions for Platform Operations](platform.md)
+- [Functions for Creating and Managing Devices](device.md)
+- [Functions for Context Management](context.md)
+- [Functions for Event Management](event.md)
+- [Functions for Command Queues](command_queue.md)
+- [Functions for Program Management](program.md)
+- [Functions for Kernel Management](kernel.md)
+- [Utility Functions](utils.md)
+- [Error Handling](errors_handling.md)
+- [Examples](examples.md)
 
 
 ## Note ⚠️
