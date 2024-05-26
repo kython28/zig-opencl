@@ -8,6 +8,20 @@ Normally, to use this wrapper effectively, you will need to refer to the aforeme
 
 Additionally, this wrapper was created with minimal abstraction. It is primarily limited to calling OpenCL functions, performing some validations such as function return checks to identify errors, and a few other minor tasks.
 
+### Table of Contents
+
+- [Functions for Platform Operations](https://github.com/kython28/zig-opencl/blob/3e6edf8d0c0d1aba186f3f02681d9494b745de47/docs/platform.md)
+- [Functions for Creating and Managing Devices](https://github.com/kython28/zig-opencl/blob/3e6edf8d0c0d1aba186f3f02681d9494b745de47/docs/device.md)
+- [Functions for Context Management](docs/context.md)
+- [Functions for Event Management](docs/event.md)
+- [Functions for Command Queues](docs/command_queue.md)
+- [Functions for Program Management](docs/program.md)
+- [Functions for Kernel Management](docs/kernel.md)
+- [Utility Functions](docs/utils.md)
+- [Error Handling](docs/errors_handling.md)
+- [Examples](docs/examples.md)
+
+
 ## Note ⚠️
 
 This wrapper does not include all existing OpenCL functions. It was specifically created for use in my projects, and therefore, only includes the functions I frequently use. If you need a function that is not included, please open an issue, and I will be happy to add it. Alternatively, if you would like to collaborate, feel free to create a pull request, and I will review and include it in the repository.
