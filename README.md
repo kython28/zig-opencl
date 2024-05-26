@@ -64,7 +64,7 @@ zig build
 This setup will allow you to use the `zig-opencl` wrapper in your project.
 
 ### How to Use
-This OpenCL wrapper for Zig leverages several features of the Zig programming language, such as error handling and slices, to provide a safer and easier-to-use interface compared to the traditional C approach. For detailed documentation, please refer to the [Documentation](https://github.com/kython28/zig-opencl/docs).
+This OpenCL wrapper for Zig leverages several features of the Zig programming language, such as error handling and slices, to provide a safer and easier-to-use interface compared to the traditional C approach. For detailed documentation, please refer to the [Documentation](https://github.com/kython28/zig-opencl/blob/3e6edf8d0c0d1aba186f3f02681d9494b745de47/docs/introduction.md) .
 
 ### Note ⚠️
 This wrapper does not include all existing OpenCL functions. It was specifically created for use in my projects, and therefore, only includes the functions I frequently use. If you need a function that is not included, please open an issue, and I will be happy to add it. Alternatively, if you would like to collaborate, feel free to create a pull request, and I will review and include it in the repository.
