@@ -10,8 +10,8 @@ Additionally, this wrapper was created with minimal abstraction. It is primarily
 
 ### Table of Contents
 
-- [Functions for Platform Operations](https://github.com/kython28/zig-opencl/blob/3e6edf8d0c0d1aba186f3f02681d9494b745de47/docs/platform.md)
-- [Functions for Creating and Managing Devices](https://github.com/kython28/zig-opencl/blob/3e6edf8d0c0d1aba186f3f02681d9494b745de47/docs/device.md)
+- [Functions for Platform Operations](docs/platform.md)
+- [Functions for Creating and Managing Devices](docs/device.md)
 - [Functions for Context Management](docs/context.md)
 - [Functions for Event Management](docs/event.md)
 - [Functions for Command Queues](docs/command_queue.md)
