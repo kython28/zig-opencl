@@ -11,10 +11,10 @@ pub const cl_context = opencl.cl_context;
 
 pub const pfn_notify_callback = fn (errinfo: [*c]const u8, private_info: ?*const anyopaque, cb: usize, user_data: ?*anyopaque) callconv(.C) void;
 
-const device_id = opencl.cl_device_id;
+const cl_device_id = opencl.cl_device_id;
 
 pub fn create(
-    properties: ?[]const cl_context_properties, devices: []const device_id,
+    properties: ?[]const cl_context_properties, devices: []const cl_device_id,
     pfn_notify: ?*const pfn_notify_callback, 
     user_data: ?*anyopaque
 )  errors.opencl_error!cl_context {
@@ -32,7 +32,7 @@ pub fn create(
 
     const errors_arr = .{
         "invalid_value", "out_of_host_memory", "invalid_platform", "device_not_available",
-        "out_of_resources"
+        "out_of_resources", "invalid_property"
     };
     return errors.translate_opencl_error(errors_arr, ret);
 }

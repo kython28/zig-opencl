@@ -27,7 +27,7 @@ pub fn create(
     if (ret == opencl.CL_SUCCESS) return mem;
 
     const errors_arr = .{
-        "invalid_context", "invalid_property", "invalid_value", "invalid_buffer_size",
+        "invalid_context", "invalid_value", "invalid_buffer_size",
         "invalid_host_ptr", "mem_object_allocation_failure", "out_of_resources",
         "out_of_host_memory"
     };
