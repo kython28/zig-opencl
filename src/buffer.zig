@@ -92,7 +92,7 @@ pub fn write_rect(
     command_queue: cl_command_queue, buffer: cl_mem, blocking_write: bool,
     buffer_origin: []const usize, host_origin: []const usize, region: []const usize,
     buffer_row_pitch: usize, buffer_slice_pitch: usize, host_row_pitch: usize,
-    host_slice_pitch: usize, ptr: *anyopaque, event_wait_list: ?[]const cl_event,
+    host_slice_pitch: usize, ptr: *const anyopaque, event_wait_list: ?[]const cl_event,
     event: ?*cl_event
 ) errors.opencl_error!void {
     if (buffer_origin.len != 3 or host_origin.len != 3 or region.len != 3){
