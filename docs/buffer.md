@@ -246,9 +246,8 @@ The function uses Zig's error handling features to manage potential OpenCL error
 
 The `fill` function fills a buffer with a specified pattern. This function is useful for initializing or resetting the contents of a buffer in OpenCL.
 
-zig
-
-`pub fn fill(
+```zig
+pub fn fill(
     command_queue: cl_command_queue,
     buffer: cl_mem,
     pattern: *const anyopaque,
@@ -257,7 +256,8 @@ zig
     size: usize,
     event_wait_list: ?[]const cl_event,
     event: ?*cl_event
-) errors.opencl_error!void;` 
+) errors.opencl_error!void;
+```
 
 ### Parameters
 
