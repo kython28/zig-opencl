@@ -1,5 +1,3 @@
-# Device
-
 ## Querying Devices
 
 ### Description

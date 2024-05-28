@@ -1,5 +1,3 @@
-# Buffer
-
 ## Creating a Buffer Object
 
 ### Description

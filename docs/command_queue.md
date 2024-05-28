@@ -1,5 +1,3 @@
-# Command queue
-
 ## Create a command queue
 
 Creates a command queue on a specific device within a context. Command queues are used to schedule the execution of kernels and the transfer of data.

@@ -1,5 +1,3 @@
-# Platform
-
 ## Querying Platform Info
 
 ### Description

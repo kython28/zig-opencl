@@ -1,5 +1,3 @@
-# Context
-
 ## Create a context
 
 ### Description
