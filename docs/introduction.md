@@ -18,8 +18,6 @@ Additionally, this wrapper was created with minimal abstraction. It is primarily
 - [Functions for Program Management](program.md)
 - [Functions for Kernel Management](kernel.md)
 - [Functions for Buffer Management](buffer.md)
-- [Utility Functions](utils.md)
-- [Error Handling](errors_handling.md)
 - [Examples](examples.md)
 
 
