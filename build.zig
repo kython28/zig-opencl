@@ -10,13 +10,13 @@ pub fn build(b: *std.Build) void {
     options.addOption([]const u8, "opencl_version", opencl_version);
 
     const module = b.addModule("opencl", .{
-        .root_source_file = .{
-            .path = "src/opencl.zig"
-        },
+        .root_source_file = b.path("src/opencl.zig"),
         .target = target,
         .optimize = optimize
     });
-    module.addIncludePath(.{ .path = "/usr/include/" });
+    module.addIncludePath(.{
+        .cwd_relative = "/usr/include/"
+    });
     module.linkSystemLibrary("OpenCL", .{
         .needed = true
     });

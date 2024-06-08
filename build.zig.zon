@@ -1,8 +1,8 @@
 .{
     .name = "zig-opencl",
-    .version = "0.1.1",
+    .version = "0.2.0",
 
-    .minimum_zig_version = "0.12.0",
+    .minimum_zig_version = "0.13.0",
 
     .paths = .{
         "",
