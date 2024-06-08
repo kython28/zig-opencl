@@ -3,7 +3,7 @@ A modern OpenCL wrapper for Zig language, providing easy-to-use interfaces for O
 
 ## Getting Started
 ### Prerequisites
--   Zig 0.12.0 or higher
+-   Zig 0.13.0 or higher
 -   OpenCL 1.0 or higher
 
 ### Installation
@@ -59,6 +59,7 @@ pub fn build(b: *std.Build) void {
 4. **Build the project:**
 Now you can build your project using Zig:
 ```bash
+zig fetch --save zig-opencl
 zig build
 ```
 This setup will allow you to use the `zig-opencl` wrapper in your project.
