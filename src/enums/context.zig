@@ -14,4 +14,4 @@ const context_info_definitions: []const [:0]const u8 = &[_][:0]const u8 {
     "num_devices", "CL_CONTEXT_NUM_DEVICES"
 };
 
-pub const context_info = utils.build_enum(u32, context_properties_definitions);
+pub const context_info = utils.build_enum(u32, context_info_definitions);
