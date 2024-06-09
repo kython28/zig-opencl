@@ -64,7 +64,7 @@ pub fn create_from_type(
 pub fn get_info(context: cl_context, param_name: enums.context_info,
     param_value_size: usize, param_value: ?*anyopaque,
     param_value_size_ret: ?*usize) errors.opencl_error!void {
-    const ret: i32 = opencl.clGetDeviceInfo(
+    const ret: i32 = opencl.clGetContextInfo(
         context, @intFromEnum(param_name), param_value_size, param_value,
         param_value_size_ret
     );
