@@ -6,6 +6,7 @@ const std = @import("std");
 pub const enums = @import("enums/buffer.zig");
 const errors = @import("errors.zig");
 
+pub const cl_buffer_create_type = opencl.cl_buffer_create_type;
 pub const cl_map_flags = opencl.cl_map_flags;
 pub const cl_mem_flags = opencl.cl_mem_flags;
 pub const cl_mem = opencl.cl_mem;
@@ -13,6 +14,11 @@ pub const cl_mem = opencl.cl_mem;
 const cl_command_queue = opencl.cl_command_queue;
 const cl_context = opencl.cl_context;
 const cl_event = opencl.cl_event;
+
+pub const cl_buffer_region = extern struct {
+    origin: usize,
+    size: usize
+};
 
 pub fn create(
     context: cl_context,
@@ -30,6 +36,26 @@ pub fn create(
         "invalid_context", "invalid_value", "invalid_buffer_size",
         "invalid_host_ptr", "mem_object_allocation_failure", "out_of_resources",
         "out_of_host_memory"
+    };
+    return errors.translate_opencl_error(errors_arr, ret);
+}
+
+pub fn create_sub_buffer(
+    buffer: cl_mem,
+    flags: cl_mem_flags,
+    buffer_create_type: enums.buffer_create_type,
+    buffer_create_info: *anyopaque
+) errors.opencl_error!cl_mem {
+    var ret: i32 = undefined;
+    const mem: cl_mem = opencl.clCreateBuffer(
+        buffer, flags, @intFromEnum(buffer_create_type), buffer_create_info, &ret
+    );
+    if (ret == opencl.CL_SUCCESS) return mem;
+
+    const errors_arr = .{
+        "invalid_mem_object", "invalid_value", "mem_object_allocation_failure",
+        "out_of_resources", "out_of_host_memory", "invalid_buffer_size",
+        "misaligned_sub_buffer_offset"
     };
     return errors.translate_opencl_error(errors_arr, ret);
 }

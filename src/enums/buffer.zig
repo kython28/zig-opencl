@@ -24,3 +24,9 @@ const mem_flags_definitions: []const [:0]const u8 =  &[_][:0]const u8{
 };
 
 pub const mem_flags = utils.build_enum(u64, mem_flags_definitions);
+
+const buffer_create_type_definitions: []const [:0]const u8 =  &[_][:0]const u8{
+    "region", "CL_BUFFER_CREATE_TYPE_REGION"
+};
+
+pub const buffer_create_type = utils.build_enum(u32, buffer_create_type_definitions);
