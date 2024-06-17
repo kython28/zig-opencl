@@ -24,10 +24,10 @@ pub fn create_with_properties(
     }
 
     var ret: i32 = undefined;
-    const command_queue: cl_command_queue = opencl.clCreateCommandQueueWithProperties(
+    const command_queue: ?cl_command_queue = opencl.clCreateCommandQueueWithProperties(
         context, device, properties_ptr, &ret
     );
-    if (ret == opencl.CL_SUCCESS) return command_queue;
+    if (ret == opencl.CL_SUCCESS) return command_queue.?;
 
     const errors_arr = .{
         "invalid_value", "invalid_context", "invalid_device", "invalid_queue_properties",
@@ -41,10 +41,10 @@ pub fn create(
     properties: cl_command_queue_properties
 ) errors.opencl_error!cl_command_queue {
     var ret: i32 = undefined;
-    const command_queue: cl_command_queue = opencl.clCreateCommandQueue(
+    const command_queue: ?cl_command_queue = opencl.clCreateCommandQueue(
         context, device, properties, &ret
     );
-    if (ret == opencl.CL_SUCCESS) return command_queue;
+    if (ret == opencl.CL_SUCCESS) return command_queue.?;
 
     const errors_arr = .{
         "invalid_value", "invalid_context", "invalid_device", "invalid_queue_properties",

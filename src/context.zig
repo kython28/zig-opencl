@@ -24,11 +24,11 @@ pub fn create(
     }
 
     var ret: i32 = undefined;
-    const context: cl_context = opencl.clCreateContext(
+    const context: ?cl_context = opencl.clCreateContext(
         properties_ptr, @intCast(devices.len), devices.ptr, pfn_notify, user_data,
         &ret
     );
-    if (ret == opencl.CL_SUCCESS) return context;
+    if (ret == opencl.CL_SUCCESS) return context.?;
 
     const errors_arr = .{
         "invalid_value", "out_of_host_memory", "invalid_platform", "device_not_available",
@@ -48,11 +48,11 @@ pub fn create_from_type(
     }
 
     var ret: i32 = undefined;
-    const context: cl_context = opencl.clCreateContextFromType(
+    const context: ?cl_context = opencl.clCreateContextFromType(
         properties_ptr, @intFromEnum(device_type), pfn_notify, user_data,
         &ret
     );
-    if (ret == opencl.CL_SUCCESS) return context;
+    if (ret == opencl.CL_SUCCESS) return context.?;
 
     const errors_arr = .{
         "invalid_value", "out_of_host_memory", "invalid_platform", "device_not_available",

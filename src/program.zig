@@ -29,11 +29,11 @@ pub fn create_with_source(
     }
 
     var ret: i32 = undefined;
-    const program: cl_program = opencl.clCreateProgramWithSource(
+    const program: ?cl_program = opencl.clCreateProgramWithSource(
         context, @intCast(strings.len), tmp_array.ptr, tmp_lengths.ptr,
         &ret
     );
-    if (ret == opencl.CL_SUCCESS) return program;
+    if (ret == opencl.CL_SUCCESS) return program.?;
 
     const errors_arr = .{
         "invalid_context", "invalid_value", "out_of_resources",

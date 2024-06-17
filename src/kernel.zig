@@ -10,10 +10,10 @@ const cl_event = opencl.cl_event;
 
 pub fn create(program: cl_program, kernel_name: []const u8) errors.opencl_error!cl_kernel {
     var ret: i32 = undefined;
-    const kernel: cl_kernel = opencl.clCreateKernel(
+    const kernel: ?cl_kernel = opencl.clCreateKernel(
         program, kernel_name.ptr, &ret
     );
-    if (ret == opencl.CL_SUCCESS) return kernel;
+    if (ret == opencl.CL_SUCCESS) return kernel.?;
 
     const errors_arr = .{
         "invalid_program", "invalid_program_executable", "invalid_kernel_name",

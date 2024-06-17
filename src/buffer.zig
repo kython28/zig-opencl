@@ -27,10 +27,10 @@ pub fn create(
     host_ptr: ?*anyopaque
 ) errors.opencl_error!cl_mem {
     var ret: i32 = undefined;
-    const mem: cl_mem = opencl.clCreateBuffer(
+    const mem: ?cl_mem = opencl.clCreateBuffer(
         context, flags, size, host_ptr, &ret
     );
-    if (ret == opencl.CL_SUCCESS) return mem;
+    if (ret == opencl.CL_SUCCESS) return mem.?;
 
     const errors_arr = .{
         "invalid_context", "invalid_value", "invalid_buffer_size",
@@ -47,10 +47,10 @@ pub fn create_sub_buffer(
     buffer_create_info: *anyopaque
 ) errors.opencl_error!cl_mem {
     var ret: i32 = undefined;
-    const mem: cl_mem = opencl.clCreateBuffer(
+    const mem: ?cl_mem = opencl.clCreateBuffer(
         buffer, flags, @intFromEnum(buffer_create_type), buffer_create_info, &ret
     );
-    if (ret == opencl.CL_SUCCESS) return mem;
+    if (ret == opencl.CL_SUCCESS) return mem.?;
 
     const errors_arr = .{
         "invalid_mem_object", "invalid_value", "mem_object_allocation_failure",
