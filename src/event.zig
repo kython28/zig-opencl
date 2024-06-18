@@ -21,7 +21,7 @@ pub fn create_user_event(context: cl_context) errors.opencl_error!cl_event {
 }
 
 pub fn set_user_event_status(event: cl_event, status: enums.execution_status) errors.opencl_error!void {
-    const ret: i32 = opencl.clCreateUserEvent(event, @intFromEnum(status));
+    const ret: i32 = opencl.clSetUserEventStatus(event, @intFromEnum(status));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
