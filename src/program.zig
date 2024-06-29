@@ -42,6 +42,87 @@ pub fn create_with_source(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
+pub fn compile(
+    allocator: std.mem.Allocator, program: cl_program, devices: []const cl_device_id,
+    options: ?[]const u8, input_headers: ?[]cl_program,
+    header_include_names: ?[]const []const u8,
+    callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
+) !void {
+    if (@intFromBool(input_headers != null)^@intFromBool(header_include_names != null)) {
+        return errors.opencl_error.invalid_value;
+    }
+
+    var options_ptr: ?[*]const u8 = null;
+    if (options) |v| {
+        options_ptr = v.ptr;
+    }
+
+    var tmp_array: ?[][*c]const u8 = null;
+    var tmp_array_ptr: ?[*][*c]const u8 = null;
+    var input_headers_ptr: ?[*]cl_program = null;
+    var input_headers_len: u32 = 0;
+    if (input_headers) |v| {
+        input_headers_ptr = v.ptr;
+        input_headers_len = @intCast(v.len);
+    }
+
+    if (header_include_names) |v| {
+        tmp_array = try allocator.alloc([*c]const u8, v.len);
+        tmp_array_ptr = tmp_array.?.ptr;
+
+        for (tmp_array, v) |*d, s| {
+            d.* = @ptrCast(s.ptr);
+        }
+    }
+    defer {
+        if (header_include_names) |_| {
+            allocator.free(tmp_array);
+        }
+    }
+
+    const ret: i32 = opencl.clCompileProgram(
+        program, @intCast(devices.len), devices.ptr, options_ptr,
+        input_headers_len, input_headers_ptr,
+        tmp_array_ptr, callback, user_data
+    );
+    if (ret == opencl.CL_SUCCESS) return;
+
+    const errors_arr = .{
+        "invalid_program", "invalid_value", "invalid_device",
+        "invalid_compiler_options", "invalid_operation",
+        "compiler_not_available", "compile_program_failure",
+        "out_of_resources", "out_of_host_memory"
+    };
+    return errors.translate_opencl_error(errors_arr, ret);
+}
+
+pub fn link(
+    context: cl_context, devices: []const cl_device_id,
+    options: ?[]const u8, input_programs: []const cl_program,
+    callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
+) errors.opencl_error!cl_program {
+    var options_ptr: ?[*]const u8 = null;
+    if (options) |v| {
+        options_ptr = v.ptr;
+    }
+    var ret: i32 = undefined;
+    const program: ?cl_program = opencl.clLinkProgram(
+        context, @intCast(devices.len), devices.ptr, options_ptr,
+        @intCast(input_programs.len), input_programs.ptr,
+        callback, user_data, &ret
+    );
+    if (ret == opencl.CL_SUCCESS) return program.?;
+
+    const errors_arr = .{
+        "invalid_context", "invalid_value", "invalid_program",
+        "invalid_device", "invalid_linker_options",
+        "invalid_operation", "linker_not_available",
+        "link_program_failure", "out_of_host_memory",
+        "out_of_resources"
+    };
+    return errors.translate_opencl_error(errors_arr, ret);
+}
+
 pub fn build(
     program: cl_program, device_list: []const cl_device_id, options: ?[]const u8,
     callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
