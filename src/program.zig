@@ -70,7 +70,7 @@ pub fn compile(
         tmp_array = try allocator.alloc([*c]const u8, v.len);
         tmp_array_ptr = tmp_array.?.ptr;
 
-        for (tmp_array, v) |*d, s| {
+        for (tmp_array.?, v) |*d, s| {
             d.* = @ptrCast(s.ptr);
         }
     }
