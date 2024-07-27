@@ -44,7 +44,7 @@ pub fn create_with_source(
 
 pub fn compile(
     allocator: std.mem.Allocator, program: cl_program, devices: []const cl_device_id,
-    options: ?[]const u8, input_headers: ?[]cl_program,
+    options: ?[]const u8, input_headers: ?[]const cl_program,
     header_include_names: ?[]const []const u8,
     callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
 ) !void {
