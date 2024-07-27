@@ -76,7 +76,7 @@ pub fn compile(
     }
     defer {
         if (header_include_names) |_| {
-            allocator.free(tmp_array);
+            allocator.free(tmp_array.?);
         }
     }
 
