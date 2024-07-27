@@ -59,7 +59,7 @@ pub fn compile(
 
     var tmp_array: ?[][*c]const u8 = null;
     var tmp_array_ptr: ?[*][*c]const u8 = null;
-    var input_headers_ptr: ?[*]cl_program = null;
+    var input_headers_ptr: ?[*]const cl_program = null;
     var input_headers_len: u32 = 0;
     if (input_headers) |v| {
         input_headers_ptr = v.ptr;
