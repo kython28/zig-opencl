@@ -48,7 +48,7 @@ pub fn compile(
     header_include_names: ?[]const []const u8,
     callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
 ) !void {
-    if (@intFromBool(input_headers != null)^@intFromBool(header_include_names != null)) {
+    if (@intFromBool(input_headers != null)^@intFromBool(header_include_names != null) == 1) {
         return errors.opencl_error.invalid_value;
     }
 
