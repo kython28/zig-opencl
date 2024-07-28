@@ -43,13 +43,20 @@ pub fn create_with_source(
 }
 
 pub fn compile(
-    allocator: std.mem.Allocator, program: cl_program, devices: []const cl_device_id,
+    allocator: std.mem.Allocator, program: cl_program, devices: ?[]const cl_device_id,
     options: ?[]const u8, input_headers: ?[]const cl_program,
     header_include_names: ?[]const []const u8,
     callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
 ) !void {
     if (@intFromBool(input_headers != null)^@intFromBool(header_include_names != null) == 1) {
         return errors.opencl_error.invalid_value;
+    }
+
+    var devices_ptr: ?[*]const cl_device_id = null;
+    var devices_len: u32 = 0;
+    if (devices) |v| {
+        devices_ptr = v.ptr;
+        devices_len = @intCast(v.len);
     }
 
     var options_ptr: ?[*]const u8 = null;
@@ -81,7 +88,7 @@ pub fn compile(
     }
 
     const ret: i32 = opencl.clCompileProgram(
-        program, @intCast(devices.len), devices.ptr, options_ptr,
+        program, devices_len, devices_ptr, options_ptr,
         input_headers_len, input_headers_ptr,
         tmp_array_ptr, callback, user_data
     );
