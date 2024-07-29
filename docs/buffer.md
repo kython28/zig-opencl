@@ -144,7 +144,7 @@ pub fn write_rect(
     buffer_slice_pitch: usize,
     host_row_pitch: usize,
     host_slice_pitch: usize,
-    ptr: *anyopaque,
+    ptr: *const anyopaque,
     event_wait_list: ?[]const cl_event,
     event: ?*cl_event
 ) errors.opencl_error!void;

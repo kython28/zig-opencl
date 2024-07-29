@@ -5,7 +5,7 @@
 The `wait_for_many` function waits for a list of events to complete. This function blocks until all specified events are completed.
 
 ```zig
-pub fn wait_for_many(events: []cl_event) errors.opencl_error!void;
+pub fn wait_for_many(events: []const cl_event) errors.opencl_error!void;
 ```
 
 ### Parameters

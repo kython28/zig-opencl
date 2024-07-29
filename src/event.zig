@@ -59,7 +59,7 @@ pub fn wait(event: cl_event) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn wait_for_many(events: []cl_event) errors.opencl_error!void {
+pub fn wait_for_many(events: []const cl_event) errors.opencl_error!void {
     const ret: i32 = opencl.clWaitForEvents(@intCast(events.len), events.ptr);
     if (ret == opencl.CL_SUCCESS) return;
 
