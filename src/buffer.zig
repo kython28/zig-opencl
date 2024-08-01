@@ -47,7 +47,7 @@ pub fn create_sub_buffer(
     buffer_create_info: *anyopaque
 ) errors.opencl_error!cl_mem {
     var ret: i32 = undefined;
-    const mem: ?cl_mem = opencl.clCreateBuffer(
+    const mem: ?cl_mem = opencl.clCreateSubBuffer(
         buffer, flags, @intFromEnum(buffer_create_type), buffer_create_info, &ret
     );
     if (ret == opencl.CL_SUCCESS) return mem.?;
