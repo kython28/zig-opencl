@@ -77,7 +77,6 @@ pub fn get_attr_info(comptime T: anytype, comptime func: anytype,
         try func(id, param_name, size, &attr, null);
     }
 
-
     return attr;
 }
 

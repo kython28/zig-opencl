@@ -79,3 +79,14 @@ pub fn translate_opencl_error(comptime fields: anytype, error_code: i32) opencl_
     @panic("Unkwon error code");
 }
 
+pub fn translate_opencl_error_for_all_fields(error_code: i32) opencl_error {
+    const opencl_error_fields = @typeInfo(opencl_error_enum).Enum.fields;
+    inline for (opencl_error_fields) |field| {
+        const field_name = field.name;
+        if (@hasField(opencl_error_enum, field_name) and @intFromEnum(@field(opencl_error_enum, field_name)) == error_code){
+            return @field(opencl_error, field_name);
+        }
+    }
+
+    @panic("Unkwon error code");
+}
