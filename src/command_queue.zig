@@ -7,10 +7,10 @@ const errors = @import("errors.zig");
 
 pub const cl_command_queue_properties = opencl.cl_command_queue_properties;
 pub const cl_queue_properties = opencl.cl_queue_properties; 
-pub const cl_command_queue = opencl.cl_command_queue;
+pub const cl_command_queue = *opaque {};
 
-const cl_context = opencl.cl_context;
-const cl_device_id = opencl.cl_device_id; 
+const cl_context = @import("context.zig").cl_context;
+const cl_device_id = @import("device.zig").cl_device_id;
 
 pub fn create_with_properties(
     context: cl_context, device: cl_device_id,
@@ -18,15 +18,15 @@ pub fn create_with_properties(
 ) errors.opencl_error!cl_command_queue {
     if (cl.opencl_version < 200) unreachable; 
 
-    var properties_ptr: ?[*]cl_queue_properties = null;
+    var properties_ptr: ?[*]const cl_queue_properties = null;
     if (properties) |v| {
         properties_ptr = v.ptr;
     }
 
     var ret: i32 = undefined;
-    const command_queue: ?cl_command_queue = opencl.clCreateCommandQueueWithProperties(
-        context, device, properties_ptr, &ret
-    );
+    const command_queue: ?cl_command_queue = @ptrCast(opencl.clCreateCommandQueueWithProperties(
+        @ptrCast(context), @ptrCast(device), properties_ptr, &ret
+    ));
     if (ret == opencl.CL_SUCCESS) return command_queue.?;
 
     const errors_arr = .{
@@ -41,9 +41,9 @@ pub fn create(
     properties: cl_command_queue_properties
 ) errors.opencl_error!cl_command_queue {
     var ret: i32 = undefined;
-    const command_queue: ?cl_command_queue = opencl.clCreateCommandQueue(
-        context, device, properties, &ret
-    );
+    const command_queue: ?cl_command_queue = @ptrCast(opencl.clCreateCommandQueue(
+        @ptrCast(context), @ptrCast(device), properties, &ret
+    ));
     if (ret == opencl.CL_SUCCESS) return command_queue.?;
 
     const errors_arr = .{
@@ -54,7 +54,7 @@ pub fn create(
 }
 
 pub fn flush(command_queue: cl_command_queue) errors.opencl_error!void {
-    const ret: i32 = opencl.clFlush(command_queue);
+    const ret: i32 = opencl.clFlush(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -64,7 +64,7 @@ pub fn flush(command_queue: cl_command_queue) errors.opencl_error!void {
 }
 
 pub fn finish(command_queue: cl_command_queue) errors.opencl_error!void {
-    const ret: i32 = opencl.clFinish(command_queue);
+    const ret: i32 = opencl.clFinish(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -74,7 +74,7 @@ pub fn finish(command_queue: cl_command_queue) errors.opencl_error!void {
 }
 
 pub fn retain(command_queue: cl_command_queue) errors.opencl_error!void {
-    const ret: i32 = opencl.clRetainCommandQueue(command_queue);
+    const ret: i32 = opencl.clRetainCommandQueue(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -84,7 +84,7 @@ pub fn retain(command_queue: cl_command_queue) errors.opencl_error!void {
 }
 
 pub fn release(command_queue: cl_command_queue) errors.opencl_error!void {
-    const ret: i32 = opencl.clReleaseCommandQueue(command_queue);
+    const ret: i32 = opencl.clReleaseCommandQueue(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{

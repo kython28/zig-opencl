@@ -6,10 +6,10 @@ const std = @import("std");
 pub const enums = @import("enums/program.zig");
 const errors = @import("errors.zig");
 
-pub const cl_program = opencl.cl_program;
+pub const cl_program = *opaque {};
 pub const cl_program_build_info = opencl.cl_program_build_info;
-const cl_context = opencl.cl_context;
-const cl_device_id = opencl.cl_device_id;
+const cl_context = @import("context.zig").cl_context;
+const cl_device_id = @import("device.zig").cl_device_id;
 
 pub const pfn_notify_callback = fn (program: cl_program, user_data: ?*anyopaque) callconv(.C) void;
 
@@ -29,10 +29,10 @@ pub fn create_with_source(
     }
 
     var ret: i32 = undefined;
-    const program: ?cl_program = opencl.clCreateProgramWithSource(
-        context, @intCast(strings.len), tmp_array.ptr, tmp_lengths.ptr,
+    const program: ?cl_program = @ptrCast(opencl.clCreateProgramWithSource(
+        @ptrCast(context), @intCast(strings.len), tmp_array.ptr, tmp_lengths.ptr,
         &ret
-    );
+    ));
     if (ret == opencl.CL_SUCCESS) return program.?;
 
     const errors_arr = .{
@@ -88,9 +88,9 @@ pub fn compile(
     }
 
     const ret: i32 = opencl.clCompileProgram(
-        program, devices_len, devices_ptr, options_ptr,
-        input_headers_len, input_headers_ptr,
-        tmp_array_ptr, callback, user_data
+        @ptrCast(program), devices_len, @ptrCast(devices_ptr), options_ptr,
+        input_headers_len, @ptrCast(input_headers_ptr),
+        tmp_array_ptr, @ptrCast(callback), user_data
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -113,11 +113,11 @@ pub fn link(
         options_ptr = v.ptr;
     }
     var ret: i32 = undefined;
-    const program: ?cl_program = opencl.clLinkProgram(
-        context, @intCast(devices.len), devices.ptr, options_ptr,
-        @intCast(input_programs.len), input_programs.ptr,
-        callback, user_data, &ret
-    );
+    const program: ?cl_program = @ptrCast(opencl.clLinkProgram(
+        @ptrCast(context), @intCast(devices.len), @ptrCast(devices.ptr), options_ptr,
+        @intCast(input_programs.len), @ptrCast(input_programs.ptr),
+        @ptrCast(callback), user_data, &ret
+    ));
     if (ret == opencl.CL_SUCCESS) return program.?;
 
     const errors_arr = .{
@@ -139,8 +139,8 @@ pub fn build(
         options_ptr = v.ptr;
     }
     const ret: i32 = opencl.clBuildProgram(
-        program, @intCast(device_list.len), device_list.ptr, options_ptr,
-        callback, user_data
+        @ptrCast(program), @intCast(device_list.len), @ptrCast(device_list.ptr), options_ptr,
+        @ptrCast(callback), user_data
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -157,7 +157,7 @@ pub fn get_build_info(
     param_value_size: usize, param_value: ?*anyopaque, param_value_size_ret: ?*usize
 ) errors.opencl_error!void {
     const ret: i32 = opencl.clGetProgramBuildInfo(
-        program, device, @intFromEnum(param_name), param_value_size, param_value,
+        @ptrCast(program), @ptrCast(device), @intFromEnum(param_name), param_value_size, param_value,
         param_value_size_ret
     );
     if (ret == opencl.CL_SUCCESS) return;
@@ -170,7 +170,7 @@ pub fn get_build_info(
 }
 
 pub fn retain(program: cl_program) errors.opencl_error!void {
-    const ret: i32 = opencl.clRetainProgram(program);
+    const ret: i32 = opencl.clRetainProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -180,7 +180,7 @@ pub fn retain(program: cl_program) errors.opencl_error!void {
 }
 
 pub fn release(program: cl_program) errors.opencl_error!void {
-    const ret: i32 = opencl.clReleaseProgram(program);
+    const ret: i32 = opencl.clReleaseProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{

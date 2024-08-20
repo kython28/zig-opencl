@@ -9,11 +9,11 @@ const errors = @import("errors.zig");
 pub const cl_buffer_create_type = opencl.cl_buffer_create_type;
 pub const cl_map_flags = opencl.cl_map_flags;
 pub const cl_mem_flags = opencl.cl_mem_flags;
-pub const cl_mem = opencl.cl_mem;
+pub const cl_mem = *opaque {};
 
-const cl_command_queue = opencl.cl_command_queue;
-const cl_context = opencl.cl_context;
-const cl_event = opencl.cl_event;
+const cl_command_queue = @import("command_queue.zig").cl_command_queue;
+const cl_context = @import("context.zig").cl_context;
+const cl_event = @import("event.zig").cl_event;
 
 pub const cl_buffer_region = extern struct {
     origin: usize,
@@ -27,9 +27,9 @@ pub fn create(
     host_ptr: ?*anyopaque
 ) errors.opencl_error!cl_mem {
     var ret: i32 = undefined;
-    const mem: ?cl_mem = opencl.clCreateBuffer(
-        context, flags, size, host_ptr, &ret
-    );
+    const mem: ?cl_mem = @ptrCast(opencl.clCreateBuffer(
+        @ptrCast(context), flags, size, host_ptr, &ret
+    ));
     if (ret == opencl.CL_SUCCESS) return mem.?;
 
     const errors_arr = .{
@@ -47,9 +47,9 @@ pub fn create_sub_buffer(
     buffer_create_info: *anyopaque
 ) errors.opencl_error!cl_mem {
     var ret: i32 = undefined;
-    const mem: ?cl_mem = opencl.clCreateSubBuffer(
-        buffer, flags, @intFromEnum(buffer_create_type), buffer_create_info, &ret
-    );
+    const mem: ?cl_mem = @ptrCast(opencl.clCreateSubBuffer(
+        @ptrCast(buffer), flags, @intFromEnum(buffer_create_type), buffer_create_info, &ret
+    ));
     if (ret == opencl.CL_SUCCESS) return mem.?;
 
     const errors_arr = .{
@@ -73,8 +73,8 @@ pub fn read(
     }
 
     const ret: i32 = opencl.clEnqueueReadBuffer(
-        command_queue, buffer, @intFromBool(blocking_read), offset, size, ptr, num_events,
-        event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(buffer), @intFromBool(blocking_read),
+        offset, size, ptr, num_events, @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -100,8 +100,8 @@ pub fn write(
     }
 
     const ret: i32 = opencl.clEnqueueWriteBuffer(
-        command_queue, buffer, @intFromBool(blocking_write), offset, size, ptr, num_events,
-        event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(buffer), @intFromBool(blocking_write), offset, size, ptr, num_events,
+        @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -133,9 +133,9 @@ pub fn write_rect(
     }
 
     const ret: i32 = opencl.clEnqueueWriteBufferRect(
-        command_queue, buffer, @intFromBool(blocking_write), buffer_origin.ptr, host_origin.ptr, region.ptr,
-        buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch,
-        ptr, num_events, event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(buffer), @intFromBool(blocking_write),
+        buffer_origin.ptr, host_origin.ptr, region.ptr, buffer_row_pitch, buffer_slice_pitch,
+        host_row_pitch, host_slice_pitch, ptr, num_events, @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -167,9 +167,9 @@ pub fn read_rect(
     }
 
     const ret: i32 = opencl.clEnqueueReadBufferRect(
-        command_queue, buffer, @intFromBool(blocking_read), buffer_origin.ptr, host_origin.ptr, region.ptr,
-        buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch,
-        ptr, num_events, event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(buffer), @intFromBool(blocking_read), buffer_origin.ptr,
+        host_origin.ptr, region.ptr, buffer_row_pitch, buffer_slice_pitch, host_row_pitch, host_slice_pitch,
+        ptr, num_events, @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -195,8 +195,8 @@ pub fn fill(
     }
 
     const ret: i32 = opencl.clEnqueueFillBuffer(
-        command_queue, buffer, pattern, pattern_size, offset, size, num_events,
-        event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(buffer), pattern, pattern_size, offset, size, num_events,
+        @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -221,8 +221,8 @@ pub fn copy(
     }
 
     const ret: i32 = opencl.clEnqueueCopyBuffer(
-        command_queue, src_buffer, dst_buffer, src_offset, dst_offset, size, num_events,
-        event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(src_buffer), @ptrCast(dst_buffer), src_offset,
+        dst_offset, size, num_events, @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -254,9 +254,9 @@ pub fn copy_rect(
     }
 
     const ret: i32 = opencl.clEnqueueCopyBufferRect(
-        command_queue, src_buffer, dst_buffer, src_origin, dst_origin, region,
-        src_row_pitch, src_slice_pitch, dst_row_pitch, dst_slice_pitch, num_events,
-        event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(src_buffer), @ptrCast(dst_buffer), src_origin.ptr,
+        dst_origin.ptr, region.ptr, src_row_pitch, src_slice_pitch, dst_row_pitch, dst_slice_pitch,
+        num_events, @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -292,8 +292,8 @@ pub fn map(
 
     var ret: i32 = undefined;
     const ptr: ?*anyopaque = opencl.clEnqueueMapBuffer(
-        command_queue, buffer, @intFromBool(blocking_map), map_flags, offset, size, num_events,
-        event_wait_list_ptr, event, &ret
+        @ptrCast(command_queue), @ptrCast(buffer), @intFromBool(blocking_map), map_flags, offset, size,
+        num_events, @ptrCast(event_wait_list_ptr), @ptrCast(event), &ret
     );
     if (ret != opencl.CL_SUCCESS) {
         const errors_arr = .{
@@ -348,8 +348,8 @@ pub fn unmap(
     };
 
     const ret: i32 = opencl.clEnqueueUnmapMemObject(
-        command_queue, buffer, ptr, num_events, event_wait_list_ptr,
-        event
+        @ptrCast(command_queue), @ptrCast(buffer), ptr, num_events, @ptrCast(event_wait_list_ptr),
+        @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -361,7 +361,7 @@ pub fn unmap(
 }
 
 pub fn retain(buffer: cl_mem) errors.opencl_error!void {
-    const ret: i32 = opencl.clRetainMemObject(buffer);
+    const ret: i32 = opencl.clRetainMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -371,7 +371,7 @@ pub fn retain(buffer: cl_mem) errors.opencl_error!void {
 }
 
 pub fn release(buffer: cl_mem) errors.opencl_error!void {
-    const ret: i32 = opencl.clReleaseMemObject(buffer);
+    const ret: i32 = opencl.clReleaseMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{

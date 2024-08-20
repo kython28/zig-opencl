@@ -7,11 +7,11 @@ const d_enums = @import("enums/device.zig");
 const errors = @import("errors.zig");
 
 pub const cl_context_properties = opencl.cl_context_properties;
-pub const cl_context = opencl.cl_context;
+pub const cl_context = *opaque {};
 
 pub const pfn_notify_callback = fn (errinfo: [*c]const u8, private_info: ?*const anyopaque, cb: usize, user_data: ?*anyopaque) callconv(.C) void;
 
-const cl_device_id = opencl.cl_device_id;
+const cl_device_id = @import("device.zig").cl_device_id;
 
 pub fn create(
     properties: ?[]const cl_context_properties, devices: []const cl_device_id,
@@ -24,10 +24,10 @@ pub fn create(
     }
 
     var ret: i32 = undefined;
-    const context: ?cl_context = opencl.clCreateContext(
-        properties_ptr, @intCast(devices.len), devices.ptr, pfn_notify, user_data,
+    const context: ?cl_context = @ptrCast(opencl.clCreateContext(
+        properties_ptr, @intCast(devices.len), @ptrCast(devices.ptr), pfn_notify, user_data,
         &ret
-    );
+    ));
     if (ret == opencl.CL_SUCCESS) return context.?;
 
     const errors_arr = .{
@@ -48,10 +48,10 @@ pub fn create_from_type(
     }
 
     var ret: i32 = undefined;
-    const context: ?cl_context = opencl.clCreateContextFromType(
+    const context: ?cl_context = @ptrCast(opencl.clCreateContextFromType(
         properties_ptr, @intFromEnum(device_type), pfn_notify, user_data,
         &ret
-    );
+    ));
     if (ret == opencl.CL_SUCCESS) return context.?;
 
     const errors_arr = .{
@@ -65,7 +65,7 @@ pub fn get_info(context: cl_context, param_name: enums.context_info,
     param_value_size: usize, param_value: ?*anyopaque,
     param_value_size_ret: ?*usize) errors.opencl_error!void {
     const ret: i32 = opencl.clGetContextInfo(
-        context, @intFromEnum(param_name), param_value_size, param_value,
+        @ptrCast(context), @intFromEnum(param_name), param_value_size, param_value,
         param_value_size_ret
     );
     if (ret == opencl.CL_SUCCESS) return;
@@ -78,7 +78,7 @@ pub fn get_info(context: cl_context, param_name: enums.context_info,
 }
 
 pub fn retain(context: cl_context) errors.opencl_error!void {
-    const ret: i32 = opencl.clRetainContext(context);
+    const ret: i32 = opencl.clRetainContext(@ptrCast(context));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -88,7 +88,7 @@ pub fn retain(context: cl_context) errors.opencl_error!void {
 }
 
 pub fn release(context: cl_context) errors.opencl_error!void {
-    const ret: i32 = opencl.clReleaseContext(context);
+    const ret: i32 = opencl.clReleaseContext(@ptrCast(context));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{

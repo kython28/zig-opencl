@@ -5,9 +5,9 @@ const std = @import("std");
 const errors = @import("errors.zig");
 pub const enums = @import("enums/device.zig");
 
-pub const cl_device_id = opencl.cl_device_id;
+pub const cl_device_id = *opaque {};
 pub const cl_device_local_mem_type = opencl.cl_device_local_mem_type;
-const cl_platform_id = opencl.cl_platform_id;
+const cl_platform_id = @import("platform.zig").cl_platform_id;
 
 pub const device_partition_property = opencl.cl_device_partition_property;
 
@@ -23,7 +23,8 @@ pub fn get_ids(
     }
 
     const ret: i32 = opencl.clGetDeviceIDs(
-        platform, @intFromEnum(device_type), num_entries, devices_ptr, num_devices
+        @ptrCast(platform), @intFromEnum(device_type), num_entries, @ptrCast(devices_ptr),
+        num_devices
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -39,7 +40,7 @@ pub fn get_info(device: cl_device_id, param_name: enums.device_info,
     param_value_size: usize, param_value: ?*anyopaque,
     param_value_size_ret: ?*usize) errors.opencl_error!void {
     const ret: i32 = opencl.clGetDeviceInfo(
-        device, @intFromEnum(param_name), param_value_size, param_value,
+        @ptrCast(device), @intFromEnum(param_name), param_value_size, param_value,
         param_value_size_ret
     );
     if (ret == opencl.CL_SUCCESS) return;
@@ -65,7 +66,7 @@ pub fn create_sub_devices(
     }
 
     const ret: i32 = opencl.clCreateSubDevices(
-        in_device, properties.ptr, num_devices, out_devices_ptr,
+        @ptrCast(in_device), properties.ptr, num_devices, @ptrCast(out_devices_ptr),
         num_devices_ret
     );
     if (ret == opencl.CL_SUCCESS) return;
@@ -80,7 +81,7 @@ pub fn create_sub_devices(
 pub fn retain(device: cl_device_id) errors.opencl_error!void {
     if (cl.opencl_version < 120) return;
 
-    const ret: i32 = opencl.clRetainContext(device);
+    const ret: i32 = opencl.clRetainContext(@ptrCast(device));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -92,7 +93,7 @@ pub fn retain(device: cl_device_id) errors.opencl_error!void {
 pub fn release(device: cl_device_id) errors.opencl_error!void {
     if (cl.opencl_version < 120) return;
 
-    const ret: i32 = opencl.clReleaseDevice(device);
+    const ret: i32 = opencl.clReleaseDevice(@ptrCast(device));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{

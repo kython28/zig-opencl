@@ -6,9 +6,9 @@ const utils = @import("utils.zig");
 const errors = @import("errors.zig");
 pub const enums = @import("enums/platform.zig");
 
-pub const cl_platform_id = opencl.cl_platform_id;
+pub const cl_platform_id = *opaque {};
 pub const platform_info = struct {
-    id: cl_platform_id = null,
+    id: ?cl_platform_id = null,
     profile: []u8,
     version: []u8,
     name: []u8,
@@ -25,7 +25,7 @@ pub fn get_ids(platforms: ?[]cl_platform_id,
         num_entries = @intCast(v.len);
     }
 
-    const ret: i32 = opencl.clGetPlatformIDs(num_entries, platforms_ptr, num_platforms);
+    const ret: i32 = opencl.clGetPlatformIDs(num_entries, @ptrCast(platforms_ptr), num_platforms);
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{"invalid_value", "out_of_host_memory"};
@@ -36,7 +36,7 @@ pub fn get_info(platform: cl_platform_id, param_name: enums.platform_info,
     param_value_size: usize, param_value: ?*anyopaque,
     param_value_size_ret: ?*usize) errors.opencl_error!void {
     const ret: i32 = opencl.clGetPlatformInfo(
-        platform, @intFromEnum(param_name), param_value_size, param_value,
+        @ptrCast(platform), @intFromEnum(param_name), param_value_size, param_value,
         param_value_size_ret
     );
     if (ret == opencl.CL_SUCCESS) return;
@@ -104,7 +104,7 @@ pub fn release_list(allocator: std.mem.Allocator,
 
         const fields = @typeInfo(@TypeOf(p_info)).Struct.fields;
         inline for (fields) |field| {
-            if (field.type != cl_platform_id){
+            if (field.type != ?cl_platform_id){
                 utils.release_attr_info(field.type, allocator, @field(p_info, field.name));
             }
         }

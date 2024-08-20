@@ -3,16 +3,16 @@ const opencl = cl.opencl;
 
 const errors = @import("errors.zig");
 
-pub const cl_kernel = opencl.cl_kernel;
-const cl_program = opencl.cl_program;
-const cl_command_queue = opencl.cl_command_queue;
-const cl_event = opencl.cl_event;
+pub const cl_kernel = *opaque {};
+const cl_program = @import("program.zig").cl_program;
+const cl_command_queue = @import("command_queue.zig").cl_command_queue;
+const cl_event = @import("event.zig").cl_event;
 
 pub fn create(program: cl_program, kernel_name: []const u8) errors.opencl_error!cl_kernel {
     var ret: i32 = undefined;
-    const kernel: ?cl_kernel = opencl.clCreateKernel(
-        program, kernel_name.ptr, &ret
-    );
+    const kernel: ?cl_kernel = @ptrCast(opencl.clCreateKernel(
+        @ptrCast(program), kernel_name.ptr, &ret
+    ));
     if (ret == opencl.CL_SUCCESS) return kernel.?;
 
     const errors_arr = .{
@@ -25,7 +25,7 @@ pub fn create(program: cl_program, kernel_name: []const u8) errors.opencl_error!
 
 pub fn set_arg(kernel: cl_kernel, arg_index: u32, arg_size: usize, arg_value: ?*const anyopaque) errors.opencl_error!void {
     const ret: i32 = opencl.clSetKernelArg(
-        kernel, arg_index, arg_size, arg_value
+        @ptrCast(kernel), arg_index, arg_size, arg_value
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -67,8 +67,8 @@ pub fn enqueue_nd_range(
     }
 
     const ret: i32 = opencl.clEnqueueNDRangeKernel(
-        command_queue, kernel, work_dim, global_work_offset_ptr, global_work_size_ptr,
-        local_work_size_ptr, num_events, event_wait_list_ptr, event
+        @ptrCast(command_queue), @ptrCast(kernel), work_dim, global_work_offset_ptr, global_work_size_ptr,
+        local_work_size_ptr, num_events, @ptrCast(event_wait_list_ptr), @ptrCast(event)
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -84,7 +84,7 @@ pub fn enqueue_nd_range(
 }
 
 pub fn retain(kernel: cl_kernel) errors.opencl_error!void {
-    const ret: i32 = opencl.clRetainKernel(kernel);
+    const ret: i32 = opencl.clRetainKernel(@ptrCast(kernel));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -94,7 +94,7 @@ pub fn retain(kernel: cl_kernel) errors.opencl_error!void {
 }
 
 pub fn release(kernel: cl_kernel) errors.opencl_error!void {
-    const ret: i32 = opencl.clReleaseKernel(kernel);
+    const ret: i32 = opencl.clReleaseKernel(@ptrCast(kernel));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{

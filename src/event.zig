@@ -4,14 +4,14 @@ const opencl = cl.opencl;
 const errors = @import("errors.zig");
 pub const enums = @import("enums/event.zig");
 
-pub const cl_event = opencl.cl_event;
-const cl_context = opencl.cl_context;
+pub const cl_event = *opaque {};
+const cl_context = @import("context.zig").cl_context;
 
 pub const pfn_notify_callback = fn (event: cl_event, event_command_status: i32, user_data: ?*anyopaque) callconv(.C) void;
 
 pub fn create_user_event(context: cl_context) errors.opencl_error!cl_event {
     var ret: i32 = undefined;
-    const event: ?cl_event = opencl.clCreateUserEvent(context, &ret);
+    const event: ?cl_event = @ptrCast(opencl.clCreateUserEvent(@ptrCast(context), &ret));
     if (ret == opencl.CL_SUCCESS) return event.?;
 
     const errors_arr = .{
@@ -21,7 +21,7 @@ pub fn create_user_event(context: cl_context) errors.opencl_error!cl_event {
 }
 
 pub fn set_user_event_status(event: cl_event, status: enums.execution_status) errors.opencl_error!void {
-    const ret: i32 = opencl.clSetUserEventStatus(event, @intFromEnum(status));
+    const ret: i32 = opencl.clSetUserEventStatus(@ptrCast(event), @intFromEnum(status));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -36,7 +36,7 @@ pub fn set_callback(
     callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
 ) errors.opencl_error!void {
     const ret: i32 = opencl.clSetEventCallback(
-        event, @intFromEnum(command_exec_callback_type), callback, user_data
+        @ptrCast(event), @intFromEnum(command_exec_callback_type), @ptrCast(callback), user_data
     );
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -48,7 +48,7 @@ pub fn set_callback(
 }
 
 pub fn wait(event: cl_event) errors.opencl_error!void {
-    const ret: i32 = opencl.clWaitForEvents(1, &event);
+    const ret: i32 = opencl.clWaitForEvents(1, @ptrCast(&event));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -60,7 +60,7 @@ pub fn wait(event: cl_event) errors.opencl_error!void {
 }
 
 pub fn wait_for_many(events: []const cl_event) errors.opencl_error!void {
-    const ret: i32 = opencl.clWaitForEvents(@intCast(events.len), events.ptr);
+    const ret: i32 = opencl.clWaitForEvents(@intCast(events.len), @ptrCast(events.ptr));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -72,7 +72,7 @@ pub fn wait_for_many(events: []const cl_event) errors.opencl_error!void {
 }
 
 pub fn retain(event: cl_event) errors.opencl_error!void {
-    const ret: i32 = opencl.clRetainEvent(event);
+    const ret: i32 = opencl.clRetainEvent(@ptrCast(event));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
@@ -82,7 +82,7 @@ pub fn retain(event: cl_event) errors.opencl_error!void {
 }
 
 pub fn release(event: cl_event) errors.opencl_error!void {
-    const ret: i32 = opencl.clReleaseEvent(event);
+    const ret: i32 = opencl.clReleaseEvent(@ptrCast(event));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
