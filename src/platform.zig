@@ -56,10 +56,10 @@ pub fn get_all(allocator: std.mem.Allocator) ![]platform_info {
     const platform_infos: []platform_info = try allocator.alloc(
         platform_info, num_platforms
     );
+    for (platform_infos) |*p_info| p_info.id = null;
     errdefer release_list(allocator, platform_infos);
 
     try get_ids(platforms, null);
-
     for (platform_infos, platforms) |*p_info, p| {
         const name = try utils.get_attr_info(
             []u8, get_info, enums.platform_info.name, p, allocator
@@ -109,4 +109,5 @@ pub fn release_list(allocator: std.mem.Allocator,
             }
         }
     }
+    allocator.free(platform_infos);
 }
