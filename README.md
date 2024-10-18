@@ -20,7 +20,8 @@ Add the `zig-opencl` dependency to your `build.zig.zon` file, similar to the fol
     // ......
     .dependencies = .{
         .@"zig-opencl" = .{
-            .path = "zig-opencl"
+            .url = "https://github.com/kython28/zig-opencl/archive/refs/tags/v0.3.0.tar.gz",
+            .hash = "1220f5e5f896607483e5177125f8b6bdf4343d37b4c0bccbe6733f545fafe9a60345",
         },
     },
     // .....
@@ -57,7 +58,6 @@ pub fn build(b: *std.Build) void {
 4. **Build the project:**
 Now you can build your project using Zig:
 ```bash
-zig fetch --save zig-opencl
 zig build
 ```
 This setup will allow you to use the `zig-opencl` wrapper in your project.
