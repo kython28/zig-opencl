@@ -80,7 +80,7 @@ pub fn get_attr_info(comptime T: anytype, comptime func: anytype,
     return attr;
 }
 
-pub fn release_attr_info(comptime T: anytype, allocator: std.mem.Allocator, attr: T) void {
+pub inline fn release_attr_info(comptime T: anytype, allocator: std.mem.Allocator, attr: T) void {
     const attr_type_info = @typeInfo(T);
     if (attr_type_info != .Pointer or attr_type_info.Pointer.size == .One) {
         @compileError("This function only support arrays");

@@ -16,7 +16,7 @@ pub const platform_info = struct {
     extensions: []u8
 };
 
-pub fn get_ids(platforms: ?[]cl_platform_id,
+pub inline fn get_ids(platforms: ?[]cl_platform_id,
     num_platforms: ?*u32) errors.opencl_error!void {
     var platforms_ptr: ?[*]cl_platform_id = null;
     var num_entries: u32 = 0;
@@ -32,7 +32,7 @@ pub fn get_ids(platforms: ?[]cl_platform_id,
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn get_info(platform: cl_platform_id, param_name: enums.platform_info,
+pub inline fn get_info(platform: cl_platform_id, param_name: enums.platform_info,
     param_value_size: usize, param_value: ?*anyopaque,
     param_value_size_ret: ?*usize) errors.opencl_error!void {
     const ret: i32 = opencl.clGetPlatformInfo(

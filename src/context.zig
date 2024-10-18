@@ -13,7 +13,7 @@ pub const pfn_notify_callback = fn (errinfo: [*c]const u8, private_info: ?*const
 
 const cl_device_id = @import("device.zig").cl_device_id;
 
-pub fn create(
+pub inline fn create(
     properties: ?[]const cl_context_properties, devices: []const cl_device_id,
     pfn_notify: ?*const pfn_notify_callback, 
     user_data: ?*anyopaque
@@ -37,7 +37,7 @@ pub fn create(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn create_from_type(
+pub inline fn create_from_type(
     properties: ?[]const cl_context_properties, device_type: d_enums.device_type,
     pfn_notify: ?* const pfn_notify_callback,
     user_data: ?*anyopaque
@@ -61,7 +61,7 @@ pub fn create_from_type(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn get_info(context: cl_context, param_name: enums.context_info,
+pub inline fn get_info(context: cl_context, param_name: enums.context_info,
     param_value_size: usize, param_value: ?*anyopaque,
     param_value_size_ret: ?*usize) errors.opencl_error!void {
     const ret: i32 = opencl.clGetContextInfo(
@@ -77,7 +77,7 @@ pub fn get_info(context: cl_context, param_name: enums.context_info,
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn retain(context: cl_context) errors.opencl_error!void {
+pub inline fn retain(context: cl_context) errors.opencl_error!void {
     const ret: i32 = opencl.clRetainContext(@ptrCast(context));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -87,7 +87,7 @@ pub fn retain(context: cl_context) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn release(context: cl_context) errors.opencl_error!void {
+pub inline fn release(context: cl_context) errors.opencl_error!void {
     const ret: i32 = opencl.clReleaseContext(@ptrCast(context));
     if (ret == opencl.CL_SUCCESS) return;
 

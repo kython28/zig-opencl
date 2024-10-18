@@ -11,7 +11,7 @@ const cl_platform_id = @import("platform.zig").cl_platform_id;
 
 pub const device_partition_property = opencl.cl_device_partition_property;
 
-pub fn get_ids(
+pub inline fn get_ids(
     platform: cl_platform_id, device_type: enums.device_type,
     devices: ?[]cl_device_id, num_devices: ?*u32
 ) errors.opencl_error!void {
@@ -36,7 +36,7 @@ pub fn get_ids(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn get_info(device: cl_device_id, param_name: enums.device_info,
+pub inline fn get_info(device: cl_device_id, param_name: enums.device_info,
     param_value_size: usize, param_value: ?*anyopaque,
     param_value_size_ret: ?*usize) errors.opencl_error!void {
     const ret: i32 = opencl.clGetDeviceInfo(
@@ -52,7 +52,7 @@ pub fn get_info(device: cl_device_id, param_name: enums.device_info,
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn create_sub_devices(
+pub inline fn create_sub_devices(
     in_device: cl_device_id, properties: []const device_partition_property,
     out_devices: ?[]cl_device_id, num_devices_ret: ?*u32
 ) errors.opencl_error!void {
@@ -78,7 +78,7 @@ pub fn create_sub_devices(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn retain(device: cl_device_id) errors.opencl_error!void {
+pub inline fn retain(device: cl_device_id) errors.opencl_error!void {
     if (cl.opencl_version < 120) return;
 
     const ret: i32 = opencl.clRetainContext(@ptrCast(device));
@@ -90,7 +90,7 @@ pub fn retain(device: cl_device_id) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn release(device: cl_device_id) errors.opencl_error!void {
+pub inline fn release(device: cl_device_id) errors.opencl_error!void {
     if (cl.opencl_version < 120) return;
 
     const ret: i32 = opencl.clReleaseDevice(@ptrCast(device));

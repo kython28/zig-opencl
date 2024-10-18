@@ -2,7 +2,7 @@
 
 Creates a command queue on a specific device within a context. Command queues are used to schedule the execution of kernels and the transfer of data.
 ```zig
-pub fn create(
+pub inline fn create(
     context: cl_context, 
     device: cl_device_id, 
     properties: cl_command_queue_properties
@@ -30,7 +30,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `create_with_properties` function creates a command queue with specified properties.
 
 ```zig
-pub fn create_with_properties(
+pub inline fn create_with_properties(
     context: cl_context, 
     device: cl_device_id, 
     properties: ?[]const cl_queue_properties
@@ -59,7 +59,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `flush` function issues all previously queued OpenCL commands in `command_queue` to the device associated with `command_queue`.
 
 ```zig
-pub fn flush(command_queue: cl_command_queue) errors.opencl_error!void;
+pub inline fn flush(command_queue: cl_command_queue) errors.opencl_error!void;
 ```
 
 #### Parameters
@@ -81,7 +81,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `finish` function ensures that all previously queued OpenCL commands in a command queue have been issued to the associated device and that all these commands have completed execution. This function blocks until the execution of all previously queued commands in the specified command queue is complete.
 
 ```zig
-pub fn finish(command_queue: cl_command_queue) errors.opencl_error!void;
+pub inline fn finish(command_queue: cl_command_queue) errors.opencl_error!void;
 ```
 
 #### Parameters
@@ -103,7 +103,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of the specified command queue. This ensures that the command queue is not deleted while it is still in use.
 
 ```zig
-pub fn retain(command_queue: cl_command_queue) errors.opencl_error!void;
+pub inline fn retain(command_queue: cl_command_queue) errors.opencl_error!void;
 ```
 
 ### Parameters
@@ -125,7 +125,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of the specified command queue. When the reference count reaches zero, the command queue is deleted.
 
 ```zig
-pub fn release(command_queue: cl_command_queue) errors.opencl_error!void;
+pub inline fn release(command_queue: cl_command_queue) errors.opencl_error!void;
 ```
 
 ### Parameters

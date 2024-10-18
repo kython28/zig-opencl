@@ -3,7 +3,7 @@
 ### Description
 The `get_ids` function queries the list of available OpenCL platforms and returns the number of platforms and their IDs. This is a crucial step in setting up an OpenCL context, as it allows the application to identify and select a specific platform to use.
 ```zig
-pub fn get_ids(platforms: ?[]cl_platform_id, num_platforms: ?*u32) errors.opencl_error!void;
+pub inline fn get_ids(platforms: ?[]cl_platform_id, num_platforms: ?*u32) errors.opencl_error!void;
 ```
 #### Parameters
 
@@ -23,7 +23,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 
 The `get_info` function retrieves specific information about an OpenCL platform. This function is essential for obtaining various details about the platform, such as its name, profile, version, and other attributes.
 ```zig
-pub fn get_info(
+pub inline fn get_info(
     platform: cl_platform_id, 
     param_name: enums.platform_info, 
     param_value_size: usize, 

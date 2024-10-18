@@ -5,7 +5,7 @@
 The `wait_for_many` function waits for a list of events to complete. This function blocks until all specified events are completed.
 
 ```zig
-pub fn wait_for_many(events: []const cl_event) errors.opencl_error!void;
+pub inline fn wait_for_many(events: []const cl_event) errors.opencl_error!void;
 ```
 
 ### Parameters
@@ -30,7 +30,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `wait` function waits for a single event to complete. This function blocks until the specified event is completed.
 
 ```zig
-pub fn wait(event: cl_event) errors.opencl_error!void;
+pub inline fn wait(event: cl_event) errors.opencl_error!void;
 ```
 
 ### Parameters
@@ -55,7 +55,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of an event object. This function ensures that the event object remains valid even if other references to it are released.
 
 ```zig
-pub fn retain(event: cl_event) errors.opencl_error!void;
+pub inline fn retain(event: cl_event) errors.opencl_error!void;
 ```
 
 ### Parameters
@@ -77,7 +77,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of an event object. When the reference count becomes zero, the event object is deleted. This function ensures that resources are properly released when they are no longer needed.
 
 ```zig
-pub fn release(event: cl_event) errors.opencl_error!void;
+pub inline fn release(event: cl_event) errors.opencl_error!void;
 ```
 
 ### Parameters

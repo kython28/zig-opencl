@@ -4,7 +4,7 @@
 
 The `get_ids` function retrieves the list of available OpenCL devices on a specified platform. This function allows the application to query specific OpenCL devices or all OpenCL devices available on the platform.
 ```zig
-pub fn get_ids(
+pub inline fn get_ids(
     platform: cl_platform_id, 
     device_type: enums.device_type, 
     devices: ?[]cl_device_id, 
@@ -41,7 +41,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `get_info` function retrieves specific information about an OpenCL device. This function is essential for obtaining various details about the device, such as its name, profile, version, and other attributes.
 
 ```zig
-pub fn get_info(
+pub inline fn get_info(
     device: cl_device_id, 
     param_name: enums.device_info, 
     param_value_size: usize, 
@@ -77,7 +77,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 
 The `create_sub_devices` function creates sub-devices by partitioning an OpenCL device. This function is useful for dividing a device into multiple sub-devices that can be used independently.
 ```zig
-pub fn create_sub_devices(
+pub inline fn create_sub_devices(
     in_device: cl_device_id, 
     properties: []const device_partition_property, 
     out_devices: ?[]cl_device_id, 
@@ -114,7 +114,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of an OpenCL device if it is a valid sub-device created by a call to `clCreateSubDevices`. If the device is a root-level device (i.e., a `cl_device_id` returned by `clGetDeviceIDs`), the reference count remains unchanged.
 
 ```zig
-pub fn retain(device: cl_device_id) errors.opencl_error!void;
+pub inline fn retain(device: cl_device_id) errors.opencl_error!void;
 ```
 
 #### Parameters
@@ -136,7 +136,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function releases an OpenCL device. If the device is a valid sub-device created by a call to `clCreateSubDevices`, it is released. If the device is a root-level device (i.e., a `cl_device_id` returned by `clGetDeviceIDs`), the release function ensures proper cleanup.
 
 ```zig
-pub fn release(device: cl_device_id) errors.opencl_error!void;
+pub inline fn release(device: cl_device_id) errors.opencl_error!void;
 ```
 
 #### Parameters

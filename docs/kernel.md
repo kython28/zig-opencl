@@ -5,7 +5,7 @@
 The `create` function creates a kernel object for a specific function declared in a program. This function ensures that the kernel is properly set up and ready to be used in OpenCL operations.
 
 ```zig
-pub fn create(
+pub inline fn create(
     program: cl_program,
     kernel_name: []const u8
 ) errors.opencl_error!cl_kernel;
@@ -35,7 +35,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `set_arg` function sets the value of a specific argument for a kernel object. This function ensures that the kernel's argument is properly configured for execution.
 
 ```zig
-pub fn set_arg(
+pub inline fn set_arg(
     kernel: cl_kernel,
     arg_index: u32,
     arg_size: usize,
@@ -72,7 +72,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `enqueue_nd_range` function enqueues a command to execute a kernel on a device. This function allows the application to specify the dimensions and size of the global and local work-items, as well as any events to wait for and generate.
 
 ```zig
-pub fn enqueue_nd_range(
+pub inline fn enqueue_nd_range(
     command_queue: cl_command_queue,
     kernel: cl_kernel,
     global_work_offset: ?[]const usize,
@@ -123,7 +123,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of a kernel object. This function ensures that the kernel object is not released while it is still being used.
 
 ```zig
-pub fn retain(kernel: cl_kernel) errors.opencl_error!void;
+pub inline fn retain(kernel: cl_kernel) errors.opencl_error!void;
 ```
 
 ### Parameters
@@ -145,7 +145,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of a kernel object. When the reference count becomes zero, the kernel object is deleted.
 
 ```zig
-pub fn release(kernel: cl_kernel) errors.opencl_error!void;
+pub inline fn release(kernel: cl_kernel) errors.opencl_error!void;
 ```
 
 ### Parameters

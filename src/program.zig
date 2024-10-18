@@ -13,7 +13,7 @@ const cl_device_id = @import("device.zig").cl_device_id;
 
 pub const pfn_notify_callback = fn (program: cl_program, user_data: ?*anyopaque) callconv(.C) void;
 
-pub fn create_with_source(
+pub inline fn create_with_source(
     context: cl_context, strings: []const []const u8,
     allocator: std.mem.Allocator
 ) !cl_program {
@@ -42,7 +42,7 @@ pub fn create_with_source(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn compile(
+pub inline fn compile(
     allocator: std.mem.Allocator, program: cl_program, devices: ?[]const cl_device_id,
     options: ?[]const u8, input_headers: ?[]const cl_program,
     header_include_names: ?[]const []const u8,
@@ -103,7 +103,7 @@ pub fn compile(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn link(
+pub inline fn link(
     context: cl_context, devices: []const cl_device_id,
     options: ?[]const u8, input_programs: []const cl_program,
     callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
@@ -130,7 +130,7 @@ pub fn link(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn build(
+pub inline fn build(
     program: cl_program, device_list: []const cl_device_id, options: ?[]const u8,
     callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
 ) errors.opencl_error!void {
@@ -152,7 +152,7 @@ pub fn build(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn get_build_info(
+pub inline fn get_build_info(
     program: cl_program, device: cl_device_id, param_name: enums.build_info,
     param_value_size: usize, param_value: ?*anyopaque, param_value_size_ret: ?*usize
 ) errors.opencl_error!void {
@@ -169,7 +169,7 @@ pub fn get_build_info(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn retain(program: cl_program) errors.opencl_error!void {
+pub inline fn retain(program: cl_program) errors.opencl_error!void {
     const ret: i32 = opencl.clRetainProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -179,7 +179,7 @@ pub fn retain(program: cl_program) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn release(program: cl_program) errors.opencl_error!void {
+pub inline fn release(program: cl_program) errors.opencl_error!void {
     const ret: i32 = opencl.clReleaseProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 

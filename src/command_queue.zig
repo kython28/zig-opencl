@@ -12,7 +12,7 @@ pub const cl_command_queue = *opaque {};
 const cl_context = @import("context.zig").cl_context;
 const cl_device_id = @import("device.zig").cl_device_id;
 
-pub fn create_with_properties(
+pub inline fn create_with_properties(
     context: cl_context, device: cl_device_id,
     properties: ?[]const cl_queue_properties
 ) errors.opencl_error!cl_command_queue {
@@ -36,7 +36,7 @@ pub fn create_with_properties(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn create(
+pub inline fn create(
     context: cl_context, device: cl_device_id,
     properties: cl_command_queue_properties
 ) errors.opencl_error!cl_command_queue {
@@ -53,7 +53,7 @@ pub fn create(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn flush(command_queue: cl_command_queue) errors.opencl_error!void {
+pub inline fn flush(command_queue: cl_command_queue) errors.opencl_error!void {
     const ret: i32 = opencl.clFlush(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -63,7 +63,7 @@ pub fn flush(command_queue: cl_command_queue) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn finish(command_queue: cl_command_queue) errors.opencl_error!void {
+pub inline fn finish(command_queue: cl_command_queue) errors.opencl_error!void {
     const ret: i32 = opencl.clFinish(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -73,7 +73,7 @@ pub fn finish(command_queue: cl_command_queue) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn retain(command_queue: cl_command_queue) errors.opencl_error!void {
+pub inline fn retain(command_queue: cl_command_queue) errors.opencl_error!void {
     const ret: i32 = opencl.clRetainCommandQueue(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -83,7 +83,7 @@ pub fn retain(command_queue: cl_command_queue) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn release(command_queue: cl_command_queue) errors.opencl_error!void {
+pub inline fn release(command_queue: cl_command_queue) errors.opencl_error!void {
     const ret: i32 = opencl.clReleaseCommandQueue(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 

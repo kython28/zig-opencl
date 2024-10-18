@@ -20,7 +20,7 @@ pub const cl_buffer_region = extern struct {
     size: usize
 };
 
-pub fn create(
+pub inline fn create(
     context: cl_context,
     flags: cl_mem_flags,
     size: usize,
@@ -40,7 +40,7 @@ pub fn create(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn create_sub_buffer(
+pub inline fn create_sub_buffer(
     buffer: cl_mem,
     flags: cl_mem_flags,
     buffer_create_type: enums.buffer_create_type,
@@ -60,7 +60,7 @@ pub fn create_sub_buffer(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn read(
+pub inline fn read(
     command_queue: cl_command_queue, buffer: cl_mem, blocking_read: bool,
     offset: usize, size: usize, ptr: *anyopaque, event_wait_list: ?[]const cl_event,
     event: ?*cl_event
@@ -87,7 +87,7 @@ pub fn read(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn write(
+pub inline fn write(
     command_queue: cl_command_queue, buffer: cl_mem, blocking_write: bool,
     offset: usize, size: usize, ptr: *const anyopaque, event_wait_list: ?[]const cl_event,
     event: ?*cl_event
@@ -114,7 +114,7 @@ pub fn write(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn write_rect(
+pub inline fn write_rect(
     command_queue: cl_command_queue, buffer: cl_mem, blocking_write: bool,
     buffer_origin: []const usize, host_origin: []const usize, region: []const usize,
     buffer_row_pitch: usize, buffer_slice_pitch: usize, host_row_pitch: usize,
@@ -148,7 +148,7 @@ pub fn write_rect(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn read_rect(
+pub inline fn read_rect(
     command_queue: cl_command_queue, buffer: cl_mem, blocking_read: bool,
     buffer_origin: []const usize, host_origin: []const usize, region: []const usize,
     buffer_row_pitch: usize, buffer_slice_pitch: usize, host_row_pitch: usize,
@@ -182,7 +182,7 @@ pub fn read_rect(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn fill(
+pub inline fn fill(
     command_queue: cl_command_queue, buffer: cl_mem, pattern: *const anyopaque,
     pattern_size: usize, offset: usize, size: usize, event_wait_list: ?[]const cl_event,
     event: ?*cl_event
@@ -208,7 +208,7 @@ pub fn fill(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn copy(
+pub inline fn copy(
     command_queue: cl_command_queue, src_buffer: cl_mem, dst_buffer: cl_mem,
     src_offset: usize, dst_offset: usize, size: usize, event_wait_list: ?[]const cl_event,
     event: ?*cl_event
@@ -235,7 +235,7 @@ pub fn copy(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn copy_rect(
+pub inline fn copy_rect(
     command_queue: cl_command_queue, src_buffer: cl_mem, dst_buffer: cl_mem,
     src_origin: []const usize, dst_origin: []const usize, region: []const usize,
     src_row_pitch: usize, src_slice_pitch: usize, dst_row_pitch: usize,
@@ -360,7 +360,7 @@ pub fn unmap(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn retain(buffer: cl_mem) errors.opencl_error!void {
+pub inline fn retain(buffer: cl_mem) errors.opencl_error!void {
     const ret: i32 = opencl.clRetainMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -370,7 +370,7 @@ pub fn retain(buffer: cl_mem) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn release(buffer: cl_mem) errors.opencl_error!void {
+pub inline fn release(buffer: cl_mem) errors.opencl_error!void {
     const ret: i32 = opencl.clReleaseMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 

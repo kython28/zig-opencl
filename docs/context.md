@@ -5,7 +5,7 @@
 The `create` function creates an OpenCL context, which is used by the OpenCL runtime to manage objects such as command-queues, memory, programs, and kernels.
 
 ```zig
-pub fn create(
+pub inline fn create(
     properties: ?[]const cl_context_properties, 
     devices: []const cl_device_id, 
     pfn_notify: ?*const pfn_notify_callback, 
@@ -35,7 +35,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 ## Creating Context from Type
 
 ```zig
-pub fn create_from_type(
+pub inline fn create_from_type(
     properties: ?[]const cl_context_properties,
     device_type: device.enums.device_type,
     pfn_notify: ?*const pfn_notify_callback,
@@ -76,7 +76,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `get_info` function is used to query various types of information about an OpenCL context, such as the reference count, number of devices, and other attributes.
 
 ```zig
-pub fn get_info(
+pub inline fn get_info(
     context: cl_context,
     param_name: enums.context_info,
     param_value_size: usize,
@@ -109,7 +109,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 ### Retain a context
 
 ```zig
-pub fn retain(context: cl_context) errors.opencl_error!void;
+pub inline fn retain(context: cl_context) errors.opencl_error!void;
 ``` 
 
 #### Parameters
@@ -127,7 +127,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 ## Releasing a context
 
 ```zig
-pub fn release(context: cl_context) errors.opencl_error!void;
+pub inline fn release(context: cl_context) errors.opencl_error!void;
 ```
 
 #### Parameters

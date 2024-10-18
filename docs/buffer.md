@@ -5,7 +5,7 @@
 The `create` function creates a buffer object in an OpenCL context. This buffer object can be used to store data that will be processed by an OpenCL device.
 
 ```zig
-pub fn create(
+pub inline fn create(
     context: cl_context,
     flags: cl_mem_flags,
     size: usize,
@@ -34,6 +34,40 @@ The function uses Zig's error handling features to manage potential OpenCL error
 -   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
 -   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
+## Creating a Sub Buffer
+
+### Description
+
+The `create_sub_buffer` function creates a sub-buffer object from an existing buffer. This allows a portion of a buffer's memory to be used separately as a new buffer object. The function uses specific flags and a buffer creation type to control how the sub-buffer is created.
+
+```zig
+pub inline fn create_sub_buffer(
+    buffer: cl_mem,
+    flags: cl_mem_flags,
+    buffer_create_type: enums.buffer_create_type,
+    buffer_create_info: *anyopaque
+) errors.opencl_error!cl_mem
+```
+
+### Parameters
+
+-   **buffer**: The existing `cl_mem` buffer from which the sub-buffer will be created.
+-   **flags**: Memory allocation flags defining how the sub-buffer will be used (e.g., read/write permissions).
+-   **buffer_create_type**: Specifies the type of sub-buffer to create, from the `enums.buffer_create_type` enum.
+-   **buffer_create_info**: A pointer to a structure that defines how the sub-buffer is created. This can vary depending on the sub-buffer type.
+
+### Error Handling
+
+The function uses Zig's error handling features to manage potential OpenCL errors. If `clCreateSubBuffer` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
+
+-   `"invalid_mem_object"`: The buffer provided is not a valid memory object.
+-   `"invalid_value"`: Invalid values for buffer creation info or flags.
+-   `"mem_object_allocation_failure"`: Failure to allocate the sub-buffer.
+-   `"out_of_resources"`: Failure to allocate resources required by the OpenCL implementation on the device.
+-   `"out_of_host_memory"`: Failure to allocate resources required by the OpenCL implementation on the host.
+-   `"invalid_buffer_size"`: The specified buffer size is not valid.
+-   `"misaligned_sub_buffer_offset"`: The sub-buffer offset is misaligned.
+
 ## Reading from a Buffer
 
 ### Description
@@ -41,7 +75,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `read` function reads data from an OpenCL buffer object to host memory. This function allows for both blocking and non-blocking reads.
 
 ```zig
-pub fn read(
+pub inline fn read(
     command_queue: cl_command_queue,
     buffer: cl_mem,
     blocking_read: bool,
@@ -87,7 +121,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `write` function writes data from host memory to an OpenCL buffer object. This function allows for both blocking and non-blocking writes.
 
 ```zig
-pub fn write(
+pub inline fn write(
     command_queue: cl_command_queue,
     buffer: cl_mem,
     blocking_write: bool,
@@ -133,7 +167,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `write_rect` function writes data from host memory to a rectangular region in an OpenCL buffer object. This function allows for both blocking and non-blocking writes.
 
 ```zig
-pub fn write_rect(
+pub inline fn write_rect(
     command_queue: cl_command_queue,
     buffer: cl_mem,
     blocking_write: bool,
@@ -189,7 +223,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `read_rect` function reads data from a rectangular region in an OpenCL buffer object to host memory. This function allows for both blocking and non-blocking reads.
 
 ```zig
-pub fn read_rect(
+pub inline fn read_rect(
     command_queue: cl_command_queue,
     buffer: cl_mem,
     blocking_read: bool,
@@ -245,7 +279,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `fill` function fills a buffer with a specified pattern. This function is useful for initializing or resetting the contents of a buffer in OpenCL.
 
 ```zig
-pub fn fill(
+pub inline fn fill(
     command_queue: cl_command_queue,
     buffer: cl_mem,
     pattern: *const anyopaque,
@@ -289,7 +323,7 @@ The function uses Zig's error handling to manage potential OpenCL errors. If the
 The `copy` function performs a buffer copy operation in OpenCL, copying data from a source buffer to a destination buffer within the same context. This function allows for specifying offsets, size, and events related to the copy operation.
 
 ```zig
-pub fn copy(
+pub inline fn copy(
 	command_queue: cl_command_queue,
 	src_buffer: cl_mem,
 	dst_buffer: cl_mem,
@@ -335,7 +369,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `copy_rect` function performs a rectangular buffer copy operation in OpenCL, copying a 2D or 3D region of data from a source buffer to a destination buffer within the same context. This function allows for specifying offsets, region dimensions, and events related to the copy operation.
 
 ```zig
-pub fn copy_rect(
+pub inline fn copy_rect(
     command_queue: cl_command_queue,
     src_buffer: cl_mem,
     dst_buffer: cl_mem,
@@ -389,7 +423,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `map` function maps a buffer into the host address space, allowing the application to read or write directly to the buffer. This function supports both blocking and non-blocking map operations and leverages Zig's `comptime` to provide a template-like mechanism for different pointer types.
 
 ```zig
-pub fn map(
+pub inline fn map(
     comptime T: type,
     command_queue: cl_command_queue,
     buffer: cl_mem,
@@ -439,7 +473,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `unmap` function unmaps a previously mapped buffer from the host address space. This function completes any operations on the mapped region and makes the buffer available for other operations in OpenCL. This function leverages Zig's `comptime` to provide a template-like mechanism for different pointer types.
 
 ```zig
-pub fn unmap(
+pub inline fn unmap(
     comptime T: type,
     command_queue: cl_command_queue,
     buffer: cl_mem,
@@ -477,7 +511,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of a memory object. This function is used to ensure that the memory object remains valid even if other references to it are released.
 
 ```zig
-pub fn retain(buffer: cl_mem) errors.opencl_error!void;
+pub inline fn retain(buffer: cl_mem) errors.opencl_error!void;
 ```
 
 ### Parameters
@@ -499,7 +533,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of a memory object. When the reference count becomes zero, the memory object is deleted. This function ensures that resources are properly released when they are no longer needed.
 
 ```zig
-pub fn release(buffer: cl_mem) errors.opencl_error!void; 
+pub inline fn release(buffer: cl_mem) errors.opencl_error!void; 
 ```
 
 ### Parameters

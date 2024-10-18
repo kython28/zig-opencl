@@ -8,7 +8,7 @@ const cl_program = @import("program.zig").cl_program;
 const cl_command_queue = @import("command_queue.zig").cl_command_queue;
 const cl_event = @import("event.zig").cl_event;
 
-pub fn create(program: cl_program, kernel_name: []const u8) errors.opencl_error!cl_kernel {
+pub inline fn create(program: cl_program, kernel_name: []const u8) errors.opencl_error!cl_kernel {
     var ret: i32 = undefined;
     const kernel: ?cl_kernel = @ptrCast(opencl.clCreateKernel(
         @ptrCast(program), kernel_name.ptr, &ret
@@ -23,7 +23,7 @@ pub fn create(program: cl_program, kernel_name: []const u8) errors.opencl_error!
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn set_arg(kernel: cl_kernel, arg_index: u32, arg_size: usize, arg_value: ?*const anyopaque) errors.opencl_error!void {
+pub inline fn set_arg(kernel: cl_kernel, arg_index: u32, arg_size: usize, arg_value: ?*const anyopaque) errors.opencl_error!void {
     const ret: i32 = opencl.clSetKernelArg(
         @ptrCast(kernel), arg_index, arg_size, arg_value
     );
@@ -37,7 +37,7 @@ pub fn set_arg(kernel: cl_kernel, arg_index: u32, arg_size: usize, arg_value: ?*
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn enqueue_nd_range(
+pub inline fn enqueue_nd_range(
     command_queue: cl_command_queue,
     kernel: cl_kernel,
     global_work_offset: ?[]const usize,
@@ -83,7 +83,7 @@ pub fn enqueue_nd_range(
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn retain(kernel: cl_kernel) errors.opencl_error!void {
+pub inline fn retain(kernel: cl_kernel) errors.opencl_error!void {
     const ret: i32 = opencl.clRetainKernel(@ptrCast(kernel));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -93,7 +93,7 @@ pub fn retain(kernel: cl_kernel) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub fn release(kernel: cl_kernel) errors.opencl_error!void {
+pub inline fn release(kernel: cl_kernel) errors.opencl_error!void {
     const ret: i32 = opencl.clReleaseKernel(@ptrCast(kernel));
     if (ret == opencl.CL_SUCCESS) return;
 
