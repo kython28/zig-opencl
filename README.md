@@ -8,12 +8,7 @@ A modern OpenCL wrapper for Zig language, providing easy-to-use interfaces for O
 
 ### Installation
 To include this wrapper in your Zig project as a submodule, follow these steps:
-1.  **Add the submodule:**
-```bash
-git submodule add https://github.com/kython28/zig-opencl zig-opencl
-git submodule update --init --recursive
-```
-2. **Edit your `build.zig.zon`:**
+1. **Edit your `build.zig.zon`:**
 Add the `zig-opencl` dependency to your `build.zig.zon` file, similar to the following:
 ```zig
 .{
@@ -27,7 +22,7 @@ Add the `zig-opencl` dependency to your `build.zig.zon` file, similar to the fol
     // .....
 }
 ```
-3. **Edit your `build.zig`:**
+2. **Edit your `build.zig`:**
 Configure your `build.zig` file to include the `zig-opencl` module:
 ```zig
 const std = @import("std");
@@ -55,7 +50,7 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(app);
 }
 ```
-4. **Build the project:**
+3. **Build the project:**
 Now you can build your project using Zig:
 ```bash
 zig build
