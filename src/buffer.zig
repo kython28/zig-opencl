@@ -312,7 +312,7 @@ pub fn map(
                     .child = type_ptr.child,
                     .size = .many,
                     .is_const = type_ptr.is_const,
-                    .sentinel = type_ptr.sentinel,
+                    .sentinel_ptr = type_ptr.sentinel_ptr,
                     .alignment = type_ptr.alignment,
                     .is_volatile = type_ptr.is_volatile,
                     .is_allowzero = type_ptr.is_allowzero,
