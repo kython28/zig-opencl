@@ -305,7 +305,7 @@ pub fn map(
     }
 
     return switch (type_info.pointer.size) {
-        .Slice => blk: {
+        .slice => blk: {
             const type_ptr = type_info.pointer;
             const many_ptr_type = @Type(std.builtin.Type{
                 .Pointer = .{
