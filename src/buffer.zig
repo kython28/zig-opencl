@@ -274,7 +274,7 @@ pub fn map(
     event: ?*cl_event
 ) errors.opencl_error!T {
     const type_info = @typeInfo(T);
-    if (type_info != .Pointer) {
+    if (type_info != .pointer) {
         @compileError("Only pointers are accepted");
     }
 
@@ -310,7 +310,7 @@ pub fn map(
             const many_ptr_type = @Type(std.builtin.Type{
                 .Pointer = .{
                     .child = type_ptr.child,
-                    .size = .Many,
+                    .size = .many,
                     .is_const = type_ptr.is_const,
                     .sentinel = type_ptr.sentinel,
                     .alignment = type_ptr.alignment,

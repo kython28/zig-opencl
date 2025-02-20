@@ -19,7 +19,7 @@ const platforms: []cl.platform.platform_info = try cl.platform.get_all(allocator
 defer allocator.free(platforms);
 
 for (platforms) |platform| {
-    const fields = @typeInfo(@TypeOf(platform)).Struct.fields;
+    const fields = @typeInfo(@TypeOf(platform)).@"struct".fields;
     inline for (fields) |field| {
         if (field.type == cl.platform.cl_platform_id) continue;
         print("{s} = {s}\n", .{field.name, @field(platform, field.name)});
