@@ -23,7 +23,7 @@ pub fn build_enum(comptime T: type, comptime definition: []const [:0]const u8) t
     }
     
     const my_new_enum = std.builtin.Type{
-        .Enum = std.builtin.Type.Enum{
+        .@"enum" = std.builtin.Type.Enum{
             .fields = &fields,
             .tag_type = T,
             .is_exhaustive = false,
@@ -56,7 +56,7 @@ pub fn build_error_set(comptime enum_tag: anytype, comptime definition: []const 
     }
 
     return @Type(std.builtin.Type{
-        .ErrorSet = &error_set
+        .error_set = &error_set
     });
 }
 
@@ -68,8 +68,8 @@ pub fn get_attr_info(comptime T: anytype, comptime func: anytype,
     try func(id, param_name, 0, null, &size);
 
     const type_info = @typeInfo(T);
-    if (type_info == .Pointer) {
-        attr = try allocator.alloc(type_info.Pointer.child, size / @sizeOf(type_info.Pointer.child));
+    if (type_info == .pointer) {
+        attr = try allocator.alloc(type_info.pointer.child, size / @sizeOf(type_info.pointer.child));
         errdefer allocator.free(attr);
 
         try func(id, param_name, size, attr.ptr, null);
@@ -82,7 +82,7 @@ pub fn get_attr_info(comptime T: anytype, comptime func: anytype,
 
 pub inline fn release_attr_info(comptime T: anytype, allocator: std.mem.Allocator, attr: T) void {
     const attr_type_info = @typeInfo(T);
-    if (attr_type_info != .Pointer or attr_type_info.Pointer.size == .One) {
+    if (attr_type_info != .pointer or attr_type_info.pointer.size == .one) {
         @compileError("This function only support arrays");
     }
 

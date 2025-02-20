@@ -3,7 +3,7 @@ A modern OpenCL wrapper for Zig language, providing easy-to-use interfaces for O
 
 ## Getting Started
 ### Prerequisites
--   Zig 0.13.0 or higher
+-   Zig 0.14.0-dev.3241+55c46870b or higher
 -   OpenCL 1.0 or higher
 
 ### Installation
@@ -15,8 +15,7 @@ Add the `zig-opencl` dependency to your `build.zig.zon` file, similar to the fol
     // ......
     .dependencies = .{
         .@"zig-opencl" = .{
-            .url = "https://github.com/kython28/zig-opencl/archive/refs/tags/v0.3.0.tar.gz",
-            .hash = "1220f5e5f896607483e5177125f8b6bdf4343d37b4c0bccbe6733f545fafe9a60345",
+            .url = "https://github.com/kython28/zig-opencl/archive/refs/tags/v0.4.0.tar.gz",
         },
     },
     // .....

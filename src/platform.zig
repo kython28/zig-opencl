@@ -102,7 +102,7 @@ pub fn release_list(allocator: std.mem.Allocator,
     for (platform_infos) |p_info| {
         if (p_info.id == null) break;
 
-        const fields = @typeInfo(@TypeOf(p_info)).Struct.fields;
+        const fields = @typeInfo(@TypeOf(p_info)).@"struct".fields;
         inline for (fields) |field| {
             if (field.type != ?cl_platform_id){
                 utils.release_attr_info(field.type, allocator, @field(p_info, field.name));
