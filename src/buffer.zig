@@ -308,7 +308,7 @@ pub fn map(
         .slice => blk: {
             const type_ptr = type_info.pointer;
             const many_ptr_type = @Type(std.builtin.Type{
-                .Pointer = .{
+                .pointer = .{
                     .child = type_ptr.child,
                     .size = .many,
                     .is_const = type_ptr.is_const,
