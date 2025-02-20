@@ -278,7 +278,7 @@ pub fn map(
         @compileError("Only pointers are accepted");
     }
 
-    const ptr_child = type_info.Pointer.child;
+    const ptr_child = type_info.pointer.child;
     if (@mod(size, @sizeOf(ptr_child)) != 0) {
         return errors.opencl_error.invalid_value;
     }
@@ -304,9 +304,9 @@ pub fn map(
         return errors.translate_opencl_error(errors_arr, ret);
     }
 
-    return switch (type_info.Pointer.size) {
+    return switch (type_info.pointer.size) {
         .Slice => blk: {
-            const type_ptr = type_info.Pointer;
+            const type_ptr = type_info.pointer;
             const many_ptr_type = @Type(std.builtin.Type{
                 .Pointer = .{
                     .child = type_ptr.child,
@@ -331,7 +331,7 @@ pub fn unmap(
     event_wait_list: ?[]const cl_event, event: ?*cl_event
 ) errors.opencl_error!void {
     const type_info = @typeInfo(T);
-    if (type_info != .Pointer) {
+    if (type_info != .pointer) {
         @compileError("Only pointers are accepted");
     }
 
@@ -342,8 +342,8 @@ pub fn unmap(
         num_events = @intCast(v.len);
     }
 
-    const ptr = switch(type_info.Pointer.size) {
-        .Slice => mapped_ptr.ptr,
+    const ptr = switch(type_info.pointer.size) {
+        .slice => mapped_ptr.ptr,
         else => mapped_ptr
     };
 
