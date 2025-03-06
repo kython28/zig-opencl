@@ -16,7 +16,7 @@ Add the `zig-opencl` dependency to your `build.zig.zon` file, similar to the fol
     .dependencies = .{
         .@"zig-opencl" = .{
             .url = "https://github.com/kython28/zig-opencl/archive/refs/tags/v0.4.6.tar.gz",
-            .hash = "12203a9c14ebbb6e86ba16842b5f4086f31dbf39f09283a7b6fc41d41a9f28c5a3a9"
+            .hash = "zigopencl-0.4.6-z-Vhw1ySAgDvQCNmB6n7jkUo1i6whoFwlqBNfG0YgPn9"
         },
     },
     // .....
