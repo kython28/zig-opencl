@@ -1,8 +1,9 @@
 .{
-    .name = "zig-opencl",
-    .version = "0.4.5",
+    .name = .zigopencl,
+    .version = "0.4.6",
 
     .minimum_zig_version = "0.14.0",
+    .fingerprint = 0x46243d52c361e5cf,
 
     .paths = .{
         "",
