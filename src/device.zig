@@ -99,7 +99,7 @@ pub inline fn release(device: cl_device_id) void {
     const errors_arr = .{
         "out_of_host_memory", "invalid_device", "out_of_resources"
     };
-    std.debug.panic("Unexcepted error while releasing OpenCL device: {s}", .{
+    std.debug.panic("Unexpected error while releasing OpenCL device: {s}", .{
         @errorName(errors.translate_opencl_error(errors_arr, ret))}
     );
 }

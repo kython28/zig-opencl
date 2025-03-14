@@ -377,7 +377,7 @@ pub inline fn release(buffer: cl_mem) void {
     const errors_arr = .{
         "out_of_host_memory", "invalid_mem_object", "out_of_resources"
     };
-    std.debug.panic("Unexcepted error while releasing OpenCL buffer: {s}", .{
+    std.debug.panic("Unexpected error while releasing OpenCL buffer: {s}", .{
         @errorName(errors.translate_opencl_error(errors_arr, ret))}
     );
 }

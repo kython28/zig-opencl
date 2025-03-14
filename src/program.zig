@@ -186,7 +186,7 @@ pub inline fn release(program: cl_program) void {
     const errors_arr = .{
         "out_of_host_memory", "invalid_program", "out_of_resources"
     };
-    std.debug.panic("Unexcepted error while releasing OpenCL program: {s}", .{
+    std.debug.panic("Unexpected error while releasing OpenCL program: {s}", .{
         @errorName(errors.translate_opencl_error(errors_arr, ret))}
     );
 }

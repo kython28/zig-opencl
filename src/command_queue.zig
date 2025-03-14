@@ -90,7 +90,7 @@ pub inline fn release(command_queue: cl_command_queue) void {
     const errors_arr = .{
         "out_of_host_memory", "invalid_command_queue", "out_of_resources"
     };
-    std.debug.panic("Unexcepted error while releasing OpenCL command queue: {s}", .{
+    std.debug.panic("Unexpected error while releasing OpenCL command queue: {s}", .{
         @errorName(errors.translate_opencl_error(errors_arr, ret))}
     );
 }

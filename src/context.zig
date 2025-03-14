@@ -94,7 +94,7 @@ pub inline fn release(context: cl_context) void {
     const errors_arr = .{
         "out_of_host_memory", "invalid_context", "out_of_resources"
     };
-    std.debug.panic("Unexcepted error while releasing OpenCL context: {s}", .{
+    std.debug.panic("Unexpected error while releasing OpenCL context: {s}", .{
         @errorName(errors.translate_opencl_error(errors_arr, ret))}
     );
 }
