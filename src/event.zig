@@ -89,7 +89,7 @@ pub inline fn release(event: cl_event) void {
     const errors_arr = .{
         "out_of_host_memory", "invalid_event", "out_of_resources"
     };
-    std.debug.panic("Unexcepted error while releasing OpenCL kernel: {s}", .{
+    std.debug.panic("Unexcepted error while releasing OpenCL event: {s}", .{
         @errorName(errors.translate_opencl_error(errors_arr, ret))}
     );
 }
