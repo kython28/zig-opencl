@@ -77,18 +77,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of an event object. When the reference count becomes zero, the event object is deleted. This function ensures that resources are properly released when they are no longer needed.
 
 ```zig
-pub inline fn release(event: cl_event) errors.opencl_error!void;
+pub inline fn release(event: cl_event) void;
 ```
 
 ### Parameters
 
 -   **event**: The `cl_event` object to be released.
-
-### Error Handling
-
-The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clReleaseEvent` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
-
--   `"invalid_event"`: The event is not a valid event object.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
-

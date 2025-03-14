@@ -54,18 +54,10 @@ With the platform and device ready, the next step is to create a context and a c
 const cl = @import("opencl");
 
 const context: cl.context.cl_context = try cl.context.create(null, devices, null, null);
-defer {
-    cl.context.release(context) catch {
-        unreachable; // All the OpenCL functions can fail
-    };
-}
+defer cl.context.release(context);
 
 const cmd = try cl.command_queue.create(context, device, 0);
-defer {
-    cl.command_queue.release(cmd) catch {
-        unreachable;
-    };
-}
+defer cl.command_queue.release(cmd);
 ```
 
 ### 4. Creating a Program
@@ -95,11 +87,7 @@ const sources_list = &[_][]const u8{file_content};
 const program = try cl.program.create_with_source(
     context, sources_list, allocator
 );
-defer {
-    cl.program.release(program) catch {
-        unreachable;
-    };
-}
+defer cl.program.release(program);
 
 cl.program.build(program, &[_]cl.device.cl_device_id{device}, null, null, null) catch |err| {
     if (err == cl.errors.opencl_error.build_program_failure){
@@ -131,11 +119,7 @@ const buff = try cl.buffer.create(
     context, @intFromEnum(cl.buffer.enums.mem_flags.read_write),
     32 * @sizeOf(i32), null
 );
-defer {
-    cl.buffer.release(buff) catch {
-        unreachable;
-    };
-}
+defer cl.buffer.release(buff);
 
 var buff_map: []i32 = try cl.buffer.map(
     []i32, cmd, buff, true,
@@ -163,17 +147,14 @@ const cl = @import("cl");
 // ...
 
 const kernel: cl.kernel.cl_kernel = try cl.kernel.create(program, "test_kernel");
-defer {
-    cl.kernel.release(kernel) catch {
-        unreachable;
-    };
-}
+defer cl.kernel.release(kernel);
 
 try cl.kernel.set_arg(kernel, 0,  @sizeOf(cl.buffer.cl_mem), @ptrCast(&buff1));
 try cl.kernel.set_arg(kernel, 1,  @sizeOf(cl.buffer.cl_mem), @ptrCast(&buff2));
 
 try cl.kernel.enqueue_nd_range(cmd, kernel, null, &[_]usize{8}, &[_]usize{8}, null, &event);
+defer cl.event.release(event);
+
 try cl.event.wait(event);
-try cl.event.release(event);
 ```
 

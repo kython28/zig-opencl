@@ -127,18 +127,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 ## Releasing a context
 
 ```zig
-pub inline fn release(context: cl_context) errors.opencl_error!void;
+pub inline fn release(context: cl_context) void;
 ```
 
 #### Parameters
 
 -   `context`: Specifies the OpenCL context to release.
-
-#### Error Handling
-
-The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clReleaseContext` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
-
--   `"invalid_context"`: If the specified context is not a valid OpenCL context.
--   `"out_of_resources"`: If there is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: If there is a failure to allocate resources required by the OpenCL implementation on the host
-

@@ -69,7 +69,7 @@ const opencl_error_enum = utils.build_enum(i32, opencl_error_definitions);
 
 pub const opencl_error = utils.build_error_set(opencl_error_enum, opencl_error_definitions);
 
-pub inline fn translate_opencl_error(comptime fields: anytype, error_code: i32) opencl_error {
+pub fn translate_opencl_error(comptime fields: anytype, error_code: i32) opencl_error {
     inline for (fields) |field| {
         if (@hasField(opencl_error_enum, field) and @intFromEnum(@field(opencl_error_enum, field)) == error_code){
             return @field(opencl_error, field);
@@ -79,7 +79,7 @@ pub inline fn translate_opencl_error(comptime fields: anytype, error_code: i32) 
     @panic("Unkwon error code");
 }
 
-pub inline fn translate_opencl_error_for_all_fields(error_code: i32) opencl_error {
+pub fn translate_opencl_error_for_all_fields(error_code: i32) opencl_error {
     const opencl_error_fields = @typeInfo(opencl_error_enum).@"enum".fields;
     inline for (opencl_error_fields) |field| {
         const field_name = field.name;

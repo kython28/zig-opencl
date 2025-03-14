@@ -136,17 +136,10 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function releases an OpenCL device. If the device is a valid sub-device created by a call to `clCreateSubDevices`, it is released. If the device is a root-level device (i.e., a `cl_device_id` returned by `clGetDeviceIDs`), the release function ensures proper cleanup.
 
 ```zig
-pub inline fn release(device: cl_device_id) errors.opencl_error!void;
+pub inline fn release(device: cl_device_id) void;
 ```
 
 #### Parameters
 
 -   `device`: The `cl_device_id` of the OpenCL device to release.
 
-#### Error Handling
-
-The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clReleaseDevice` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
-
--   `"invalid_device"`: The specified device is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.

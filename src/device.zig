@@ -90,7 +90,7 @@ pub inline fn retain(device: cl_device_id) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub inline fn release(device: cl_device_id) errors.opencl_error!void {
+pub inline fn release(device: cl_device_id) void {
     if (cl.opencl_version < 120) return;
 
     const ret: i32 = opencl.clReleaseDevice(@ptrCast(device));
@@ -99,5 +99,7 @@ pub inline fn release(device: cl_device_id) errors.opencl_error!void {
     const errors_arr = .{
         "out_of_host_memory", "invalid_device", "out_of_resources"
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    std.debug.panic("Unexcepted error while releasing OpenCL device: {s}", .{
+        @errorName(errors.translate_opencl_error(errors_arr, ret))}
+    );
 }

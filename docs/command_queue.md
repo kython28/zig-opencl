@@ -125,18 +125,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of the specified command queue. When the reference count reaches zero, the command queue is deleted.
 
 ```zig
-pub inline fn release(command_queue: cl_command_queue) errors.opencl_error!void;
+pub inline fn release(command_queue: cl_command_queue) void;
 ```
 
 ### Parameters
 
 -   **command_queue**: The `cl_command_queue` whose reference count is to be decremented.
-
-### Error Handling
-
-The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clReleaseCommandQueue` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
-
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
-

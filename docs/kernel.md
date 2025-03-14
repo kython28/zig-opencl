@@ -145,18 +145,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of a kernel object. When the reference count becomes zero, the kernel object is deleted.
 
 ```zig
-pub inline fn release(kernel: cl_kernel) errors.opencl_error!void;
+pub inline fn release(kernel: cl_kernel) void;
 ```
 
 ### Parameters
 
 -   `kernel`: The `cl_kernel` object to be released. The kernel reference count is decremented.
-
-### Error Handling
-
-The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clReleaseKernel` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
-
--   `"invalid_kernel"`: The kernel object is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
-

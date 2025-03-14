@@ -179,12 +179,14 @@ pub inline fn retain(program: cl_program) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub inline fn release(program: cl_program) errors.opencl_error!void {
+pub inline fn release(program: cl_program) void {
     const ret: i32 = opencl.clReleaseProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
         "out_of_host_memory", "invalid_program", "out_of_resources"
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    std.debug.panic("Unexcepted error while releasing OpenCL program: {s}", .{
+        @errorName(errors.translate_opencl_error(errors_arr, ret))}
+    );
 }

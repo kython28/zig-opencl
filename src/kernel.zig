@@ -1,3 +1,4 @@
+const std = @import("std");
 const cl = @import("cl.zig");
 const opencl = cl.opencl;
 
@@ -93,12 +94,14 @@ pub inline fn retain(kernel: cl_kernel) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub inline fn release(kernel: cl_kernel) errors.opencl_error!void {
+pub inline fn release(kernel: cl_kernel) void {
     const ret: i32 = opencl.clReleaseKernel(@ptrCast(kernel));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
         "out_of_host_memory", "invalid_kernel", "out_of_resources"
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    std.debug.panic("Unexcepted error while releasing OpenCL kernel: {s}", .{
+        @errorName(errors.translate_opencl_error(errors_arr, ret))}
+    );
 }

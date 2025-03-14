@@ -83,12 +83,14 @@ pub inline fn retain(command_queue: cl_command_queue) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub inline fn release(command_queue: cl_command_queue) errors.opencl_error!void {
+pub inline fn release(command_queue: cl_command_queue) void {
     const ret: i32 = opencl.clReleaseCommandQueue(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
         "out_of_host_memory", "invalid_command_queue", "out_of_resources"
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    std.debug.panic("Unexcepted error while releasing OpenCL command queue: {s}", .{
+        @errorName(errors.translate_opencl_error(errors_arr, ret))}
+    );
 }

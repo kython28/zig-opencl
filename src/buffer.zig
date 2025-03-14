@@ -370,12 +370,14 @@ pub inline fn retain(buffer: cl_mem) errors.opencl_error!void {
     return errors.translate_opencl_error(errors_arr, ret);
 }
 
-pub inline fn release(buffer: cl_mem) errors.opencl_error!void {
+pub inline fn release(buffer: cl_mem) void {
     const ret: i32 = opencl.clReleaseMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
         "out_of_host_memory", "invalid_mem_object", "out_of_resources"
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    std.debug.panic("Unexcepted error while releasing OpenCL buffer: {s}", .{
+        @errorName(errors.translate_opencl_error(errors_arr, ret))}
+    );
 }
