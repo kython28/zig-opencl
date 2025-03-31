@@ -3,7 +3,7 @@ const utils = @import("../utils.zig");
 const device_type_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "cpu", "CL_DEVICE_TYPE_CPU",
     "gpu", "CL_DEVICE_TYPE_GPU",
-    "accelator", "CL_DEVICE_TYPE_ACCELERATOR",
+    "accelerator", "CL_DEVICE_TYPE_ACCELERATOR",
     "default", "CL_DEVICE_TYPE_DEFAULT",
     "all", "CL_DEVICE_TYPE_ALL",
     "custom", "CL_DEVICE_TYPE_CUSTOM"
