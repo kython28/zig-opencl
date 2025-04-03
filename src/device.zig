@@ -6,7 +6,6 @@ const errors = @import("errors.zig");
 pub const enums = @import("enums/device.zig");
 
 pub const cl_device_id = *opaque {};
-pub const cl_device_local_mem_type = opencl.cl_device_local_mem_type;
 const cl_platform_id = @import("platform.zig").cl_platform_id;
 
 pub const device_partition_property = opencl.cl_device_partition_property;

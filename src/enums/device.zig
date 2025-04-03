@@ -1,4 +1,6 @@
 const utils = @import("../utils.zig");
+const cl = @import("../cl.zig");
+const opencl = cl.opencl;
 
 const device_type_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "cpu", "CL_DEVICE_TYPE_CPU",
@@ -154,4 +156,4 @@ const device_local_mem_type_definitions: []const [:0]const u8 = &[_][:0]const u8
     "global", "CL_GLOBAL"
 };
 
-pub const local_mem_type = utils.build_enum(u32, device_local_mem_type_definitions);
+pub const local_mem_type = utils.build_enum(opencl.cl_device_local_mem_type, device_local_mem_type_definitions);
