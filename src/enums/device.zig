@@ -147,11 +147,11 @@ const device_partition_properties_definitions: []const [:0]const u8 = &[_][:0]co
     "partition_by_affinity_domain", "CL_DEVICE_PARTITION_BY_AFFINITY_DOMAIN"
 };
 
-pub const device_partition_property = utils.build_enum(isize, device_partition_properties_definitions);
+pub const partition_property = utils.build_enum(isize, device_partition_properties_definitions);
 
 const device_local_mem_type_definitions: []const [:0]const u8 = &[_][:0]const u8 {
     "local", "CL_LOCAL",
     "global", "CL_GLOBAL"
 };
 
-pub const device_local_mem_type = utils.build_enum(u32, device_local_mem_type_definitions);
+pub const local_mem_type = utils.build_enum(u32, device_local_mem_type_definitions);
