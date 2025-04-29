@@ -5,7 +5,13 @@
     .minimum_zig_version = "0.14.0",
     .fingerprint = 0x46243d52c361e5cf,
 
+    .dependencies = .{
+        .opencl_headers = .{
+            .url = "https://github.com/KhronosGroup/OpenCL-Headers/archive/v2024.10.24.tar.gz",
+            .hash = "1220b550e9e79baf05f8b4797bfbc392a49856d08de65d05fd2082298d17ad0ddd4d",
+        },
+    },
     .paths = .{
         "",
-    }
+    },
 }
