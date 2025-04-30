@@ -12,17 +12,17 @@ pub fn build(b: *std.Build) void {
     const module = b.addModule("opencl", .{
         .root_source_file = b.path("src/opencl.zig"),
         .target = target,
-        .optimize = optimize
+        .optimize = optimize,
     });
-    module.addIncludePath(.{
-        .cwd_relative = "/usr/include/"
-    });
-    module.linkSystemLibrary("OpenCL", .{
-        .needed = true
-    });
-    module.linkSystemLibrary("c", .{
-        .needed = true
-    });
+    const headers = b.dependency("opencl_headers", .{});
+    module.addIncludePath(headers.path(""));
+    if (target.result.os.tag == .windows) {
+        module.addLibraryPath(.{ .cwd_relative = "C:\\Windows\\System32\\" });
+    } else {
+        module.addIncludePath(.{ .cwd_relative = "/usr/include/" });
+    }
+    module.linkSystemLibrary("OpenCL", .{ .needed = true });
+    module.linkSystemLibrary("c", .{ .needed = true });
     module.addOptions("opencl_config", options);
 
     const exe_unit_tests = b.addTest(.{
