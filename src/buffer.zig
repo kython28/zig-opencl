@@ -6,9 +6,9 @@ const std = @import("std");
 const errors = @import("errors.zig");
 pub const OpenCLError = errors.OpenCLError;
 
-const cl_command_queue = @import("command_queue.zig").CommandQueue;
-const cl_context = @import("context.zig").Context;
-const cl_event = @import("event.zig").Event;
+const CommandQueue = @import("command_queue.zig").CommandQueue;
+const Context = @import("context.zig").Context;
+const Event = @import("event.zig").Event;
 
 pub const Region = extern struct {
     origin: usize,
@@ -45,7 +45,7 @@ pub const CreateType = struct {
 pub const Mem = *opaque {};
 
 pub fn create(
-    context: cl_context,
+    context: Context,
     flags: MemFlags,
     size: usize,
     host_ptr: ?*anyopaque,
@@ -95,16 +95,16 @@ pub fn createSubBuffer(
 }
 
 pub fn read(
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     buffer: Mem,
     blocking_read: bool,
     offset: usize,
     size: usize,
     ptr: *anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -136,16 +136,16 @@ pub fn read(
 }
 
 pub fn write(
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     buffer: Mem,
     blocking_write: bool,
     offset: usize,
     size: usize,
     ptr: *const anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -177,7 +177,7 @@ pub fn write(
 }
 
 pub fn writeRect(
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     buffer: Mem,
     blocking_write: bool,
     buffer_origin: []const usize,
@@ -188,14 +188,14 @@ pub fn writeRect(
     host_row_pitch: usize,
     host_slice_pitch: usize,
     ptr: *const anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
     if (buffer_origin.len != 3 or host_origin.len != 3 or region.len != 3) {
         return OpenCLError.invalid_value;
     }
 
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -232,7 +232,7 @@ pub fn writeRect(
 }
 
 pub fn readRect(
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     buffer: Mem,
     blocking_read: bool,
     buffer_origin: []const usize,
@@ -243,14 +243,14 @@ pub fn readRect(
     host_row_pitch: usize,
     host_slice_pitch: usize,
     ptr: *anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
     if (buffer_origin.len != 3 or host_origin.len != 3 or region.len != 3) {
         return OpenCLError.invalid_value;
     }
 
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -287,16 +287,16 @@ pub fn readRect(
 }
 
 pub fn fill(
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     buffer: Mem,
     pattern: *const anyopaque,
     pattern_size: usize,
     offset: usize,
     size: usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -327,16 +327,16 @@ pub fn fill(
 }
 
 pub fn copy(
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     src_buffer: Mem,
     dst_buffer: Mem,
     src_offset: usize,
     dst_offset: usize,
     size: usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -367,7 +367,7 @@ pub fn copy(
 }
 
 pub fn copyRect(
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     src_buffer: Mem,
     dst_buffer: Mem,
     src_origin: []const usize,
@@ -377,14 +377,14 @@ pub fn copyRect(
     src_slice_pitch: usize,
     dst_row_pitch: usize,
     dst_slice_pitch: usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
     if (src_origin.len != 3 or dst_origin.len != 3 or region.len != 3) {
         return OpenCLError.invalid_value;
     }
 
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -420,14 +420,14 @@ pub fn copyRect(
 
 pub fn map(
     comptime T: type,
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     buffer: Mem,
     blocking_map: bool,
     map_flags: MapFlags,
     offset: usize,
     size: usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!T {
     const type_info = @typeInfo(T);
     if (type_info != .pointer) {
@@ -439,7 +439,7 @@ pub fn map(
         return OpenCLError.invalid_value;
     }
 
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;
@@ -494,18 +494,18 @@ pub fn map(
 
 pub fn unmap(
     comptime T: type,
-    command_queue: cl_command_queue,
+    command_queue: CommandQueue,
     buffer: Mem,
     mapped_ptr: T,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
 ) OpenCLError!void {
     const type_info = @typeInfo(T);
     if (type_info != .pointer) {
         @compileError("Only pointers are accepted");
     }
 
-    var event_wait_list_ptr: ?[*]const cl_event = null;
+    var event_wait_list_ptr: ?[*]const Event = null;
     var num_events: u32 = 0;
     if (event_wait_list) |v| {
         event_wait_list_ptr = v.ptr;

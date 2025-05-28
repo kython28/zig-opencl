@@ -16,13 +16,13 @@ pub const BuildInfo = enum(32) {
     build_global_variable_total_size = opencl.CL_PROGRAM_BUILD_GLOBAL_VARIABLE_TOTAL_SIZE,
 };
 
-const cl_context = @import("context.zig").Context;
-const cl_device_id = @import("device.zig").DeviceId;
+const Context = @import("context.zig").Context;
+const DeviceId = @import("device.zig").DeviceId;
 
 pub const Callback = fn (program: Program, user_data: ?*anyopaque) callconv(.C) void;
 
 pub inline fn createWithSource(
-    context: cl_context,
+    context: Context,
     strings: []const []const u8,
     allocator: std.mem.Allocator,
 ) !Program {
@@ -57,7 +57,7 @@ pub inline fn createWithSource(
 pub inline fn compile(
     allocator: std.mem.Allocator,
     program: Program,
-    devices: ?[]const cl_device_id,
+    devices: ?[]const DeviceId,
     options: ?[]const u8,
     input_headers: ?[]const Program,
     header_include_names: ?[]const []const u8,
@@ -68,7 +68,7 @@ pub inline fn compile(
         return OpenCLError.invalid_value;
     }
 
-    var devices_ptr: ?[*]const cl_device_id = null;
+    var devices_ptr: ?[*]const DeviceId = null;
     var devices_len: u32 = 0;
     if (devices) |v| {
         devices_ptr = v.ptr;
@@ -127,8 +127,8 @@ pub inline fn compile(
 }
 
 pub inline fn link(
-    context: cl_context,
-    devices: []const cl_device_id,
+    context: Context,
+    devices: []const DeviceId,
     options: ?[]const u8,
     input_programs: []const Program,
     callback: ?*const Callback,
@@ -164,7 +164,7 @@ pub inline fn link(
 
 pub inline fn build(
     program: Program,
-    device_list: []const cl_device_id,
+    device_list: []const DeviceId,
     options: ?[]const u8,
     callback: ?*const Callback,
     user_data: ?*anyopaque,
@@ -195,7 +195,7 @@ pub inline fn build(
 
 pub inline fn get_build_info(
     program: Program,
-    device: cl_device_id,
+    device: DeviceId,
     param_name: BuildInfo,
     param_value_size: usize,
     param_value: ?*anyopaque,

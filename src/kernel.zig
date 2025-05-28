@@ -6,11 +6,11 @@ const errors = @import("errors.zig");
 pub const OpenCLError = errors.OpenCLError;
 
 pub const Kernel = *opaque {};
-const cl_program = @import("program.zig").Program;
+const Program = @import("program.zig").Program;
 const CommandQueue = @import("command_queue.zig").CommandQueue;
 const Event = @import("event.zig").Event;
 
-pub fn create(program: cl_program, kernel_name: []const u8) OpenCLError!Kernel {
+pub fn create(program: Program, kernel_name: []const u8) OpenCLError!Kernel {
     var ret: i32 = undefined;
     const kernel: ?Kernel = @ptrCast(opencl.clCreateKernel(
         @ptrCast(program),
