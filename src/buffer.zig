@@ -44,7 +44,12 @@ pub const CreateType = struct {
 
 pub const Mem = *opaque {};
 
-pub inline fn create(context: cl_context, flags: MemFlags, size: usize, host_ptr: ?*anyopaque) OpenCLError!Mem {
+pub fn create(
+    context: cl_context,
+    flags: MemFlags,
+    size: usize,
+    host_ptr: ?*anyopaque,
+) OpenCLError!Mem {
     var ret: i32 = undefined;
     const mem: ?Mem = @ptrCast(opencl.clCreateBuffer(
         @ptrCast(context),
@@ -64,7 +69,7 @@ pub inline fn create(context: cl_context, flags: MemFlags, size: usize, host_ptr
     return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub inline fn createSubBuffer(
+pub fn createSubBuffer(
     buffer: Mem,
     flags: MemFlags,
     buffer_create_type: CreateType,
@@ -171,7 +176,7 @@ pub fn write(
     return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub fn write_rect(
+pub fn writeRect(
     command_queue: cl_command_queue,
     buffer: Mem,
     blocking_write: bool,
@@ -530,7 +535,7 @@ pub fn unmap(
     return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub inline fn retain(buffer: Mem) OpenCLError!void {
+pub fn retain(buffer: Mem) OpenCLError!void {
     const ret: i32 = opencl.clRetainMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
@@ -540,7 +545,7 @@ pub inline fn retain(buffer: Mem) OpenCLError!void {
     return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub inline fn release(buffer: Mem) void {
+pub fn release(buffer: Mem) void {
     const ret: i32 = opencl.clReleaseMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
