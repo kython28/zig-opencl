@@ -68,7 +68,7 @@ const opencl_error_definitions: []const [:0]const u8 = &[_][:0]const u8{
 const OpenCLErrorEnum = utils.build_enum(i32, opencl_error_definitions);
 pub const OpenCLError = utils.build_error_set(OpenCLErrorEnum, opencl_error_definitions);
 
-pub fn translateOpenclError(comptime fields: anytype, error_code: i32) OpenCLError {
+pub fn translateOpenCLError(comptime fields: anytype, error_code: i32) OpenCLError {
     inline for (fields) |field| {
         if (!@hasField(OpenCLErrorEnum, field)) {
             @compileError("Field " ++ field ++ " does not exist");

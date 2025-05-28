@@ -1,12 +1,11 @@
 const utils = @import("../utils.zig");
+const opencl = cl.opencl;
 
-const map_flags_definitions: []const [:0]const u8 =  &[_][:0]const u8{
-    "read", "CL_MAP_READ",
-    "write", "CL_MAP_WRITE",
-    "write_invalidate_region", "CL_MAP_WRITE_INVALIDATE_REGION",
+pub const MapFlag = struct {
+    pub const read = opencl.CL_MAP_READ;
+    pub const write = opencl.CL_MAP_WRITE;
+    pub const write_invalidate_region = opencl.CL_MAP_WRITE_INVALIDATE_REGION;
 };
-
-pub const MapFlag = utils.buildEnum(u64, map_flags_definitions);
 
 const mem_flags_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "read_write", "CL_MEM_READ_WRITE",
