@@ -8,11 +8,11 @@ const opencl_header_file = switch (builtin.target.os.tag) {
 };
 
 pub const opencl = @cImport({
-    @cDefine("CL_TARGET_OPENCL_VERSION", opencl_target_version);
+    @cDefine("CL_TARGET_OPENCL_VERSION", 300);
     @cInclude(opencl_header_file);
 });
 
-fn get_opencl_version() u16 {
+fn getOpenCLVersion() u16 {
     if (std.fmt.parseInt(u16, opencl_target_version, 10)) |value| {
         return value;
     } else |_| {
@@ -20,4 +20,4 @@ fn get_opencl_version() u16 {
     }
 }
 
-pub const opencl_version = get_opencl_version();
+pub const opencl_version = getOpenCLVersion();
