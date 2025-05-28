@@ -28,8 +28,6 @@ pub fn createWithProperties(
     device: cl_device_id,
     properties: ?[]const QueueProperties,
 ) OpenCLError!CommandQueue {
-    if (cl.opencl_version < 200) unreachable;
-
     var properties_ptr: ?[*]const QueueProperties = null;
     if (properties) |v| {
         properties_ptr = v.ptr;
