@@ -23,7 +23,7 @@ pub const CommandQueue = *opaque {};
 const cl_context = @import("context.zig").cl_context;
 const cl_device_id = @import("device.zig").cl_device_id;
 
-pub fn create_with_properties(
+pub fn createWithProperties(
     context: cl_context,
     device: cl_device_id,
     properties: ?[]const QueueProperties,
