@@ -2,8 +2,6 @@ const cl = @import("cl.zig");
 const opencl = cl.opencl;
 const std = @import("std");
 
-const d_enums = @import("enums/device.zig");
-
 const errors = @import("errors.zig");
 pub const OpenCLError = errors.OpenCLError;
 
@@ -29,11 +27,12 @@ pub const Callback = fn (
     user_data: ?*anyopaque,
 ) callconv(.C) void;
 
-const cl_device_id = @import("device.zig").cl_device_id;
+const device = @import("device.zig");
+const DeviceId = device.DeviceId;
 
 pub fn create(
     properties: ?[]const Properties,
-    devices: []const cl_device_id,
+    devices: []const DeviceId,
     pfn_notify: ?*const Callback,
     user_data: ?*anyopaque,
 ) OpenCLError!Context {
@@ -61,9 +60,9 @@ pub fn create(
     return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub fn create_from_type(
+pub fn createFromType(
     properties: ?[]const Properties,
-    device_type: d_enums.device_type,
+    device_type: device.Type,
     pfn_notify: ?*const Callback,
     user_data: ?*anyopaque,
 ) OpenCLError!Context {
@@ -89,7 +88,7 @@ pub fn create_from_type(
     return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub fn get_info(
+pub fn getInfo(
     context: Context,
     param_name: Info,
     param_value_size: usize,

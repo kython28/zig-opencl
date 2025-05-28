@@ -8,7 +8,7 @@ pub const OpenCLError = errors.OpenCLError;
 
 const cl_command_queue = @import("command_queue.zig").CommandQueue;
 const cl_context = @import("context.zig").Context;
-const cl_event = @import("event.zig").cl_event;
+const cl_event = @import("event.zig").Event;
 
 pub const Region = extern struct {
     origin: usize,

@@ -20,12 +20,12 @@ pub const QueueProperties = opencl.cl_queue_properties;
 
 pub const CommandQueue = *opaque {};
 
-const cl_context = @import("context.zig").Context;
-const cl_device_id = @import("device.zig").cl_device_id;
+const Context = @import("context.zig").Context;
+const DeviceId = @import("device.zig").DeviceId;
 
 pub fn createWithProperties(
-    context: cl_context,
-    device: cl_device_id,
+    context: Context,
+    device: DeviceId,
     properties: ?[]const QueueProperties,
 ) OpenCLError!CommandQueue {
     var properties_ptr: ?[*]const QueueProperties = null;
@@ -51,8 +51,8 @@ pub fn createWithProperties(
 }
 
 pub fn create(
-    context: cl_context,
-    device: cl_device_id,
+    context: Context,
+    device: DeviceId,
     properties: Properties,
 ) OpenCLError!CommandQueue {
     var ret: i32 = undefined;
