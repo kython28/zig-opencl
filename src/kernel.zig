@@ -6,7 +6,7 @@ const errors = @import("errors.zig");
 pub const OpenCLError = errors.OpenCLError;
 
 pub const Kernel = *opaque {};
-const cl_program = @import("program.zig").cl_program;
+const cl_program = @import("program.zig").Program;
 const CommandQueue = @import("command_queue.zig").CommandQueue;
 const Event = @import("event.zig").Event;
 

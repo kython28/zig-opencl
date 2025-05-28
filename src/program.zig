@@ -3,20 +3,29 @@ const opencl = cl.opencl;
 
 const std = @import("std");
 
-pub const enums = @import("enums/program.zig");
 const errors = @import("errors.zig");
+pub const OpenCLError = errors.OpenCLError;
 
-pub const cl_program = *opaque {};
-pub const cl_program_build_info = opencl.cl_program_build_info;
-const cl_context = @import("context.zig").cl_context;
-const cl_device_id = @import("device.zig").cl_device_id;
+pub const Program = *opaque {};
 
-pub const pfn_notify_callback = fn (program: cl_program, user_data: ?*anyopaque) callconv(.C) void;
+pub const BuildInfo = enum(32) {
+    build_status = opencl.CL_PROGRAM_BUILD_STATUS,
+    build_options = opencl.CL_PROGRAM_BUILD_OPTIONS,
+    build_log = opencl.CL_PROGRAM_BUILD_LOG,
+    binary_type = opencl.CL_PROGRAM_BINARY_TYPE,
+    build_global_variable_total_size = opencl.CL_PROGRAM_BUILD_GLOBAL_VARIABLE_TOTAL_SIZE,
+};
 
-pub inline fn create_with_source(
-    context: cl_context, strings: []const []const u8,
-    allocator: std.mem.Allocator
-) !cl_program {
+const cl_context = @import("context.zig").Context;
+const cl_device_id = @import("device.zig").DeviceId;
+
+pub const Callback = fn (program: Program, user_data: ?*anyopaque) callconv(.C) void;
+
+pub inline fn createWithSource(
+    context: cl_context,
+    strings: []const []const u8,
+    allocator: std.mem.Allocator,
+) !Program {
     const tmp_array: [][*c]const u8 = try allocator.alloc([*c]const u8, strings.len);
     defer allocator.free(tmp_array);
 
@@ -29,27 +38,34 @@ pub inline fn create_with_source(
     }
 
     var ret: i32 = undefined;
-    const program: ?cl_program = @ptrCast(opencl.clCreateProgramWithSource(
-        @ptrCast(context), @intCast(strings.len), tmp_array.ptr, tmp_lengths.ptr,
-        &ret
+    const program: ?Program = @ptrCast(opencl.clCreateProgramWithSource(
+        @ptrCast(context),
+        @intCast(strings.len),
+        tmp_array.ptr,
+        tmp_lengths.ptr,
+        &ret,
     ));
     if (ret == opencl.CL_SUCCESS) return program.?;
 
     const errors_arr = .{
-        "invalid_context", "invalid_value", "out_of_resources",
-        "out_of_host_memory"
+        "invalid_context",  "invalid_value",
+        "out_of_resources", "out_of_host_memory",
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    return errors.translateOpenCLError(errors_arr, ret);
 }
 
 pub inline fn compile(
-    allocator: std.mem.Allocator, program: cl_program, devices: ?[]const cl_device_id,
-    options: ?[]const u8, input_headers: ?[]const cl_program,
+    allocator: std.mem.Allocator,
+    program: Program,
+    devices: ?[]const cl_device_id,
+    options: ?[]const u8,
+    input_headers: ?[]const Program,
     header_include_names: ?[]const []const u8,
-    callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
+    callback: ?*const Callback,
+    user_data: ?*anyopaque,
 ) !void {
-    if (@intFromBool(input_headers != null)^@intFromBool(header_include_names != null) == 1) {
-        return errors.opencl_error.invalid_value;
+    if (@intFromBool(input_headers != null) ^ @intFromBool(header_include_names != null) == 1) {
+        return OpenCLError.invalid_value;
     }
 
     var devices_ptr: ?[*]const cl_device_id = null;
@@ -66,7 +82,7 @@ pub inline fn compile(
 
     var tmp_array: ?[][*c]const u8 = null;
     var tmp_array_ptr: ?[*][*c]const u8 = null;
-    var input_headers_ptr: ?[*]const cl_program = null;
+    var input_headers_ptr: ?[*]const Program = null;
     var input_headers_len: u32 = 0;
     if (input_headers) |v| {
         input_headers_ptr = v.ptr;
@@ -88,105 +104,135 @@ pub inline fn compile(
     }
 
     const ret: i32 = opencl.clCompileProgram(
-        @ptrCast(program), devices_len, @ptrCast(devices_ptr), options_ptr,
-        input_headers_len, @ptrCast(input_headers_ptr),
-        tmp_array_ptr, @ptrCast(callback), user_data
+        @ptrCast(program),
+        devices_len,
+        @ptrCast(devices_ptr),
+        options_ptr,
+        input_headers_len,
+        @ptrCast(input_headers_ptr),
+        tmp_array_ptr,
+        @ptrCast(callback),
+        user_data,
     );
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
-        "invalid_program", "invalid_value", "invalid_device",
-        "invalid_compiler_options", "invalid_operation",
-        "compiler_not_available", "compile_program_failure",
-        "out_of_resources", "out_of_host_memory"
+        "invalid_program",         "invalid_value",
+        "invalid_device",          "invalid_compiler_options",
+        "invalid_operation",       "compiler_not_available",
+        "compile_program_failure", "out_of_resources",
+        "out_of_host_memory",
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    return errors.translateOpenCLError(errors_arr, ret);
 }
 
 pub inline fn link(
-    context: cl_context, devices: []const cl_device_id,
-    options: ?[]const u8, input_programs: []const cl_program,
-    callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
-) errors.opencl_error!cl_program {
+    context: cl_context,
+    devices: []const cl_device_id,
+    options: ?[]const u8,
+    input_programs: []const Program,
+    callback: ?*const Callback,
+    user_data: ?*anyopaque,
+) OpenCLError!Program {
     var options_ptr: ?[*]const u8 = null;
     if (options) |v| {
         options_ptr = v.ptr;
     }
     var ret: i32 = undefined;
-    const program: ?cl_program = @ptrCast(opencl.clLinkProgram(
-        @ptrCast(context), @intCast(devices.len), @ptrCast(devices.ptr), options_ptr,
-        @intCast(input_programs.len), @ptrCast(input_programs.ptr),
-        @ptrCast(callback), user_data, &ret
+    const program: ?Program = @ptrCast(opencl.clLinkProgram(
+        @ptrCast(context),
+        @intCast(devices.len),
+        @ptrCast(devices.ptr),
+        options_ptr,
+        @intCast(input_programs.len),
+        @ptrCast(input_programs.ptr),
+        @ptrCast(callback),
+        user_data,
+        &ret,
     ));
     if (ret == opencl.CL_SUCCESS) return program.?;
 
     const errors_arr = .{
-        "invalid_context", "invalid_value", "invalid_program",
-        "invalid_device", "invalid_linker_options",
-        "invalid_operation", "linker_not_available",
-        "link_program_failure", "out_of_host_memory",
-        "out_of_resources"
+        "invalid_context",        "invalid_value",
+        "invalid_program",        "invalid_device",
+        "invalid_linker_options", "invalid_operation",
+        "linker_not_available",   "link_program_failure",
+        "out_of_host_memory",     "out_of_resources",
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    return errors.translateOpenCLError(errors_arr, ret);
 }
 
 pub inline fn build(
-    program: cl_program, device_list: []const cl_device_id, options: ?[]const u8,
-    callback: ?*const pfn_notify_callback, user_data: ?*anyopaque
-) errors.opencl_error!void {
+    program: Program,
+    device_list: []const cl_device_id,
+    options: ?[]const u8,
+    callback: ?*const Callback,
+    user_data: ?*anyopaque,
+) OpenCLError!void {
     var options_ptr: ?[*]const u8 = null;
     if (options) |v| {
         options_ptr = v.ptr;
     }
     const ret: i32 = opencl.clBuildProgram(
-        @ptrCast(program), @intCast(device_list.len), @ptrCast(device_list.ptr), options_ptr,
-        @ptrCast(callback), user_data
+        @ptrCast(program),
+        @intCast(device_list.len),
+        @ptrCast(device_list.ptr),
+        options_ptr,
+        @ptrCast(callback),
+        user_data,
     );
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
-        "out_of_host_memory", "invalid_program", "out_of_resources",
-        "invalid_device", "invalid_binary", "invalid_build_options",
-        "compiler_not_available", "build_program_failure", "invalid_operation"
+        "out_of_host_memory",     "invalid_program",
+        "out_of_resources",       "invalid_device",
+        "invalid_binary",         "invalid_build_options",
+        "compiler_not_available", "build_program_failure",
+        "invalid_operation",
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    return errors.translateOpenCLError(errors_arr, ret);
 }
 
 pub inline fn get_build_info(
-    program: cl_program, device: cl_device_id, param_name: enums.build_info,
-    param_value_size: usize, param_value: ?*anyopaque, param_value_size_ret: ?*usize
-) errors.opencl_error!void {
+    program: Program,
+    device: cl_device_id,
+    param_name: BuildInfo,
+    param_value_size: usize,
+    param_value: ?*anyopaque,
+    param_value_size_ret: ?*usize,
+) OpenCLError!void {
     const ret: i32 = opencl.clGetProgramBuildInfo(
-        @ptrCast(program), @ptrCast(device), @intFromEnum(param_name), param_value_size, param_value,
-        param_value_size_ret
+        @ptrCast(program),
+        @ptrCast(device),
+        @intFromEnum(param_name),
+        param_value_size,
+        param_value,
+        param_value_size_ret,
     );
     if (ret == opencl.CL_SUCCESS) return;
 
     const errors_arr = .{
-        "invalid_device", "invalid_value", "invalid_program", "out_of_resources",
-        "out_of_host_memory"
+        "invalid_device",     "invalid_value", "invalid_program", "out_of_resources",
+        "out_of_host_memory",
     };
-    return errors.translate_opencl_error(errors_arr, ret);
+    return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub inline fn retain(program: cl_program) errors.opencl_error!void {
+pub inline fn retain(program: Program) OpenCLError!void {
     const ret: i32 = opencl.clRetainProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_program", "out_of_resources"
-    };
-    return errors.translate_opencl_error(errors_arr, ret);
+    const errors_arr = .{ "out_of_host_memory", "invalid_program", "out_of_resources" };
+    return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub inline fn release(program: cl_program) void {
+pub inline fn release(program: Program) void {
     const ret: i32 = opencl.clReleaseProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_program", "out_of_resources"
-    };
-    std.debug.panic("Unexpected error while releasing OpenCL program: {s}", .{
-        @errorName(errors.translate_opencl_error(errors_arr, ret))}
+    const errors_arr = .{ "out_of_host_memory", "invalid_program", "out_of_resources" };
+    std.debug.panic(
+        "Unexpected error while releasing OpenCL program: {s}",
+        .{@errorName(errors.translateOpenCLError(errors_arr, ret))},
     );
 }
