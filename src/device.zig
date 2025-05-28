@@ -9,7 +9,7 @@ const errors = @import("errors.zig");
 pub const OpenCLError = errors.OpenCLError;
 
 pub const DeviceId = *opaque {};
-const PlatformId = @import("platform.zig").cl_platform_id;
+const PlatformId = @import("platform.zig").PlatformId;
 
 pub const Type = enum(u32) {
     cpu = opencl.CL_DEVICE_TYPE_CPU,

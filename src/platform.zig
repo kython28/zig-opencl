@@ -1,88 +1,128 @@
 const std = @import("std");
 const cl = @import("cl.zig");
 const opencl = cl.opencl;
+
 const utils = @import("utils.zig");
 
 const errors = @import("errors.zig");
-pub const enums = @import("enums/platform.zig");
+pub const OpenCLError = errors.OpenCLError;
 
-pub const cl_platform_id = *opaque {};
-pub const platform_info = struct {
-    id: ?cl_platform_id = null,
+pub const Info = enum(u32) {
+    profile = opencl.CL_PLATFORM_PROFILE,
+    version = opencl.CL_PLATFORM_VERSION,
+    name = opencl.CL_PLATFORM_NAME,
+    vendor = opencl.CL_PLATFORM_VENDOR,
+    extensions = opencl.CL_PLATFORM_EXTENSIONS,
+};
+
+pub const PlatformId = *opaque {};
+pub const Details = struct {
+    id: ?PlatformId = null,
     profile: []u8,
     version: []u8,
     name: []u8,
     vendor: []u8,
-    extensions: []u8
+    extensions: []u8,
 };
 
-pub inline fn get_ids(platforms: ?[]cl_platform_id,
-    num_platforms: ?*u32) errors.opencl_error!void {
-    var platforms_ptr: ?[*]cl_platform_id = null;
+pub fn getIds(platforms: ?[]PlatformId, num_platforms: ?*u32) OpenCLError!void {
+    var platforms_ptr: ?[*]PlatformId = null;
     var num_entries: u32 = 0;
     if (platforms) |v| {
         platforms_ptr = v.ptr;
         num_entries = @intCast(v.len);
     }
 
-    const ret: i32 = opencl.clGetPlatformIDs(num_entries, @ptrCast(platforms_ptr), num_platforms);
-    if (ret == opencl.CL_SUCCESS) return;
-
-    const errors_arr = .{"invalid_value", "out_of_host_memory"};
-    return errors.translate_opencl_error(errors_arr, ret);
-}
-
-pub inline fn get_info(platform: cl_platform_id, param_name: enums.platform_info,
-    param_value_size: usize, param_value: ?*anyopaque,
-    param_value_size_ret: ?*usize) errors.opencl_error!void {
-    const ret: i32 = opencl.clGetPlatformInfo(
-        @ptrCast(platform), @intFromEnum(param_name), param_value_size, param_value,
-        param_value_size_ret
+    const ret: i32 = opencl.clGetPlatformIDs(
+        num_entries,
+        @ptrCast(platforms_ptr),
+        num_platforms,
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{"invalid_value", "out_of_host_memory", "invalid_platform"};
-    return errors.translate_opencl_error(errors_arr, ret);
+    const errors_arr = .{ "invalid_value", "out_of_host_memory" };
+    return errors.translateOpenCLError(errors_arr, ret);
 }
 
-pub fn get_all(allocator: std.mem.Allocator) ![]platform_info {
-    var platforms: []cl_platform_id = undefined;
+pub fn getInfo(
+    platform: PlatformId,
+    param_name: Info,
+    param_value_size: usize,
+    param_value: ?*anyopaque,
+    param_value_size_ret: ?*usize,
+) OpenCLError!void {
+    const ret: i32 = opencl.clGetPlatformInfo(
+        @ptrCast(platform),
+        @intFromEnum(param_name),
+        param_value_size,
+        param_value,
+        param_value_size_ret,
+    );
+    if (ret == opencl.CL_SUCCESS) return;
+
+    const errors_arr = .{ "invalid_value", "out_of_host_memory", "invalid_platform" };
+    return errors.translateOpenCLError(errors_arr, ret);
+}
+
+pub fn getAll(allocator: std.mem.Allocator) ![]Details {
+    var platforms: []PlatformId = undefined;
     var num_platforms: u32 = undefined;
 
-    try get_ids(null, &num_platforms);
-    platforms = try allocator.alloc(cl_platform_id, num_platforms);
+    try getIds(null, &num_platforms);
+    platforms = try allocator.alloc(PlatformId, num_platforms);
     defer allocator.free(platforms);
 
-    const platform_infos: []platform_info = try allocator.alloc(
-        platform_info, num_platforms
+    const platform_infos: []Details = try allocator.alloc(
+        Details,
+        num_platforms,
     );
     for (platform_infos) |*p_info| p_info.id = null;
-    errdefer release_list(allocator, platform_infos);
+    errdefer releaseList(allocator, platform_infos);
 
-    try get_ids(platforms, null);
+    try getIds(platforms, null);
     for (platform_infos, platforms) |*p_info, p| {
         const name = try utils.get_attr_info(
-            []u8, get_info, enums.platform_info.name, p, allocator
+            []u8,
+            getInfo,
+            Info.name,
+            p,
+            allocator,
         );
         errdefer allocator.free(name);
 
         const extensions = try utils.get_attr_info(
-            []u8, get_info, enums.platform_info.extensions, p, allocator
+            []u8,
+            getInfo,
+            Info.extensions,
+            p,
+            allocator,
         );
         errdefer allocator.free(extensions);
 
         const vendor = try utils.get_attr_info(
-            []u8, get_info, enums.platform_info.vendor, p, allocator
+            []u8,
+            getInfo,
+            Info.vendor,
+            p,
+            allocator,
         );
         errdefer allocator.free(vendor);
 
         const version = try utils.get_attr_info(
-            []u8, get_info, enums.platform_info.version, p, allocator
+            []u8,
+            getInfo,
+            Info.version,
+            p,
+            allocator,
         );
         errdefer allocator.free(version);
 
         const profile = try utils.get_attr_info(
-            []u8, get_info, enums.platform_info.profile, p, allocator
+            []u8,
+            getInfo,
+            Info.profile,
+            p,
+            allocator,
         );
         errdefer allocator.free(profile);
 
@@ -97,15 +137,18 @@ pub fn get_all(allocator: std.mem.Allocator) ![]platform_info {
     return platform_infos;
 }
 
-pub fn release_list(allocator: std.mem.Allocator,
-    platform_infos: []platform_info) void {
+pub fn releaseList(allocator: std.mem.Allocator, platform_infos: []Details) void {
     for (platform_infos) |p_info| {
         if (p_info.id == null) break;
 
         const fields = @typeInfo(@TypeOf(p_info)).@"struct".fields;
         inline for (fields) |field| {
-            if (field.type != ?cl_platform_id){
-                utils.release_attr_info(field.type, allocator, @field(p_info, field.name));
+            if (field.type != ?PlatformId) {
+                utils.release_attr_info(
+                    field.type,
+                    allocator,
+                    @field(p_info, field.name),
+                );
             }
         }
     }
