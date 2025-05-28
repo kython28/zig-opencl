@@ -6,7 +6,7 @@ const map_flags_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "write_invalidate_region", "CL_MAP_WRITE_INVALIDATE_REGION",
 };
 
-pub const map_flags = utils.build_enum(u64, map_flags_definitions);
+pub const MapFlag = utils.buildEnum(u64, map_flags_definitions);
 
 const mem_flags_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "read_write", "CL_MEM_READ_WRITE",
@@ -23,10 +23,10 @@ const mem_flags_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "kernel_read_and_write", "CL_MEM_KERNEL_READ_AND_WRITE"
 };
 
-pub const mem_flags = utils.build_enum(u64, mem_flags_definitions);
+pub const MemFlag = utils.buildEnum(u64, mem_flags_definitions);
 
 const buffer_create_type_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "region", "CL_BUFFER_CREATE_TYPE_REGION"
 };
 
-pub const buffer_create_type = utils.build_enum(u32, buffer_create_type_definitions);
+pub const CreateType = utils.buildEnum(u32, buffer_create_type_definitions);

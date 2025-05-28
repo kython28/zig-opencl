@@ -11,7 +11,7 @@ const device_type_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "custom", "CL_DEVICE_TYPE_CUSTOM"
 };
 
-pub const device_type = utils.build_enum(u32, device_type_definitions);
+pub const Type = utils.buildEnum(u32, device_type_definitions);
 
 const device_info_definitions: []const [:0]const u8 = &[_][:0]const u8 {
     "type", "CL_DEVICE_TYPE",
@@ -140,7 +140,7 @@ const device_info_definitions: []const [:0]const u8 = &[_][:0]const u8 {
     "latest_conformance_version_passed", "CL_DEVICE_LATEST_CONFORMANCE_VERSION_PASSED"
 };
 
-pub const device_info = utils.build_enum(u32, device_info_definitions);
+pub const Info = utils.buildEnum(u32, device_info_definitions);
 
 const device_partition_properties_definitions: []const [:0]const u8 = &[_][:0]const u8 {
     "partition_equally", "CL_DEVICE_PARTITION_EQUALLY",
@@ -149,11 +149,11 @@ const device_partition_properties_definitions: []const [:0]const u8 = &[_][:0]co
     "partition_by_affinity_domain", "CL_DEVICE_PARTITION_BY_AFFINITY_DOMAIN"
 };
 
-pub const partition_property = utils.build_enum(isize, device_partition_properties_definitions);
+pub const PartitionProperty = utils.buildEnum(isize, device_partition_properties_definitions);
 
 const device_local_mem_type_definitions: []const [:0]const u8 = &[_][:0]const u8 {
     "local", "CL_LOCAL",
     "global", "CL_GLOBAL"
 };
 
-pub const local_mem_type = utils.build_enum(opencl.cl_device_local_mem_type, device_local_mem_type_definitions);
+pub const LocalMemType = utils.buildEnum(opencl.cl_device_local_mem_type, device_local_mem_type_definitions);

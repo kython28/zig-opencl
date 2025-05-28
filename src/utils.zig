@@ -3,7 +3,7 @@ const std = @import("std");
 const cl = @import("cl.zig");
 const opencl = cl.opencl;
 
-pub fn build_enum(comptime T: type, comptime definition: []const [:0]const u8) type {
+pub fn buildEnum(comptime T: type, comptime definition: []const [:0]const u8) type {
     comptime var number_of_fields: u32 = 0;
     comptime var i: u32 = 1;
 
@@ -34,7 +34,7 @@ pub fn build_enum(comptime T: type, comptime definition: []const [:0]const u8) t
     return @Type(my_new_enum);
 }
 
-pub fn build_error_set(comptime enum_tag: anytype, comptime definition: []const [:0]const u8) type {
+pub fn buildErrorSet(comptime enum_tag: anytype, comptime definition: []const [:0]const u8) type {
     comptime var fields_num: u32 = 0;
     comptime var i: u32 = 0;
 
@@ -60,7 +60,7 @@ pub fn build_error_set(comptime enum_tag: anytype, comptime definition: []const 
     });
 }
 
-pub fn get_attr_info(comptime T: anytype, comptime func: anytype,
+pub fn getAttrInfo(comptime T: anytype, comptime func: anytype,
     comptime param_name: anytype, id: anytype, allocator: std.mem.Allocator) !T {
     var size: usize = undefined;
     var attr: T = undefined;
@@ -80,7 +80,7 @@ pub fn get_attr_info(comptime T: anytype, comptime func: anytype,
     return attr;
 }
 
-pub inline fn release_attr_info(comptime T: anytype, allocator: std.mem.Allocator, attr: T) void {
+pub inline fn releaseAttrInfo(comptime T: anytype, allocator: std.mem.Allocator, attr: T) void {
     const attr_type_info = @typeInfo(T);
     if (attr_type_info != .pointer or attr_type_info.pointer.size == .one) {
         @compileError("This function only support arrays");

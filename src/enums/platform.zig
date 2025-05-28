@@ -1,6 +1,6 @@
 const cl = @import("../cl.zig").opencl;
 
-pub const platform_info = enum(u32) {
+pub const PlatformInfo = enum(u32) {
     profile = cl.CL_PLATFORM_PROFILE,
     version = cl.CL_PLATFORM_VERSION,
     name = cl.CL_PLATFORM_NAME,

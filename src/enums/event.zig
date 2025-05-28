@@ -7,5 +7,5 @@ const execution_status_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "queued", "CL_QUEUED"
 };
 
-pub const execution_status = utils.build_enum(i32, execution_status_definitions);
+pub const ExecutionStatus = utils.buildEnum(i32, execution_status_definitions);
 

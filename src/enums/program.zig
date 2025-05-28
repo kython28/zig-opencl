@@ -8,4 +8,4 @@ const build_info_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "build_global_variable_total_size", "CL_PROGRAM_BUILD_GLOBAL_VARIABLE_TOTAL_SIZE",
 };
 
-pub const build_info = utils.build_enum(u32, build_info_definitions);
+pub const BuildInfo = utils.buildEnum(u32, build_info_definitions);

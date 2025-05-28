@@ -65,28 +65,31 @@ const opencl_error_definitions: []const [:0]const u8 = &[_][:0]const u8{
     "max_size_restriction_exceeded", "CL_MAX_SIZE_RESTRICTION_EXCEEDED"
 };
 
-const opencl_error_enum = utils.build_enum(i32, opencl_error_definitions);
+const OpenCLErrorEnum = utils.build_enum(i32, opencl_error_definitions);
+pub const OpenCLError = utils.build_error_set(OpenCLErrorEnum, opencl_error_definitions);
 
-pub const opencl_error = utils.build_error_set(opencl_error_enum, opencl_error_definitions);
-
-pub fn translate_opencl_error(comptime fields: anytype, error_code: i32) opencl_error {
+pub fn translateOpenclError(comptime fields: anytype, error_code: i32) OpenCLError {
     inline for (fields) |field| {
-        if (@hasField(opencl_error_enum, field) and @intFromEnum(@field(opencl_error_enum, field)) == error_code){
-            return @field(opencl_error, field);
+        if (!@hasField(OpenCLErrorEnum, field)) {
+            @compileError("Field " ++ field ++ " does not exist");
+        }
+
+        if (@intFromEnum(@field(OpenCLErrorEnum, field)) == error_code){
+            return @field(OpenCLError, field);
         }
     }
 
-    @panic("Unkwon error code");
+    @panic("Unkwon OpenCL error code");
 }
 
-pub fn translate_opencl_error_for_all_fields(error_code: i32) opencl_error {
-    const opencl_error_fields = @typeInfo(opencl_error_enum).@"enum".fields;
+pub fn translateOpenCLErrorForAllFields(error_code: i32) OpenCLError {
+    const opencl_error_fields = @typeInfo(OpenCLErrorEnum).@"enum".fields;
     inline for (opencl_error_fields) |field| {
         const field_name = field.name;
-        if (@hasField(opencl_error_enum, field_name) and @intFromEnum(@field(opencl_error_enum, field_name)) == error_code){
-            return @field(opencl_error, field_name);
+        if (@hasField(OpenCLErrorEnum, field_name) and @intFromEnum(@field(OpenCLErrorEnum, field_name)) == error_code){
+            return @field(OpenCLError, field_name);
         }
     }
 
-    @panic("Unkwon error code");
+    @panic("Unkwon OpenCL error code");
 }

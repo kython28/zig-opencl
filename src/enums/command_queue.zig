@@ -5,11 +5,11 @@ const command_queue_properties_definitions: []const [:0]const u8 =  &[_][:0]cons
     "queue_profiling_enable", "CL_QUEUE_PROFILING_ENABLE",
 };
 
-pub const command_queue_properties = utils.build_enum(u64, command_queue_properties_definitions);
+pub const Property = utils.buildEnum(u64, command_queue_properties_definitions);
 
 const queue_properties_definitions: []const [:0]const u8 =  &[_][:0]const u8{
     "queue_properties", "CL_QUEUE_PROPERTIES",
     "queue_size", "CL_QUEUE_SIZE"
 };
 
-pub const queue_properties = utils.build_enum(u64, queue_properties_definitions);
+pub const QueueProperty = utils.buildEnum(u64, queue_properties_definitions);
