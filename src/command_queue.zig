@@ -20,7 +20,7 @@ pub const QueueProperties = opencl.cl_queue_properties;
 
 pub const CommandQueue = *opaque {};
 
-const cl_context = @import("context.zig").cl_context;
+const cl_context = @import("context.zig").Context;
 const cl_device_id = @import("device.zig").cl_device_id;
 
 pub fn createWithProperties(

@@ -6,8 +6,8 @@ const std = @import("std");
 const errors = @import("errors.zig");
 pub const OpenCLError = errors.OpenCLError;
 
-const cl_command_queue = @import("command_queue.zig").cl_command_queue;
-const cl_context = @import("context.zig").cl_context;
+const cl_command_queue = @import("command_queue.zig").CommandQueue;
+const cl_context = @import("context.zig").Context;
 const cl_event = @import("event.zig").cl_event;
 
 pub const Region = extern struct {

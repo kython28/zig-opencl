@@ -6,7 +6,7 @@ const errors = @import("errors.zig");
 pub const enums = @import("enums/event.zig");
 
 pub const cl_event = *opaque {};
-const cl_context = @import("context.zig").cl_context;
+const cl_context = @import("context.zig").Context;
 
 pub const pfn_notify_callback = fn (event: cl_event, event_command_status: i32, user_data: ?*anyopaque) callconv(.C) void;
 
