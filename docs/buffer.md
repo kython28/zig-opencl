@@ -5,18 +5,18 @@
 The `create` function creates a buffer object in an OpenCL context. This buffer object can be used to store data that will be processed by an OpenCL device.
 
 ```zig
-pub inline fn create(
-    context: cl_context,
-    flags: cl_mem_flags,
+pub fn create(
+    context: Context,
+    flags: MemFlags,
     size: usize,
-    host_ptr: ?*anyopaque
-) errors.opencl_error!cl_mem;
+    host_ptr: ?*anyopaque,
+) OpenCLError!Mem;
 ```
 
 ### Parameters
 
--   **context**: The `cl_context` in which the buffer object will be created.
--   **flags**: A bit-field used to specify allocation and usage information about the buffer memory object being created. These values can be obtained from the enum `buffer.enums.mem_flags` which contains mappings to OpenCL C enums. For example:
+-   **context**: The `Context` in which the buffer object will be created.
+-   **flags**: A bit-field used to specify allocation and usage information about the buffer memory object being created. These values can be obtained from the `MemFlag` struct which contains mappings to OpenCL C enums. For example:
     -   `CL_MEM_WRITE_ONLY` -> `write_only`
     -   `CL_MEM_READ_WRITE` -> `read_write`
 -   **size**: The size in bytes of the buffer memory object to be allocated.
@@ -41,19 +41,19 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `create_sub_buffer` function creates a sub-buffer object from an existing buffer. This allows a portion of a buffer's memory to be used separately as a new buffer object. The function uses specific flags and a buffer creation type to control how the sub-buffer is created.
 
 ```zig
-pub inline fn create_sub_buffer(
-    buffer: cl_mem,
-    flags: cl_mem_flags,
-    buffer_create_type: enums.buffer_create_type,
-    buffer_create_info: *anyopaque
-) errors.opencl_error!cl_mem
+pub fn createSubBuffer(
+    buffer: Mem,
+    flags: MemFlags,
+    buffer_create_type: CreateType,
+    buffer_create_info: *anyopaque,
+) OpenCLError!Mem;
 ```
 
 ### Parameters
 
--   **buffer**: The existing `cl_mem` buffer from which the sub-buffer will be created.
+-   **buffer**: The existing `Mem` buffer from which the sub-buffer will be created.
 -   **flags**: Memory allocation flags defining how the sub-buffer will be used (e.g., read/write permissions).
--   **buffer_create_type**: Specifies the type of sub-buffer to create, from the `enums.buffer_create_type` enum.
+-   **buffer_create_type**: Specifies the type of sub-buffer to create, from the `CreateType` enum.
 -   **buffer_create_info**: A pointer to a structure that defines how the sub-buffer is created. This can vary depending on the sub-buffer type.
 
 ### Error Handling
@@ -75,21 +75,21 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `read` function reads data from an OpenCL buffer object to host memory. This function allows for both blocking and non-blocking reads.
 
 ```zig
-pub inline fn read(
-    command_queue: cl_command_queue,
-    buffer: cl_mem,
+pub fn read(
+    command_queue: CommandQueue,
+    buffer: Mem,
     blocking_read: bool,
     offset: usize,
     size: usize,
     ptr: *anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` in which the read command will be queued.
+-   **command_queue**: The `CommandQueue` in which the read command will be queued.
 -   **buffer**: Refers to a valid buffer object.
 -   **blocking_read**: A boolean indicating if the read operation is blocking (`true`) or non-blocking (`false`).
 -   **offset**: The offset in bytes in the buffer object to read from.
@@ -121,21 +121,21 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `write` function writes data from host memory to an OpenCL buffer object. This function allows for both blocking and non-blocking writes.
 
 ```zig
-pub inline fn write(
-    command_queue: cl_command_queue,
-    buffer: cl_mem,
+pub fn write(
+    command_queue: CommandQueue,
+    buffer: Mem,
     blocking_write: bool,
     offset: usize,
     size: usize,
     ptr: *const anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` in which the write command will be queued.
+-   **command_queue**: The `CommandQueue` in which the write command will be queued.
 -   **buffer**: Refers to a valid buffer object.
 -   **blocking_write**: A boolean indicating if the write operation is blocking (`true`) or non-blocking (`false`).
 -   **offset**: The offset in bytes in the buffer object to write to.
@@ -167,9 +167,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `write_rect` function writes data from host memory to a rectangular region in an OpenCL buffer object. This function allows for both blocking and non-blocking writes.
 
 ```zig
-pub inline fn write_rect(
-    command_queue: cl_command_queue,
-    buffer: cl_mem,
+pub fn writeRect(
+    command_queue: CommandQueue,
+    buffer: Mem,
     blocking_write: bool,
     buffer_origin: []const usize,
     host_origin: []const usize,
@@ -179,14 +179,14 @@ pub inline fn write_rect(
     host_row_pitch: usize,
     host_slice_pitch: usize,
     ptr: *const anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` in which the write command will be queued.
+-   **command_queue**: The `CommandQueue` in which the write command will be queued.
 -   **buffer**: Refers to a valid buffer object.
 -   **blocking_write**: A boolean indicating if the write operation is blocking (`true`) or non-blocking (`false`).
 -   **buffer_origin**: Defines the (x, y, z) offset in the memory region associated with the buffer. For a 2D region, the z value should be 0.
@@ -223,9 +223,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `read_rect` function reads data from a rectangular region in an OpenCL buffer object to host memory. This function allows for both blocking and non-blocking reads.
 
 ```zig
-pub inline fn read_rect(
-    command_queue: cl_command_queue,
-    buffer: cl_mem,
+pub fn readRect(
+    command_queue: CommandQueue,
+    buffer: Mem,
     blocking_read: bool,
     buffer_origin: []const usize,
     host_origin: []const usize,
@@ -235,14 +235,14 @@ pub inline fn read_rect(
     host_row_pitch: usize,
     host_slice_pitch: usize,
     ptr: *anyopaque,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` in which the read command will be queued.
+-   **command_queue**: The `CommandQueue` in which the read command will be queued.
 -   **buffer**: Refers to a valid buffer object.
 -   **blocking_read**: A boolean indicating if the read operation is blocking (`true`) or non-blocking (`false`).
 -   **buffer_origin**: Defines the (x, y, z) offset in the memory region associated with the buffer. For a 2D region, the z value should be 0.
@@ -279,16 +279,16 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `fill` function fills a buffer with a specified pattern. This function is useful for initializing or resetting the contents of a buffer in OpenCL.
 
 ```zig
-pub inline fn fill(
-    command_queue: cl_command_queue,
-    buffer: cl_mem,
+pub fn fill(
+    command_queue: CommandQueue,
+    buffer: Mem,
     pattern: *const anyopaque,
     pattern_size: usize,
     offset: usize,
     size: usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
@@ -323,28 +323,28 @@ The function uses Zig's error handling to manage potential OpenCL errors. If the
 The `copy` function performs a buffer copy operation in OpenCL, copying data from a source buffer to a destination buffer within the same context. This function allows for specifying offsets, size, and events related to the copy operation.
 
 ```zig
-pub inline fn copy(
-	command_queue: cl_command_queue,
-	src_buffer: cl_mem,
-	dst_buffer: cl_mem,
-	src_offset: usize,
-	dst_offset: usize,
-	size: usize,
-	event_wait_list: ?[]const cl_event,
-	event: ?*cl_event
-) errors.opencl_error!void;
+pub fn copy(
+    command_queue: CommandQueue,
+    src_buffer: Mem,
+    dst_buffer: Mem,
+    src_offset: usize,
+    dst_offset: usize,
+    size: usize,
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` in which the copy command will be queued. The OpenCL context associated with `command_queue`, `src_buffer`, and `dst_buffer` must be the same.
--   **src_buffer**: The source `cl_mem` buffer.
--   **dst_buffer**: The destination `cl_mem` buffer.
+-   **command_queue**: The `CommandQueue` in which the copy command will be queued. The OpenCL context associated with `command_queue`, `src_buffer`, and `dst_buffer` must be the same.
+-   **src_buffer**: The source `Mem` buffer.
+-   **dst_buffer**: The destination `Mem` buffer.
 -   **src_offset**: The offset in bytes where to begin copying data from `src_buffer`.
 -   **dst_offset**: The offset in bytes where to begin copying data into `dst_buffer`.
 -   **size**: The size in bytes to copy.
--   **event_wait_list**: A pointer to an array of `cl_event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
--   **event**: A pointer to a `cl_event` that will identify this copy command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
+-   **event_wait_list**: A pointer to an array of `Event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
+-   **event**: A pointer to an `Event` that will identify this copy command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
     
 
 ### Error Handling
@@ -369,10 +369,10 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `copy_rect` function performs a rectangular buffer copy operation in OpenCL, copying a 2D or 3D region of data from a source buffer to a destination buffer within the same context. This function allows for specifying offsets, region dimensions, and events related to the copy operation.
 
 ```zig
-pub inline fn copy_rect(
-    command_queue: cl_command_queue,
-    src_buffer: cl_mem,
-    dst_buffer: cl_mem,
+pub fn copyRect(
+    command_queue: CommandQueue,
+    src_buffer: Mem,
+    dst_buffer: Mem,
     src_origin: []const usize,
     dst_origin: []const usize,
     region: []const usize,
@@ -380,16 +380,16 @@ pub inline fn copy_rect(
     src_slice_pitch: usize,
     dst_row_pitch: usize,
     dst_slice_pitch: usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` in which the copy command will be queued. The OpenCL context associated with `command_queue`, `src_buffer`, and `dst_buffer` must be the same.
--   **src_buffer**: The source `cl_mem` buffer.
--   **dst_buffer**: The destination `cl_mem` buffer.
+-   **command_queue**: The `CommandQueue` in which the copy command will be queued. The OpenCL context associated with `command_queue`, `src_buffer`, and `dst_buffer` must be the same.
+-   **src_buffer**: The source `Mem` buffer.
+-   **dst_buffer**: The destination `Mem` buffer.
 -   **src_origin**: The (x, y, z) offset in the memory region associated with `src_buffer`. For a 2D rectangle region, the z value should be 0. The offset in bytes is computed as `src_origin[2] * src_slice_pitch + src_origin[1] * src_row_pitch + src_origin[0]`.
 -   **dst_origin**: The (x, y, z) offset in the memory region associated with `dst_buffer`. For a 2D rectangle region, the z value should be 0. The offset in bytes is computed as `dst_origin[2] * dst_slice_pitch + dst_origin[1] * dst_row_pitch + dst_origin[0]`.
 -   **region**: The (width in bytes, height in rows, depth in slices) of the 2D or 3D region being copied. For a 2D rectangle, the depth value should be 1.
@@ -397,8 +397,8 @@ pub inline fn copy_rect(
 -   **src_slice_pitch**: The length of each 2D slice in bytes to be used for the memory region associated with `src_buffer`. If `src_slice_pitch` is 0, it is computed as `region[1] * src_row_pitch`.
 -   **dst_row_pitch**: The length of each row in bytes to be used for the memory region associated with `dst_buffer`. If `dst_row_pitch` is 0, it is computed as `region[0]`.
 -   **dst_slice_pitch**: The length of each 2D slice in bytes to be used for the memory region associated with `dst_buffer`. If `dst_slice_pitch` is 0, it is computed as `region[1] * dst_row_pitch`.
--   **event_wait_list**: A pointer to an array of `cl_event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
--   **event**: A pointer to a `cl_event` that will identify this copy command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
+-   **event_wait_list**: A pointer to an array of `Event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
+-   **event**: A pointer to an `Event` that will identify this copy command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
     
 
 ### Error Handling
@@ -423,32 +423,32 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `map` function maps a buffer into the host address space, allowing the application to read or write directly to the buffer. This function supports both blocking and non-blocking map operations and leverages Zig's `comptime` to provide a template-like mechanism for different pointer types.
 
 ```zig
-pub inline fn map(
+pub fn map(
     comptime T: type,
-    command_queue: cl_command_queue,
-    buffer: cl_mem,
+    command_queue: CommandQueue,
+    buffer: Mem,
     blocking_map: bool,
-    map_flags: cl_map_flags,
+    map_flags: MapFlags,
     offset: usize,
     size: usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!T;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!T;
 ```
 
 ### Parameters
 
 -   **T**: The type of the pointer to be returned. Must be a pointer type (e.g., `*T`, `[]T`, or `[*]T`).
--   **command_queue**: The `cl_command_queue` in which the map command will be queued. The OpenCL context associated with `command_queue` and `buffer` must be the same.
--   **buffer**: The `cl_mem` buffer to be mapped.
+-   **command_queue**: The `CommandQueue` in which the map command will be queued. The OpenCL context associated with `command_queue` and `buffer` must be the same.
+-   **buffer**: The `Mem` buffer to be mapped.
 -   **blocking_map**: A boolean indicating if the map operation is blocking or non-blocking.
--   **map_flags**: A bit-field specifying the map operation. Values for constructing this bit-field can be obtained from the `buffer.enums.map_flags` enum. Possible values include:
+-   **map_flags**: A bit-field specifying the map operation. Values for constructing this bit-field can be obtained from the `MapFlag` struct. Possible values include:
     -   `CL_MAP_READ` -> `read`
     -   `CL_MAP_WRITE` -> `write`
 -   **offset**: The offset in bytes in the buffer object to map.
 -   **size**: The size in bytes of the region in the buffer object to map.
--   **event_wait_list**: A pointer to an array of `cl_event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
--   **event**: A pointer to a `cl_event` that will identify this map command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
+-   **event_wait_list**: A pointer to an array of `Event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
+-   **event**: A pointer to an `Event` that will identify this map command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
 
 ### Error Handling
 
@@ -473,24 +473,24 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `unmap` function unmaps a previously mapped buffer from the host address space. This function completes any operations on the mapped region and makes the buffer available for other operations in OpenCL. This function leverages Zig's `comptime` to provide a template-like mechanism for different pointer types.
 
 ```zig
-pub inline fn unmap(
+pub fn unmap(
     comptime T: type,
-    command_queue: cl_command_queue,
-    buffer: cl_mem,
+    command_queue: CommandQueue,
+    buffer: Mem,
     mapped_ptr: T,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
 -   **T**: The type of the pointer to be unmapped. Must be a pointer type (e.g., `*T`, `[]T`, or `[*]T`).
--   **command_queue**: The `cl_command_queue` in which the unmap command will be queued. The OpenCL context associated with `command_queue` and `buffer` must be the same.
--   **buffer**: The `cl_mem` buffer to be unmapped.
+-   **command_queue**: The `CommandQueue` in which the unmap command will be queued. The OpenCL context associated with `command_queue` and `buffer` must be the same.
+-   **buffer**: The `Mem` buffer to be unmapped.
 -   **mapped_ptr**: The pointer to the mapped region in the host address space.
--   **event_wait_list**: A pointer to an array of `cl_event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
--   **event**: A pointer to a `cl_event` that will identify this unmap command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
+-   **event_wait_list**: A pointer to an array of `Event` that need to complete before this command can be executed. If `event_wait_list` is null, no events need to complete before this command.
+-   **event**: A pointer to an `Event` that will identify this unmap command and can be used to query or queue a wait for this command to complete. If `event` is null, no event will be created.
 
 ### Error Handling
 
@@ -511,12 +511,12 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of a memory object. This function is used to ensure that the memory object remains valid even if other references to it are released.
 
 ```zig
-pub inline fn retain(buffer: cl_mem) errors.opencl_error!void;
+pub fn retain(buffer: Mem) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **buffer**: The `cl_mem` memory object to be retained.
+-   **buffer**: The `Mem` memory object to be retained.
 
 ### Error Handling
 
@@ -533,9 +533,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of a memory object. When the reference count becomes zero, the memory object is deleted. This function ensures that resources are properly released when they are no longer needed.
 
 ```zig
-pub inline fn release(buffer: cl_mem) void; 
+pub fn release(buffer: Mem) void;
 ```
 
 ### Parameters
 
--   **buffer**: The `cl_mem` memory object to be released.
+-   **buffer**: The `Mem` memory object to be released.
