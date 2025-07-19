@@ -5,12 +5,12 @@
 The `wait_for_many` function waits for a list of events to complete. This function blocks until all specified events are completed.
 
 ```zig
-pub inline fn wait_for_many(events: []const cl_event) errors.opencl_error!void;
+pub fn waitForMany(events: []const Event) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **events**: An array of `cl_event` objects that the function waits for. All events must complete before the function returns.
+-   **events**: An array of `Event` objects that the function waits for. All events must complete before the function returns.
 
 ### Error Handling
 
@@ -30,12 +30,12 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `wait` function waits for a single event to complete. This function blocks until the specified event is completed.
 
 ```zig
-pub inline fn wait(event: cl_event) errors.opencl_error!void;
+pub fn wait(event: Event) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **event**: A `cl_event` object that the function waits for. The event must complete before the function returns.
+-   **event**: An `Event` object that the function waits for. The event must complete before the function returns.
 
 ### Error Handling
 
@@ -55,12 +55,12 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of an event object. This function ensures that the event object remains valid even if other references to it are released.
 
 ```zig
-pub inline fn retain(event: cl_event) errors.opencl_error!void;
+pub fn retain(event: Event) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **event**: The `cl_event` object to be retained.
+-   **event**: The `Event` object to be retained.
 
 ### Error Handling
 
@@ -77,9 +77,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of an event object. When the reference count becomes zero, the event object is deleted. This function ensures that resources are properly released when they are no longer needed.
 
 ```zig
-pub inline fn release(event: cl_event) void;
+pub fn release(event: Event) void;
 ```
 
 ### Parameters
 
--   **event**: The `cl_event` object to be released.
+-   **event**: The `Event` object to be released.
