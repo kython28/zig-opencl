@@ -2,17 +2,17 @@
 
 Creates a command queue on a specific device within a context. Command queues are used to schedule the execution of kernels and the transfer of data.
 ```zig
-pub inline fn create(
-    context: cl_context, 
-    device: cl_device_id, 
-    properties: cl_command_queue_properties
-) errors.opencl_error!cl_command_queue;
+pub fn create(
+    context: Context,
+    device: DeviceId,
+    properties: Properties,
+) OpenCLError!CommandQueue;
 ```
 
 **Parameters**
 -   `context`: Must be a valid OpenCL context.
 -   `device`: Must be a device or sub-device associated with `context`. It can either be in the list of devices and sub-devices specified when `context` is created using `clCreateContext` or be a root device with the same device type as specified when `context` is created using `clCreateContextFromType`.
--  `properties`: An optional list of context properties and their values. To use this, please go to the `command_queue.enums.queue_properties` enum and read the OpenCL PDF documentation about to use it.
+-  `properties`: An optional list of context properties and their values. To use this, please go to the `Property` struct and read the OpenCL PDF documentation about to use it.
 
 **Error Handling**
 
@@ -30,18 +30,18 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `create_with_properties` function creates a command queue with specified properties.
 
 ```zig
-pub inline fn create_with_properties(
-    context: cl_context, 
-    device: cl_device_id, 
-    properties: ?[]const cl_queue_properties
-) errors.opencl_error!cl_command_queue
+pub fn createWithProperties(
+    context: Context,
+    device: DeviceId,
+    properties: ?[]const QueueProperties,
+) OpenCLError!CommandQueue;
 ```
 
 #### Parameters
 
 -   `context`: Specifies the OpenCL context. It must be a valid OpenCL context.
 -   `device`: Specifies the device or sub-device associated with the context. It must be a valid device or sub-device.
--   `properties`: Specifies a list of properties for the command queue and their corresponding values. Each property name is immediately followed by the corresponding desired value. This list is terminated with 0. If a supported property and its value is not specified in `properties`, its default value will be used. If `properties` is `null`, default values for supported command-queue properties will be used. (To get the properties name you can use: `command_queue.enums.command_queue_properties`)
+-   `properties`: Specifies a list of properties for the command queue and their corresponding values. Each property name is immediately followed by the corresponding desired value. This list is terminated with 0. If a supported property and its value is not specified in `properties`, its default value will be used. If `properties` is `null`, default values for supported command-queue properties will be used. (To get the properties name you can use: `QueueProperty`)
 
 #### Error Handling
 
@@ -59,7 +59,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `flush` function issues all previously queued OpenCL commands in `command_queue` to the device associated with `command_queue`.
 
 ```zig
-pub inline fn flush(command_queue: cl_command_queue) errors.opencl_error!void;
+pub fn flush(command_queue: CommandQueue) OpenCLError!void;
 ```
 
 #### Parameters
@@ -81,12 +81,12 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `finish` function ensures that all previously queued OpenCL commands in a command queue have been issued to the associated device and that all these commands have completed execution. This function blocks until the execution of all previously queued commands in the specified command queue is complete.
 
 ```zig
-pub inline fn finish(command_queue: cl_command_queue) errors.opencl_error!void;
+pub fn finish(command_queue: CommandQueue) OpenCLError!void;
 ```
 
 #### Parameters
 
--   **command_queue**: The `cl_command_queue` for which the function waits for the completion of all previously queued commands.
+-   **command_queue**: The `CommandQueue` for which the function waits for the completion of all previously queued commands.
 
 #### Error Handling
 
@@ -103,12 +103,12 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of the specified command queue. This ensures that the command queue is not deleted while it is still in use.
 
 ```zig
-pub inline fn retain(command_queue: cl_command_queue) errors.opencl_error!void;
+pub fn retain(command_queue: CommandQueue) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` whose reference count is to be incremented.
+-   **command_queue**: The `CommandQueue` whose reference count is to be incremented.
 
 ### Error Handling
 
@@ -125,9 +125,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of the specified command queue. When the reference count reaches zero, the command queue is deleted.
 
 ```zig
-pub inline fn release(command_queue: cl_command_queue) void;
+pub fn release(command_queue: CommandQueue) void;
 ```
 
 ### Parameters
 
--   **command_queue**: The `cl_command_queue` whose reference count is to be decremented.
+-   **command_queue**: The `CommandQueue` whose reference count is to be decremented.
