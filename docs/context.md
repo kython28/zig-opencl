@@ -5,18 +5,18 @@
 The `create` function creates an OpenCL context, which is used by the OpenCL runtime to manage objects such as command-queues, memory, programs, and kernels.
 
 ```zig
-pub inline fn create(
-    properties: ?[]const cl_context_properties, 
-    devices: []const cl_device_id, 
-    pfn_notify: ?*const pfn_notify_callback, 
-    user_data: ?*anyopaque
-) errors.opencl_error!cl_context;
+pub fn create(
+    properties: ?[]const Properties,
+    devices: []const DeviceId,
+    pfn_notify: ?*const Callback,
+    user_data: ?*anyopaque,
+) OpenCLError!Context;
 ```
 
 #### Parameters
 
--   `properties`: An optional list of context properties and their values. To use this, please go to the `context.enums.context_properties` enum and read the OpenCL PDF documentation about to use it.
--   `devices`: A list of `device.cl_device_id` specifying the devices to be associated with the context.
+-   `properties`: An optional list of context properties and their values. To use this, please go to the `Property` struct and read the OpenCL PDF documentation about to use it.
+-   `devices`: A list of `DeviceId` specifying the devices to be associated with the context.
 -   `pfn_notify`: A callback function that can be registered by the application. It will be called when there is a context error.
 -   `user_data`: A pointer to user-supplied data that will be passed to the callback function.
 
@@ -35,19 +35,19 @@ The function uses Zig's error handling features to manage potential OpenCL error
 ## Creating Context from Type
 
 ```zig
-pub inline fn create_from_type(
-    properties: ?[]const cl_context_properties,
-    device_type: device.enums.device_type,
-    pfn_notify: ?*const pfn_notify_callback,
-    user_data: ?*anyopaque
-) errors.opencl_error!cl_context;
+pub fn createFromType(
+    properties: ?[]const Properties,
+    device_type: device.Type,
+    pfn_notify: ?*const Callback,
+    user_data: ?*anyopaque,
+) OpenCLError!Context;
 ```
 
 #### Parameters
 
 -   `properties`: A list of context property names and their corresponding values. Each property name is immediately followed by the corresponding desired value. The list of supported properties, and their default values if not present in `properties`, is described in the Context Properties table. `properties` can be `null`, in which case all properties take on their default values.
     
--   `device_type`: A bit-field that identifies the type of device and is described in the Device Types table. This is a member of the enum `device.enums.device_type`. For example:
+-   `device_type`: A bit-field that identifies the type of device and is described in the Device Types table. This is a member of the enum `device.Type`. For example:
     -   `CL_DEVICE_TYPE_CPU` -> `cpu`
     -   `CL_DEVICE_TYPE_GPU` -> `gpu`
 -   `pfn_notify`: A callback function that can be registered by the application. This callback function will be used by the OpenCL implementation to report errors that occur during context creation as well as errors that occur at runtime in this context. This callback function may be called asynchronously by the OpenCL implementation. It is the application's responsibility to ensure that the callback function is thread-safe. If `pfn_notify` is `null`, no callback function is registered.
@@ -55,7 +55,7 @@ pub inline fn create_from_type(
 -   `user_data`: Will be passed as the `user_data` argument when `pfn_notify` is called. `user_data` can be `null`.
     
 
-For a full list of the enum members, refer to the OpenCL PDF documentation or the `src/enums/device.zig` file where the enums are defined.
+For a full list of the enum members, refer to the OpenCL PDF documentation or the `src/device.zig` file where the enums are defined.
 
 #### Error Handling
 
@@ -76,26 +76,26 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `get_info` function is used to query various types of information about an OpenCL context, such as the reference count, number of devices, and other attributes.
 
 ```zig
-pub inline fn get_info(
-    context: cl_context,
-    param_name: enums.context_info,
+pub fn getInfo(
+    context: Context,
+    param_name: Info,
     param_value_size: usize,
     param_value: ?*anyopaque,
-    param_value_size_ret: ?*usize
-) errors.opencl_error!void;
+    param_value_size_ret: ?*usize,
+) OpenCLError!void;
 ```
 
 #### Parameters
 
 -   `context`: Specifies the OpenCL context being queried.
--   `param_name`: Specifies the information to query. This is a member of the `context.enums.context_info` enum. For example:
+-   `param_name`: Specifies the information to query. This is a member of the `Info` enum. For example:
     -   `CL_CONTEXT_REFERENCE_COUNT` -> `reference_count`
     -   `CL_CONTEXT_NUM_DEVICES` -> `num_devices`
 -   `param_value_size`: Specifies the size in bytes of memory pointed to by `param_value`. This size must be greater than or equal to the size of the return type as described in the Context Attributes table.
 -   `param_value`: A pointer to memory where the appropriate result being queried is returned. If `param_value` is `null`, it is ignored.
 -   `param_value_size_ret`: Returns the actual size in bytes of data being queried by `param_name`. If `param_value_size_ret` is `null`, it is ignored.
 
-For a full list of the enum members, refer to the OpenCL PDF documentation or the `src/enums/context.zig` file where the enums are defined.
+For a full list of the enum members, refer to the OpenCL PDF documentation or the `src/context.zig` file where the enums are defined.
 
 #### Error Handling
 
@@ -109,8 +109,8 @@ The function uses Zig's error handling features to manage potential OpenCL error
 ### Retain a context
 
 ```zig
-pub inline fn retain(context: cl_context) errors.opencl_error!void;
-``` 
+pub fn retain(context: Context) OpenCLError!void;
+```
 
 #### Parameters
 
@@ -127,7 +127,7 @@ The function uses Zig's error handling features to manage potential OpenCL error
 ## Releasing a context
 
 ```zig
-pub inline fn release(context: cl_context) void;
+pub fn release(context: Context) void;
 ```
 
 #### Parameters
