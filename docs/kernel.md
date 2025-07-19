@@ -5,15 +5,12 @@
 The `create` function creates a kernel object for a specific function declared in a program. This function ensures that the kernel is properly set up and ready to be used in OpenCL operations.
 
 ```zig
-pub inline fn create(
-    program: cl_program,
-    kernel_name: []const u8
-) errors.opencl_error!cl_kernel;
+pub fn create(program: Program, kernel_name: []const u8) OpenCLError!Kernel;
 ```
 
 ### Parameters
 
--   **program**: The `cl_program` object with a successfully built executable.
+-   **program**: The `Program` object with a successfully built executable.
 -   **kernel_name**: The name of the kernel function declared with the `__kernel` qualifier in the program.
 
 ### Error Handling
@@ -35,17 +32,17 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `set_arg` function sets the value of a specific argument for a kernel object. This function ensures that the kernel's argument is properly configured for execution.
 
 ```zig
-pub inline fn set_arg(
-    kernel: cl_kernel,
+pub fn setArg(
+    kernel: Kernel,
     arg_index: u32,
     arg_size: usize,
-    arg_value: ?*const anyopaque
-) errors.opencl_error!void;
+    arg_value: ?*const anyopaque,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   **kernel**: A valid `cl_kernel` object.
+-   **kernel**: A valid `Kernel` object.
 -   **arg_index**: The argument index. Arguments to the kernel are referred to by indices that go from 0 for the leftmost argument to `n - 1`, where `n` is the total number of arguments declared by the kernel.
 -   **arg_size**: Specifies the size of the argument value. If the argument is a memory object, the `arg_size` value must be equal to `sizeof(cl_mem)`. For arguments declared with the `local` qualifier, the size specified will be the size in bytes of the buffer that must be allocated for the `local` argument. If the argument is of type `sampler_t`, the `arg_size` value must be equal to `sizeof(cl_sampler)`. If the argument is of type `queue_t`, the `arg_size` value must be equal to `sizeof(cl_command_queue)`. For all other arguments, the size will be the size of the argument type.
 -   **arg_value**: A pointer to data that should be used as the argument value for the argument specified by `arg_index`. The argument data pointed to by `arg_value` is copied and the `arg_value` pointer can therefore be reused by the application after `clSetKernelArg` returns. The argument value specified is the value used by all API calls that enqueue `kernel` (`clEnqueueNDRangeKernel` and `clEnqueueTask`) until the argument value is changed by a call to `clSetKernelArg` for `kernel`.
@@ -72,26 +69,26 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `enqueue_nd_range` function enqueues a command to execute a kernel on a device. This function allows the application to specify the dimensions and size of the global and local work-items, as well as any events to wait for and generate.
 
 ```zig
-pub inline fn enqueue_nd_range(
-    command_queue: cl_command_queue,
-    kernel: cl_kernel,
+pub fn enqueueNdRange(
+    command_queue: CommandQueue,
+    kernel: Kernel,
     global_work_offset: ?[]const usize,
     global_work_size: []const usize,
     local_work_size: ?[]const usize,
-    event_wait_list: ?[]const cl_event,
-    event: ?*cl_event
-) errors.opencl_error!void;
+    event_wait_list: ?[]const Event,
+    event: ?*Event,
+) OpenCLError!void;
 ```
 
 ### Parameters
 
--   `command_queue`: The `cl_command_queue` in which the kernel will be queued for execution.
--   `kernel`: The `cl_kernel` object. The OpenCL context associated with `kernel` and `command_queue` must be the same.
+-   `command_queue`: The `CommandQueue` in which the kernel will be queued for execution.
+-   `kernel`: The `Kernel` object. The OpenCL context associated with `kernel` and `command_queue` must be the same.
 -   `global_work_offset`: An optional array of offsets to calculate the global ID of a work-item. If `global_work_offset` is null, the global IDs start at offset (0, 0, 0).
 -   `global_work_size`: An array of dimensions describing the number of global work-items. The number of global work-items is computed as `global_work_size[0] * ... * global_work_size[work_dim - 1]`.
 -   `local_work_size`: An optional array of dimensions describing the number of work-items that make up a work-group. The total number of work-items in the work-group is computed as `local_work_size[0] * ... * local_work_size[work_dim - 1]`.
 -   `event_wait_list`: An optional array of events that need to complete before this command can be executed. If `event_wait_list` is null, the command does not wait on any event.
--   `event`: A pointer to a `cl_event` object that identifies this command. If `event` is null, no event will be created.
+-   `event`: A pointer to an `Event` object that identifies this command. If `event` is null, no event will be created.
 
 ### Error Handling
 
@@ -123,12 +120,12 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `retain` function increments the reference count of a kernel object. This function ensures that the kernel object is not released while it is still being used.
 
 ```zig
-pub inline fn retain(kernel: cl_kernel) errors.opencl_error!void;
+pub fn retain(kernel: Kernel) OpenCLError!void;
 ```
 
 ### Parameters
 
--   `kernel`: The `cl_kernel` object to be retained. The kernel reference count is incremented.
+-   `kernel`: The `Kernel` object to be retained. The kernel reference count is incremented.
 
 ### Error Handling
 
@@ -145,9 +142,9 @@ The function uses Zig's error handling features to manage potential OpenCL error
 The `release` function decrements the reference count of a kernel object. When the reference count becomes zero, the kernel object is deleted.
 
 ```zig
-pub inline fn release(kernel: cl_kernel) void;
+pub fn release(kernel: Kernel) void;
 ```
 
 ### Parameters
 
--   `kernel`: The `cl_kernel` object to be released. The kernel reference count is decremented.
+-   `kernel`: The `Kernel` object to be released. The kernel reference count is decremented.
