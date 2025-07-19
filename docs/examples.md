@@ -15,8 +15,8 @@ const cl = @import("opencl");
 
 // ...
 
-const platforms: []cl.platform.platform_info = try cl.platform.get_all(allocator);
-defer allocator.free(platforms);
+const platforms: []cl.platform.Details = try cl.platform.getAll(allocator);
+defer cl.platform.releaseList(allocator, platforms);
 
 for (platforms) |platform| {
     const fields = @typeInfo(@TypeOf(platform)).@"struct".fields;
@@ -38,12 +38,12 @@ const cl = @import("opencl");
 
 var number_of_devices: u32 = undefined;
 
-try cl.device.get_ids(platform_id, cl.device.enums.device_type.all, null, &number_of_devices);
+try cl.device.getIds(platform_id, cl.device.Type.all, null, &number_of_devices);
 
-const devices: []cl.device.cl_device_id = try allocator.alloc(cl.device.cl_device_id, number_of_devices);
+const devices: []cl.device.DeviceId = try allocator.alloc(cl.device.DeviceId, number_of_devices);
 defer allocator.free(devices);
 
-try cl.device.get_ids(platform_id, cl.device.enums.device_type.all, devices, null);
+try cl.device.getIds(platform_id, cl.device.Type.all, devices, null);
 ```
 
 ### 3. Creating a Context and Command Queue
@@ -53,7 +53,7 @@ With the platform and device ready, the next step is to create a context and a c
 ```zig
 const cl = @import("opencl");
 
-const context: cl.context.cl_context = try cl.context.create(null, devices, null, null);
+const context: cl.context.Context = try cl.context.create(null, devices, null, null);
 defer cl.context.release(context);
 
 const cmd = try cl.command_queue.create(context, device, 0);
@@ -84,20 +84,20 @@ _ = try file.read(file_content);
 print("{s}\n", .{file_content});
 
 const sources_list = &[_][]const u8{file_content};
-const program = try cl.program.create_with_source(
+const program = try cl.program.createWithSource(
     context, sources_list, allocator
 );
 defer cl.program.release(program);
 
-cl.program.build(program, &[_]cl.device.cl_device_id{device}, null, null, null) catch |err| {
-    if (err == cl.errors.opencl_error.build_program_failure){
+cl.program.build(program, &[_]cl.device.DeviceId{device}, null, null, null) catch |err| {
+    if (err == cl.errors.OpenCLError.build_program_failure){
         var build_log_size: usize = undefined;
-        try cl.program.get_build_info(program, device, cl.program.enums.build_info.build_log, 0, null, &build_log_size);
+        try cl.program.get_build_info(program, device, cl.program.BuildInfo.build_log, 0, null, &build_log_size);
 
         const build_log: []u8 = try allocator.alloc(u8, build_log_size);
         defer allocator.free(build_log);
 
-        try cl.program.get_build_info(program, device, cl.program.enums.build_info.build_log, build_log_size, build_log.ptr, null);
+        try cl.program.get_build_info(program, device, cl.program.BuildInfo.build_log, build_log_size, build_log.ptr, null);
 
         print("Error message: {s}\n", .{build_log});
     }
@@ -116,14 +116,14 @@ const cl = @import("opencl");
 // ...
 
 const buff = try cl.buffer.create(
-    context, @intFromEnum(cl.buffer.enums.mem_flags.read_write),
+    context, cl.buffer.MemFlag.read_write,
     32 * @sizeOf(i32), null
 );
 defer cl.buffer.release(buff);
 
 var buff_map: []i32 = try cl.buffer.map(
     []i32, cmd, buff, true,
-    @intFromEnum(cl.buffer.enums.map_flags.read)|@intFromEnum(cl.buffer.enums.map_flags.write),
+    cl.buffer.MapFlag.read | cl.buffer.MapFlag.write,
     0, 32 * @sizeOf(i32), null, null
 );
 defer {
@@ -146,13 +146,13 @@ const cl = @import("cl");
 
 // ...
 
-const kernel: cl.kernel.cl_kernel = try cl.kernel.create(program, "test_kernel");
+const kernel: cl.kernel.Kernel = try cl.kernel.create(program, "test_kernel");
 defer cl.kernel.release(kernel);
 
-try cl.kernel.set_arg(kernel, 0,  @sizeOf(cl.buffer.cl_mem), @ptrCast(&buff1));
-try cl.kernel.set_arg(kernel, 1,  @sizeOf(cl.buffer.cl_mem), @ptrCast(&buff2));
+try cl.kernel.setArg(kernel, 0,  @sizeOf(cl.buffer.Mem), @ptrCast(&buff1));
+try cl.kernel.setArg(kernel, 1,  @sizeOf(cl.buffer.Mem), @ptrCast(&buff2));
 
-try cl.kernel.enqueue_nd_range(cmd, kernel, null, &[_]usize{8}, &[_]usize{8}, null, &event);
+try cl.kernel.enqueueNdRange(cmd, kernel, null, &[_]usize{8}, &[_]usize{8}, null, &event);
 defer cl.event.release(event);
 
 try cl.event.wait(event);
