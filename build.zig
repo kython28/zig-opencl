@@ -19,12 +19,16 @@ pub fn build(b: *std.Build) void {
     module.linkSystemLibrary("OpenCL", .{ .needed = true });
     module.linkSystemLibrary("c", .{ .needed = true });
 
-    const exe_unit_tests = b.addTest(.{
+    const unit_tests_module = b.addModule("Unit tests", .{
         .root_source_file = b.path("tests/main.zig"),
         .target = target,
         .optimize = optimize,
     });
-    exe_unit_tests.root_module.addImport("opencl", module);
+    unit_tests_module.addImport("opencl", module);
+
+    const exe_unit_tests = b.addTest(.{
+        .root_module = unit_tests_module,
+    });
 
     const run_exe_unit_tests = b.addRunArtifact(exe_unit_tests);
     run_exe_unit_tests.has_side_effects = true;

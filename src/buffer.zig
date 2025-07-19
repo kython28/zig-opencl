@@ -38,9 +38,10 @@ pub const MemFlag = struct {
 };
 pub const MemFlags = opencl.cl_mem_flags;
 
-pub const CreateType = struct {
+pub const CreateTypes = struct {
     pub const region = opencl.CL_BUFFER_CREATE_TYPE_REGION;
 };
+pub const CreateType = opencl.cl_buffer_create_type;
 
 pub const Mem = *opaque {};
 
@@ -79,7 +80,7 @@ pub fn createSubBuffer(
     const mem: ?Mem = @ptrCast(opencl.clCreateSubBuffer(
         @ptrCast(buffer),
         flags,
-        @intFromEnum(buffer_create_type),
+        buffer_create_type,
         buffer_create_info,
         &ret,
     ));

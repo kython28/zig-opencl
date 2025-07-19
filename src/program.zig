@@ -8,7 +8,7 @@ pub const OpenCLError = errors.OpenCLError;
 
 pub const Program = *opaque {};
 
-pub const BuildInfo = enum(32) {
+pub const BuildInfo = enum(u32) {
     build_status = opencl.CL_PROGRAM_BUILD_STATUS,
     build_options = opencl.CL_PROGRAM_BUILD_OPTIONS,
     build_log = opencl.CL_PROGRAM_BUILD_LOG,
@@ -19,7 +19,7 @@ pub const BuildInfo = enum(32) {
 const Context = @import("context.zig").Context;
 const DeviceId = @import("device.zig").DeviceId;
 
-pub const Callback = fn (program: Program, user_data: ?*anyopaque) callconv(.C) void;
+pub const Callback = fn (program: Program, user_data: ?*anyopaque) callconv(.c) void;
 
 pub inline fn createWithSource(
     context: Context,

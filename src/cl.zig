@@ -7,6 +7,6 @@ const opencl_header_file = switch (builtin.target.os.tag) {
 };
 
 pub const opencl = @cImport({
-    @cDefine("CL_TARGET_OPENCL_VERSION", 300);
+    @cDefine("CL_TARGET_OPENCL_VERSION", "300");
     @cInclude(opencl_header_file);
 });

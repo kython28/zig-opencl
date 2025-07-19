@@ -65,8 +65,8 @@ const opencl_error_definitions: []const [:0]const u8 = &[_][:0]const u8{
     "max_size_restriction_exceeded", "CL_MAX_SIZE_RESTRICTION_EXCEEDED"
 };
 
-const OpenCLErrorEnum = utils.build_enum(i32, opencl_error_definitions);
-pub const OpenCLError = utils.build_error_set(OpenCLErrorEnum, opencl_error_definitions);
+const OpenCLErrorEnum = utils.buildEnum(i32, opencl_error_definitions);
+pub const OpenCLError = utils.buildErrorSet(OpenCLErrorEnum, opencl_error_definitions);
 
 pub fn translateOpenCLError(comptime fields: anytype, error_code: i32) OpenCLError {
     inline for (fields) |field| {

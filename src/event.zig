@@ -20,7 +20,7 @@ pub const Callback = fn (
     event: Event,
     event_command_status: i32,
     user_data: ?*anyopaque,
-) callconv(.C) void;
+) callconv(.c) void;
 
 pub fn createUserEvent(context: Context) OpenCLError!Event {
     var ret: i32 = undefined;

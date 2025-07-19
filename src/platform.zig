@@ -81,7 +81,7 @@ pub fn getAll(allocator: std.mem.Allocator) ![]Details {
 
     try getIds(platforms, null);
     for (platform_infos, platforms) |*p_info, p| {
-        const name = try utils.get_attr_info(
+        const name = try utils.getAttrInfo(
             []u8,
             getInfo,
             Info.name,
@@ -90,7 +90,7 @@ pub fn getAll(allocator: std.mem.Allocator) ![]Details {
         );
         errdefer allocator.free(name);
 
-        const extensions = try utils.get_attr_info(
+        const extensions = try utils.getAttrInfo(
             []u8,
             getInfo,
             Info.extensions,
@@ -99,7 +99,7 @@ pub fn getAll(allocator: std.mem.Allocator) ![]Details {
         );
         errdefer allocator.free(extensions);
 
-        const vendor = try utils.get_attr_info(
+        const vendor = try utils.getAttrInfo(
             []u8,
             getInfo,
             Info.vendor,
@@ -108,7 +108,7 @@ pub fn getAll(allocator: std.mem.Allocator) ![]Details {
         );
         errdefer allocator.free(vendor);
 
-        const version = try utils.get_attr_info(
+        const version = try utils.getAttrInfo(
             []u8,
             getInfo,
             Info.version,
@@ -117,7 +117,7 @@ pub fn getAll(allocator: std.mem.Allocator) ![]Details {
         );
         errdefer allocator.free(version);
 
-        const profile = try utils.get_attr_info(
+        const profile = try utils.getAttrInfo(
             []u8,
             getInfo,
             Info.profile,
@@ -144,7 +144,7 @@ pub fn releaseList(allocator: std.mem.Allocator, platform_infos: []Details) void
         const fields = @typeInfo(@TypeOf(p_info)).@"struct".fields;
         inline for (fields) |field| {
             if (field.type != ?PlatformId) {
-                utils.release_attr_info(
+                utils.releaseAttrInfo(
                     field.type,
                     allocator,
                     @field(p_info, field.name),

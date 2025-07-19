@@ -25,7 +25,7 @@ pub const Callback = fn (
     private_info: ?*const anyopaque,
     cb: usize,
     user_data: ?*anyopaque,
-) callconv(.C) void;
+) callconv(.c) void;
 
 const device = @import("device.zig");
 const DeviceId = device.DeviceId;
