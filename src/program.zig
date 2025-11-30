@@ -47,11 +47,7 @@ pub inline fn createWithSource(
     ));
     if (ret == opencl.CL_SUCCESS) return program.?;
 
-    const errors_arr = .{
-        "invalid_context",  "invalid_value",
-        "out_of_resources", "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub inline fn compile(
@@ -116,14 +112,7 @@ pub inline fn compile(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_program",         "invalid_value",
-        "invalid_device",          "invalid_compiler_options",
-        "invalid_operation",       "compiler_not_available",
-        "compile_program_failure", "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub inline fn link(
@@ -152,14 +141,7 @@ pub inline fn link(
     ));
     if (ret == opencl.CL_SUCCESS) return program.?;
 
-    const errors_arr = .{
-        "invalid_context",        "invalid_value",
-        "invalid_program",        "invalid_device",
-        "invalid_linker_options", "invalid_operation",
-        "linker_not_available",   "link_program_failure",
-        "out_of_host_memory",     "out_of_resources",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub inline fn build(
@@ -183,14 +165,7 @@ pub inline fn build(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory",     "invalid_program",
-        "out_of_resources",       "invalid_device",
-        "invalid_binary",         "invalid_build_options",
-        "compiler_not_available", "build_program_failure",
-        "invalid_operation",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub inline fn get_build_info(
@@ -211,28 +186,22 @@ pub inline fn get_build_info(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_device",     "invalid_value", "invalid_program", "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub inline fn retain(program: Program) OpenCLError!void {
     const ret: i32 = opencl.clRetainProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "out_of_host_memory", "invalid_program", "out_of_resources" };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub inline fn release(program: Program) void {
     const ret: i32 = opencl.clReleaseProgram(@ptrCast(program));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "out_of_host_memory", "invalid_program", "out_of_resources" };
     std.debug.panic(
         "Unexpected error while releasing OpenCL program: {s}",
-        .{@errorName(errors.translateOpenCLError(errors_arr, ret))},
+        .{@errorName(errors.translateOpenCLError(ret))},
     );
 }

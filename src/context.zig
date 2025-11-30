@@ -52,12 +52,7 @@ pub fn create(
     ));
     if (ret == opencl.CL_SUCCESS) return context.?;
 
-    const errors_arr = .{
-        "invalid_value",    "out_of_host_memory",
-        "invalid_platform", "device_not_available",
-        "out_of_resources", "invalid_property",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn createFromType(
@@ -81,11 +76,7 @@ pub fn createFromType(
     ));
     if (ret == opencl.CL_SUCCESS) return context.?;
 
-    const errors_arr = .{
-        "invalid_value",    "out_of_host_memory",  "invalid_platform", "device_not_available",
-        "out_of_resources", "invalid_device_type", "device_not_found",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn getInfo(
@@ -104,28 +95,22 @@ pub fn getInfo(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_value",   "out_of_host_memory",
-        "invalid_context", "out_of_resources",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn retain(context: Context) OpenCLError!void {
     const ret: i32 = opencl.clRetainContext(@ptrCast(context));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "out_of_host_memory", "invalid_context", "out_of_resources" };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn release(context: Context) void {
     const ret: i32 = opencl.clReleaseContext(@ptrCast(context));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "out_of_host_memory", "invalid_context", "out_of_resources" };
     std.debug.panic(
         "Unexpected error while releasing OpenCL context: {s}",
-        .{@errorName(errors.translateOpenCLError(errors_arr, ret))},
+        .{@errorName(errors.translateOpenCLError(ret))},
     );
 }

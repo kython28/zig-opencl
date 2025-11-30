@@ -42,12 +42,7 @@ pub fn createWithProperties(
     ));
     if (ret == opencl.CL_SUCCESS) return command_queue.?;
 
-    const errors_arr = .{
-        "invalid_value",    "invalid_context",
-        "invalid_device",   "invalid_queue_properties",
-        "out_of_resources", "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn create(
@@ -64,53 +59,36 @@ pub fn create(
     ));
     if (ret == opencl.CL_SUCCESS) return command_queue.?;
 
-    const errors_arr = .{
-        "invalid_value",    "invalid_context",
-        "invalid_device",   "invalid_queue_properties",
-        "out_of_resources", "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn flush(command_queue: CommandQueue) OpenCLError!void {
     const ret: i32 = opencl.clFlush(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_command_queue", "out_of_resources",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn finish(command_queue: CommandQueue) OpenCLError!void {
     const ret: i32 = opencl.clFinish(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_command_queue", "out_of_resources",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn retain(command_queue: CommandQueue) OpenCLError!void {
     const ret: i32 = opencl.clRetainCommandQueue(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_command_queue", "out_of_resources",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn release(command_queue: CommandQueue) void {
     const ret: i32 = opencl.clReleaseCommandQueue(@ptrCast(command_queue));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_command_queue", "out_of_resources",
-    };
     std.debug.panic(
         "Unexpected error while releasing OpenCL command queue: {s}",
-        .{@errorName(errors.translateOpenCLError(errors_arr, ret))},
+        .{@errorName(errors.translateOpenCLError(ret))},
     );
 }

@@ -40,8 +40,7 @@ pub fn getIds(platforms: ?[]PlatformId, num_platforms: ?*u32) OpenCLError!void {
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "invalid_value", "out_of_host_memory" };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn getInfo(
@@ -60,8 +59,7 @@ pub fn getInfo(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "invalid_value", "out_of_host_memory", "invalid_platform" };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn getAll(allocator: std.mem.Allocator) ![]Details {

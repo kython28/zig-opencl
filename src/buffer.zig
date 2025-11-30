@@ -61,13 +61,7 @@ pub fn create(
     ));
     if (ret == opencl.CL_SUCCESS) return mem.?;
 
-    const errors_arr = .{
-        "invalid_context",               "invalid_value",
-        "invalid_buffer_size",           "invalid_host_ptr",
-        "mem_object_allocation_failure", "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn createSubBuffer(
@@ -86,13 +80,7 @@ pub fn createSubBuffer(
     ));
     if (ret == opencl.CL_SUCCESS) return mem.?;
 
-    const errors_arr = .{
-        "invalid_mem_object",            "invalid_value",
-        "mem_object_allocation_failure", "out_of_resources",
-        "out_of_host_memory",            "invalid_buffer_size",
-        "misaligned_sub_buffer_offset",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn read(
@@ -125,15 +113,7 @@ pub fn read(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_command_queue",                     "invalid_context",
-        "invalid_mem_object",                        "invalid_value",
-        "invalid_event_wait_list",                   "misaligned_sub_buffer_offset",
-        "exec_status_error_for_events_in_wait_list", "mem_object_allocation_failure",
-        "invalid_operation",                         "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn write(
@@ -166,15 +146,7 @@ pub fn write(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_command_queue",                     "invalid_context",
-        "invalid_mem_object",                        "invalid_value",
-        "invalid_event_wait_list",                   "misaligned_sub_buffer_offset",
-        "exec_status_error_for_events_in_wait_list", "mem_object_allocation_failure",
-        "invalid_operation",                         "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn writeRect(
@@ -193,7 +165,7 @@ pub fn writeRect(
     event: ?*Event,
 ) OpenCLError!void {
     if (buffer_origin.len != 3 or host_origin.len != 3 or region.len != 3) {
-        return OpenCLError.invalid_value;
+        return OpenCLError.InvalidValue;
     }
 
     var event_wait_list_ptr: ?[*]const Event = null;
@@ -221,15 +193,7 @@ pub fn writeRect(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_command_queue",                     "invalid_context",
-        "invalid_mem_object",                        "invalid_value",
-        "invalid_event_wait_list",                   "misaligned_sub_buffer_offset",
-        "exec_status_error_for_events_in_wait_list", "mem_object_allocation_failure",
-        "invalid_operation",                         "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn readRect(
@@ -248,7 +212,7 @@ pub fn readRect(
     event: ?*Event,
 ) OpenCLError!void {
     if (buffer_origin.len != 3 or host_origin.len != 3 or region.len != 3) {
-        return OpenCLError.invalid_value;
+        return OpenCLError.InvalidValue;
     }
 
     var event_wait_list_ptr: ?[*]const Event = null;
@@ -276,15 +240,7 @@ pub fn readRect(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_command_queue",                     "invalid_context",
-        "invalid_mem_object",                        "invalid_value",
-        "invalid_event_wait_list",                   "misaligned_sub_buffer_offset",
-        "exec_status_error_for_events_in_wait_list", "mem_object_allocation_failure",
-        "invalid_operation",                         "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn fill(
@@ -317,14 +273,7 @@ pub fn fill(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_command_queue",         "invalid_context",
-        "invalid_mem_object",            "invalid_value",
-        "invalid_event_wait_list",       "misaligned_sub_buffer_offset",
-        "mem_object_allocation_failure", "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn copy(
@@ -357,14 +306,7 @@ pub fn copy(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_mem_object",      "invalid_value",
-        "invalid_event_wait_list", "misaligned_sub_buffer_offset",
-        "mem_copy_overlap",        "mem_object_allocation_failure",
-        "out_of_resources",        "out_of_host_memory",
-        "invalid_command_queue",   "invalid_context",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn copyRect(
@@ -382,7 +324,7 @@ pub fn copyRect(
     event: ?*Event,
 ) OpenCLError!void {
     if (src_origin.len != 3 or dst_origin.len != 3 or region.len != 3) {
-        return OpenCLError.invalid_value;
+        return OpenCLError.InvalidValue;
     }
 
     var event_wait_list_ptr: ?[*]const Event = null;
@@ -409,14 +351,7 @@ pub fn copyRect(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_command_queue",        "invalid_context",
-        "invalid_mem_object",           "invalid_value",
-        "invalid_event_wait_list",      "mem_copy_overlap",
-        "misaligned_sub_buffer_offset", "mem_object_allocation_failure",
-        "out_of_resources",             "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn map(
@@ -461,14 +396,7 @@ pub fn map(
         &ret,
     );
     if (ret != opencl.CL_SUCCESS) {
-        const errors_arr = .{
-            "invalid_command_queue",        "invalid_context",
-            "invalid_mem_object",           "invalid_value",
-            "invalid_event_wait_list",      "mem_copy_overlap",
-            "misaligned_sub_buffer_offset", "mem_object_allocation_failure",
-            "out_of_resources",             "out_of_host_memory",
-        };
-        return errors.translateOpenCLError(errors_arr, ret);
+        return errors.translateOpenCLError(ret);
     }
 
     return switch (type_info.pointer.size) {
@@ -528,33 +456,22 @@ pub fn unmap(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_command_queue", "invalid_mem_object",
-        "invalid_value",         "invalid_event_wait_list",
-        "out_of_resources",      "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn retain(buffer: Mem) OpenCLError!void {
     const ret: i32 = opencl.clRetainMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_mem_object", "out_of_resources",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn release(buffer: Mem) void {
     const ret: i32 = opencl.clReleaseMemObject(@ptrCast(buffer));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "out_of_host_memory", "invalid_mem_object", "out_of_resources",
-    };
     std.debug.panic(
         "Unexpected error while releasing OpenCL buffer: {s}",
-        .{@errorName(errors.translateOpenCLError(errors_arr, ret))},
+        .{@errorName(errors.translateOpenCLError(ret))},
     );
 }

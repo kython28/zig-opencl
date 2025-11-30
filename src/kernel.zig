@@ -19,13 +19,7 @@ pub fn create(program: Program, kernel_name: []const u8) OpenCLError!Kernel {
     ));
     if (ret == opencl.CL_SUCCESS) return kernel.?;
 
-    const errors_arr = .{
-        "invalid_program",     "invalid_program_executable",
-        "invalid_kernel_name", "invalid_kernel_definition",
-        "invalid_value",       "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn setArg(
@@ -42,15 +36,7 @@ pub fn setArg(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_kernel",     "invalid_arg_index",
-        "invalid_arg_value",  "invalid_mem_object",
-        "invalid_sampler",    "invalid_device_queue",
-        "invalid_arg_size",   "max_size_restriction_exceeded",
-        "invalid_arg_value",  "out_of_resources",
-        "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn enqueueNdRange(
@@ -68,13 +54,13 @@ pub fn enqueueNdRange(
     var local_work_size_ptr: ?[*]const usize = null;
     if (global_work_offset) |v| {
         if (v.len != work_dim) {
-            return OpenCLError.invalid_global_offset;
+            return OpenCLError.InvalidGlobalOffset;
         }
         global_work_offset_ptr = v.ptr;
     }
     if (local_work_size) |v| {
         if (v.len != work_dim) {
-            return OpenCLError.invalid_work_item_size;
+            return OpenCLError.InvalidWorkItemSize;
         }
         local_work_size_ptr = v.ptr;
     }
@@ -99,35 +85,22 @@ pub fn enqueueNdRange(
     );
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{
-        "invalid_program_executable",    "invalid_command_queue",
-        "invalid_kernel",                "invalid_context",
-        "invalid_kernel_args",           "invalid_work_dimension",
-        "invalid_global_work_size",      "invalid_global_offset",
-        "invalid_work_group_size",       "invalid_work_item_size",
-        "misaligned_sub_buffer_offset",  "invalid_image_size",
-        "image_format_not_supported",    "out_of_resources",
-        "mem_object_allocation_failure", "invalid_event_wait_list",
-        "invalid_operation",             "out_of_host_memory",
-    };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn retain(kernel: Kernel) OpenCLError!void {
     const ret: i32 = opencl.clRetainKernel(@ptrCast(kernel));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "out_of_host_memory", "invalid_kernel", "out_of_resources" };
-    return errors.translateOpenCLError(errors_arr, ret);
+    return errors.translateOpenCLError(ret);
 }
 
 pub fn release(kernel: Kernel) void {
     const ret: i32 = opencl.clReleaseKernel(@ptrCast(kernel));
     if (ret == opencl.CL_SUCCESS) return;
 
-    const errors_arr = .{ "out_of_host_memory", "invalid_kernel", "out_of_resources" };
     std.debug.panic(
         "Unexpected error while releasing OpenCL kernel: {s}",
-        .{@errorName(errors.translateOpenCLError(errors_arr, ret))},
+        .{@errorName(errors.translateOpenCLError(ret))},
     );
 }

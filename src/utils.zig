@@ -34,32 +34,6 @@ pub fn buildEnum(comptime T: type, comptime definition: []const [:0]const u8) ty
     return @Type(my_new_enum);
 }
 
-pub fn buildErrorSet(comptime enum_tag: anytype, comptime definition: []const [:0]const u8) type {
-    comptime var fields_num: u32 = 0;
-    comptime var i: u32 = 0;
-
-    inline while (i < definition.len) : (i += 2) {
-        if (@hasField(enum_tag, definition[i])) fields_num += 1;
-    }
-
-    comptime var error_set: [fields_num]std.builtin.Type.Error = undefined;
-    i = 0;
-
-    comptime var j: u32 = 0;
-    inline while (i < definition.len) : (i += 2) {
-        if (@hasField(enum_tag, definition[i])){
-            error_set[j] = std.builtin.Type.Error{
-                .name = definition[i]
-            };
-            j += 1;
-        }
-    }
-
-    return @Type(std.builtin.Type{
-        .error_set = &error_set
-    });
-}
-
 pub fn getAttrInfo(comptime T: anytype, comptime func: anytype,
     comptime param_name: anytype, id: anytype, allocator: std.mem.Allocator) !T {
     var size: usize = undefined;
