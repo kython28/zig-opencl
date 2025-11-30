@@ -3,7 +3,7 @@ A modern OpenCL wrapper for Zig language, providing easy-to-use interfaces for O
 
 ## Getting Started
 ### Prerequisites
--   Zig >=0.15.0-dev.1145+3ae0ba096
+-   Zig >=0.15
 -   OpenCL 1.0 or higher
 
 ### Installation
