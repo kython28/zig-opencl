@@ -73,6 +73,8 @@ pub fn wait(event: Event) OpenCLError!void {
 }
 
 pub fn waitForMany(events: []const Event) OpenCLError!void {
+    if (events.len == 0) return;
+
     const ret: i32 = opencl.clWaitForEvents(@intCast(events.len), @ptrCast(events.ptr));
     if (ret == opencl.CL_SUCCESS) return;
 
