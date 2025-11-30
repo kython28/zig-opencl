@@ -90,7 +90,7 @@ const program = try cl.program.createWithSource(
 defer cl.program.release(program);
 
 cl.program.build(program, &[_]cl.device.DeviceId{device}, null, null, null) catch |err| {
-    if (err == cl.errors.OpenCLError.build_program_failure){
+    if (err == cl.errors.OpenCLError.BuildProgramFailure) {
         var build_log_size: usize = undefined;
         try cl.program.get_build_info(program, device, cl.program.BuildInfo.build_log, 0, null, &build_log_size);
 

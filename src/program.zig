@@ -61,7 +61,7 @@ pub inline fn compile(
     user_data: ?*anyopaque,
 ) !void {
     if (@intFromBool(input_headers != null) ^ @intFromBool(header_include_names != null) == 1) {
-        return OpenCLError.invalid_value;
+        return OpenCLError.InvalidValue;
     }
 
     var devices_ptr: ?[*]const DeviceId = null;

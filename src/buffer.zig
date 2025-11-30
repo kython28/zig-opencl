@@ -372,7 +372,7 @@ pub fn map(
 
     const ptr_child = type_info.pointer.child;
     if (@mod(size, @sizeOf(ptr_child)) != 0) {
-        return OpenCLError.invalid_value;
+        return OpenCLError.InvalidValue;
     }
 
     var event_wait_list_ptr: ?[*]const Event = null;
