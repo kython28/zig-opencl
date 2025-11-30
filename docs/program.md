@@ -22,10 +22,10 @@ pub inline fn createWithSource(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateProgramWithSource` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_context"`: The context is not a valid context.
--   `"invalid_value"`: The count is zero or any entry in strings is null.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidContext`: The context is not a valid context.
+-   `InvalidValue`: The count is zero or any entry in strings is null.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Compiling a Program
 
@@ -61,15 +61,15 @@ pub inline fn compile(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If `clCompileProgram` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_program"`: The program is not a valid program object.
--   `"invalid_value"`: Invalid values for devices, options, or headers.
--   `"invalid_device"`: The device in the device list is not valid.
--   `"invalid_operation"`: An invalid operation occurred during compilation.
--   `"invalid_compiler_options"`: The compiler options are invalid.
--   `"compiler_not_available"`: No compiler is available.
--   `"compile_program_failure"`: Failure to compile the program.
--   `"out_of_resources"`: Failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: Failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidProgram`: The program is not a valid program object.
+-   `InvalidValue`: Invalid values for devices, options, or headers.
+-   `InvalidDevice`: The device in the device list is not valid.
+-   `InvalidOperation`: An invalid operation occurred during compilation.
+-   `InvalidCompilerOptions`: The compiler options are invalid.
+-   `CompilerNotAvailable`: No compiler is available.
+-   `CompileProgramFailure`: Failure to compile the program.
+-   `OutOfResources`: Failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: Failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Linking a Program
 
@@ -101,16 +101,16 @@ pub inline fn link(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If `clLinkProgram` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_context"`: The context is not a valid OpenCL context.
--   `"invalid_value"`: Invalid values for devices, input programs, or options.
--   `"invalid_program"`: One or more of the input programs are not valid.
--   `"invalid_device"`: The device in the device list is not valid.
--   `"invalid_linker_options"`: The linker options are invalid.
--   `"invalid_operation"`: An invalid operation occurred during linking.
--   `"linker_not_available"`: The OpenCL linker is not available.
--   `"link_program_failure"`: Failure to link the program.
--   `"out_of_resources"`: Failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: Failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidContext`: The context is not a valid OpenCL context.
+-   `InvalidValue`: Invalid values for devices, input programs, or options.
+-   `InvalidProgram`: One or more of the input programs are not valid.
+-   `InvalidDevice`: The device in the device list is not valid.
+-   `InvalidLinkerOptions`: The linker options are invalid.
+-   `InvalidOperation`: An invalid operation occurred during linking.
+-   `LinkerNotAvailable`: The OpenCL linker is not available.
+-   `LinkProgramFailure`: Failure to link the program.
+-   `OutOfResources`: Failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: Failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Building a Program
 
@@ -140,16 +140,16 @@ pub inline fn build(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clBuildProgram` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_program"`: The program is not a valid program object.
--   `"invalid_value"`: Invalid values for device list or options.
--   `"invalid_device"`: The device in the device list is not valid.
--   `"invalid_binary"`: The program created with `clCreateProgramWithBinary` does not have a valid program binary.
--   `"invalid_build_options"`: The build options are invalid.
--   `"compiler_not_available"`: No compiler is available.
--   `"build_program_failure"`: Failure to build the program executable.
--   `"invalid_operation"`: Invalid operations due to kernel objects or previous builds.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidProgram`: The program is not a valid program object.
+-   `InvalidValue`: Invalid values for device list or options.
+-   `InvalidDevice`: The device in the device list is not valid.
+-   `InvalidBinary`: The program created with `clCreateProgramWithBinary` does not have a valid program binary.
+-   `InvalidBuildOptions`: The build options are invalid.
+-   `CompilerNotAvailable`: No compiler is available.
+-   `BuildProgramFailure`: Failure to build the program executable.
+-   `InvalidOperation`: Invalid operations due to kernel objects or previous builds.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Getting Program Build Information
 
@@ -181,11 +181,11 @@ pub inline fn get_build_info(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clGetProgramBuildInfo` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_device"`: The device is not in the list of devices associated with the program.
--   `"invalid_value"`: The `param_name` is not valid, or the size specified by `param_value_size` is less than the size of the return type.
--   `"invalid_program"`: The program is not a valid program object.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidDevice`: The device is not in the list of devices associated with the program.
+-   `InvalidValue`: The `param_name` is not valid, or the size specified by `param_value_size` is less than the size of the return type.
+-   `InvalidProgram`: The program is not a valid program object.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Retaining a Program
 
@@ -205,9 +205,9 @@ pub inline fn retain(program: Program) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clRetainProgram` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_program"`: The program is not a valid program object.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidProgram`: The program is not a valid program object.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Releasing a Program
 

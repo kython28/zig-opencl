@@ -27,12 +27,12 @@ For a full list of the enum members, refer to the OpenCL PDF documentation or th
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clGetDeviceIDs` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The function was called with invalid parameters.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_platform"`: The specified platform is not valid.
--   `"invalid_device_type"`: The specified device type is not valid.
--   `"device_not_found"`: No OpenCL devices matching the specified type were found.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `InvalidValue`: The function was called with invalid parameters.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidPlatform`: The specified platform is not valid.
+-   `InvalidDeviceType`: The specified device type is not valid.
+-   `DeviceNotFound`: No OpenCL devices matching the specified type were found.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
 
 ## Querying Device Info
 
@@ -66,10 +66,10 @@ For a full list of the enum members, refer to the OpenCL PDF documentation or th
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clGetDeviceInfo` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The function was called with invalid parameters.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_device"`: The specified device is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `InvalidValue`: The function was called with invalid parameters.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidDevice`: The specified device is not valid.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
 
 ## Partitioning a Device
 
@@ -100,12 +100,12 @@ For a full list of the enum members, refer to the OpenCL PDF documentation or th
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateSubDevices` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The function was called with invalid parameters.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_device"`: The specified device is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"device_partition_failed"`: The partition name is supported by the implementation but `in_device` could not be further partitioned.
--   `"invalid_device_partition_count"`: The specified partition count is invalid or exceeds the available resources.
+-   `InvalidValue`: The function was called with invalid parameters.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidDevice`: The specified device is not valid.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `DevicePartitionFailed`: The partition name is supported by the implementation but `in_device` could not be further partitioned.
+-   `InvalidDevicePartitionCount`: The specified partition count is invalid or exceeds the available resources.
 
 ## Retaining a Device
 
@@ -125,9 +125,9 @@ pub fn retain(device: DeviceId) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clRetainDevice` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_device"`: The specified device is not valid.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `InvalidDevice`: The specified device is not valid.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
 
 ## Releasing a Device
 

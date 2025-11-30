@@ -26,13 +26,13 @@ pub fn create(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateBuffer` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_context"`: The specified context is not valid.
--   `"invalid_value"`: Values specified in flags are not valid as defined in the Memory Flags table.
--   `"invalid_buffer_size"`: Size is 0, or if size is greater than `CL_DEVICE_MAX_MEM_ALLOC_SIZE` for all devices in context.
--   `"invalid_host_ptr"`: If `host_ptr` is NULL and `CL_MEM_USE_HOST_PTR` or `CL_MEM_COPY_HOST_PTR` are set in flags or if `host_ptr` is not NULL but `CL_MEM_COPY_HOST_PTR` or `CL_MEM_USE_HOST_PTR` are not set in flags.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for the buffer object.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidContext`: The specified context is not valid.
+-   `InvalidValue`: Values specified in flags are not valid as defined in the Memory Flags table.
+-   `InvalidBufferSize`: Size is 0, or if size is greater than `CL_DEVICE_MAX_MEM_ALLOC_SIZE` for all devices in context.
+-   `InvalidHostPtr`: If `host_ptr` is NULL and `CL_MEM_USE_HOST_PTR` or `CL_MEM_COPY_HOST_PTR` are set in flags or if `host_ptr` is not NULL but `CL_MEM_COPY_HOST_PTR` or `CL_MEM_USE_HOST_PTR` are not set in flags.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for the buffer object.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Creating a Sub Buffer
 
@@ -60,13 +60,13 @@ pub fn createSubBuffer(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If `clCreateSubBuffer` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_mem_object"`: The buffer provided is not a valid memory object.
--   `"invalid_value"`: Invalid values for buffer creation info or flags.
--   `"mem_object_allocation_failure"`: Failure to allocate the sub-buffer.
--   `"out_of_resources"`: Failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: Failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_buffer_size"`: The specified buffer size is not valid.
--   `"misaligned_sub_buffer_offset"`: The sub-buffer offset is misaligned.
+-   `InvalidMemObject`: The buffer provided is not a valid memory object.
+-   `InvalidValue`: Invalid values for buffer creation info or flags.
+-   `MemObjectAllocationFailure`: Failure to allocate the sub-buffer.
+-   `OutOfResources`: Failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: Failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidBufferSize`: The specified buffer size is not valid.
+-   `MisalignedSubBufferOffset`: The sub-buffer offset is misaligned.
 
 ## Reading from a Buffer
 
@@ -102,17 +102,17 @@ pub fn read(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueReadBuffer` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
--   `"invalid_mem_object"`: The specified buffer is not a valid buffer object.
--   `"invalid_value"`: The region being read or written specified by (offset, size) is out of bounds or if `ptr` is a NULL value.
--   `"invalid_event_wait_list"`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
--   `"misaligned_sub_buffer_offset"`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
--   `"exec_status_error_for_events_in_wait_list"`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for data storage associated with the buffer.
--   `"invalid_operation"`: If `clEnqueueReadBuffer` is called on a buffer that has been created with `CL_MEM_HOST_WRITE_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The specified command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
+-   `InvalidMemObject`: The specified buffer is not a valid buffer object.
+-   `InvalidValue`: The region being read or written specified by (offset, size) is out of bounds or if `ptr` is a NULL value.
+-   `InvalidEventWaitList`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
+-   `MisalignedSubBufferOffset`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
+-   `ExecStatusErrorForEventsInWaitList`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for data storage associated with the buffer.
+-   `InvalidOperation`: If `clEnqueueReadBuffer` is called on a buffer that has been created with `CL_MEM_HOST_WRITE_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Writing to a Buffer
 
@@ -148,17 +148,17 @@ pub fn write(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueWriteBuffer` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
--   `"invalid_mem_object"`: The specified buffer is not a valid buffer object.
--   `"invalid_value"`: The region being read or written specified by (offset, size) is out of bounds or if `ptr` is a NULL value.
--   `"invalid_event_wait_list"`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
--   `"misaligned_sub_buffer_offset"`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
--   `"exec_status_error_for_events_in_wait_list"`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for data storage associated with the buffer.
--   `"invalid_operation"`: If `clEnqueueWriteBuffer` is called on a buffer that has been created with `CL_MEM_HOST_READ_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The specified command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
+-   `InvalidMemObject`: The specified buffer is not a valid buffer object.
+-   `InvalidValue`: The region being read or written specified by (offset, size) is out of bounds or if `ptr` is a NULL value.
+-   `InvalidEventWaitList`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
+-   `MisalignedSubBufferOffset`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
+-   `ExecStatusErrorForEventsInWaitList`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for data storage associated with the buffer.
+-   `InvalidOperation`: If `clEnqueueWriteBuffer` is called on a buffer that has been created with `CL_MEM_HOST_READ_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Writing to a Rectangular Region of a Buffer
 
@@ -204,17 +204,17 @@ pub fn writeRect(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueWriteBufferRect` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
--   `"invalid_mem_object"`: The specified buffer is not a valid buffer object.
--   `"invalid_value"`: The region being read or written specified by (buffer_origin, region, buffer_row_pitch, buffer_slice_pitch) is out of bounds. Any region array element is 0. The buffer row pitch is not 0 and is less than `region[0]`. The host row pitch is not 0 and is less than `region[0]`. The buffer slice pitch is not 0 and is less than `region[1] * buffer_row_pitch` and not a multiple of buffer row pitch. The host slice pitch is not 0 and is less than `region[1] * host_row_pitch` and not a multiple of host row pitch. If `ptr` is NULL.
--   `"invalid_event_wait_list"`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
--   `"misaligned_sub_buffer_offset"`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
--   `"exec_status_error_for_events_in_wait_list"`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for data storage associated with the buffer.
--   `"invalid_operation"`: If `clEnqueueWriteBufferRect` is called on a buffer that has been created with `CL_MEM_HOST_READ_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The specified command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
+-   `InvalidMemObject`: The specified buffer is not a valid buffer object.
+-   `InvalidValue`: The region being read or written specified by (buffer_origin, region, buffer_row_pitch, buffer_slice_pitch) is out of bounds. Any region array element is 0. The buffer row pitch is not 0 and is less than `region[0]`. The host row pitch is not 0 and is less than `region[0]`. The buffer slice pitch is not 0 and is less than `region[1] * buffer_row_pitch` and not a multiple of buffer row pitch. The host slice pitch is not 0 and is less than `region[1] * host_row_pitch` and not a multiple of host row pitch. If `ptr` is NULL.
+-   `InvalidEventWaitList`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
+-   `MisalignedSubBufferOffset`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
+-   `ExecStatusErrorForEventsInWaitList`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for data storage associated with the buffer.
+-   `InvalidOperation`: If `clEnqueueWriteBufferRect` is called on a buffer that has been created with `CL_MEM_HOST_READ_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Reading from a Rectangular Region of a Buffer
 
@@ -260,17 +260,17 @@ pub fn readRect(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueReadBufferRect` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
--   `"invalid_mem_object"`: The specified buffer is not a valid buffer object.
--   `"invalid_value"`: The region being read or written specified by (buffer_origin, region, buffer_row_pitch, buffer_slice_pitch) is out of bounds. Any region array element is 0. The buffer row pitch is not 0 and is less than `region[0]`. The host row pitch is not 0 and is less than `region[0]`. The buffer slice pitch is not 0 and is less than `region[1] * buffer_row_pitch` and not a multiple of buffer row pitch. The host slice pitch is not 0 and is less than `region[1] * host_row_pitch` and not a multiple of host row pitch. If `ptr` is NULL.
--   `"invalid_event_wait_list"`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
--   `"misaligned_sub_buffer_offset"`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
--   `"exec_status_error_for_events_in_wait_list"`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for data storage associated with the buffer.
--   `"invalid_operation"`: If `clEnqueueReadBufferRect` is called on a buffer that has been created with `CL_MEM_HOST_WRITE_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The specified command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer are not the same, or the context associated with command queue and events in `event_wait_list` are not the same.
+-   `InvalidMemObject`: The specified buffer is not a valid buffer object.
+-   `InvalidValue`: The region being read or written specified by (buffer_origin, region, buffer_row_pitch, buffer_slice_pitch) is out of bounds. Any region array element is 0. The buffer row pitch is not 0 and is less than `region[0]`. The host row pitch is not 0 and is less than `region[0]`. The buffer slice pitch is not 0 and is less than `region[1] * buffer_row_pitch` and not a multiple of buffer row pitch. The host slice pitch is not 0 and is less than `region[1] * host_row_pitch` and not a multiple of host row pitch. If `ptr` is NULL.
+-   `InvalidEventWaitList`: The `event_wait_list` is NULL and `num_events_in_wait_list` > 0, or `event_wait_list` is not NULL and `num_events_in_wait_list` is 0, or if event objects in `event_wait_list` are not valid events.
+-   `MisalignedSubBufferOffset`: The buffer is a sub-buffer object, and the offset specified when the sub-buffer object is created is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN` value for the device associated with the queue.
+-   `ExecStatusErrorForEventsInWaitList`: If the read and write operations are blocking and the execution status of any of the events in `event_wait_list` is a negative integer value.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for data storage associated with the buffer.
+-   `InvalidOperation`: If `clEnqueueReadBufferRect` is called on a buffer that has been created with `CL_MEM_HOST_WRITE_ONLY` or `CL_MEM_HOST_NO_ACCESS`.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Fill Buffer
 
@@ -306,15 +306,15 @@ pub fn fill(
 
 The function uses Zig's error handling to manage potential OpenCL errors. If the call to `clEnqueueFillBuffer` does not return `CL_SUCCESS`, an error is raised. Possible errors include:
 
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer are not the same.
--   `"invalid_mem_object"`: The specified buffer is not valid.
--   `"invalid_value"`: If the offset and size require accessing elements outside the buffer or if `pattern` is `NULL` or `pattern_size` is 0 or not a power of two.
--   `"invalid_event_wait_list"`: If the event wait list is `NULL` and the number of events in the wait list is greater than zero, or if the event objects are not valid events.
--   `"misaligned_sub_buffer_offset"`: If the buffer is a sub-buffer object and its offset is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN`.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for the data store associated with the buffer.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The specified command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer are not the same.
+-   `InvalidMemObject`: The specified buffer is not valid.
+-   `InvalidValue`: If the offset and size require accessing elements outside the buffer or if `pattern` is `NULL` or `pattern_size` is 0 or not a power of two.
+-   `InvalidEventWaitList`: If the event wait list is `NULL` and the number of events in the wait list is greater than zero, or if the event objects are not valid events.
+-   `MisalignedSubBufferOffset`: If the buffer is a sub-buffer object and its offset is not aligned to `CL_DEVICE_MEM_BASE_ADDR_ALIGN`.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for the data store associated with the buffer.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Copying Buffers
 
@@ -351,16 +351,16 @@ pub fn copy(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueCopyBuffer` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_mem_object"`: The source or destination buffer is not a valid memory object.
--   `"invalid_value"`: The offset, size, or other parameter is invalid.
--   `"invalid_event_wait_list"`: The event wait list is invalid.
--   `"misaligned_sub_buffer_offset"`: A sub-buffer object is not aligned correctly.
--   `"mem_copy_overlap"`: The source and destination buffers overlap.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for the buffer objects.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_command_queue"`: The command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer objects is not valid or not the same.
+-   `InvalidMemObject`: The source or destination buffer is not a valid memory object.
+-   `InvalidValue`: The offset, size, or other parameter is invalid.
+-   `InvalidEventWaitList`: The event wait list is invalid.
+-   `MisalignedSubBufferOffset`: A sub-buffer object is not aligned correctly.
+-   `MemCopyOverlap`: The source and destination buffers overlap.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for the buffer objects.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer objects is not valid or not the same.
 
 ## Copying Rectangular Buffers
 
@@ -405,16 +405,16 @@ pub fn copyRect(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueCopyBufferRect` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: The command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer objects is not valid or not the same.
--   `"invalid_mem_object"`: The source or destination buffer is not a valid memory object.
--   `"invalid_value"`: The offset, size, or other parameter is invalid.
--   `"invalid_event_wait_list"`: The event wait list is invalid.
--   `"misaligned_sub_buffer_offset"`: A sub-buffer object is not aligned correctly.
--   `"mem_copy_overlap"`: The source and destination buffers overlap.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for the buffer objects.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer objects is not valid or not the same.
+-   `InvalidMemObject`: The source or destination buffer is not a valid memory object.
+-   `InvalidValue`: The offset, size, or other parameter is invalid.
+-   `InvalidEventWaitList`: The event wait list is invalid.
+-   `MisalignedSubBufferOffset`: A sub-buffer object is not aligned correctly.
+-   `MemCopyOverlap`: The source and destination buffers overlap.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for the buffer objects.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Mapping Buffers
 
@@ -454,17 +454,17 @@ pub fn map(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueMapBuffer` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: The command queue is not valid.
--   `"invalid_context"`: The context associated with the command queue and buffer objects is not valid or not the same.
--   `"invalid_mem_object"`: The buffer is not a valid memory object.
--   `"invalid_value"`: The offset, size, or map flags are invalid.
--   `"invalid_event_wait_list"`: The event wait list is invalid.
--   `"misaligned_sub_buffer_offset"`: A sub-buffer object is not aligned correctly.
--   `"mem_copy_overlap"`: The source and destination buffers overlap.
--   `"mem_object_allocation_failure"`: There is a failure to allocate memory for the buffer objects.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_operation"`: The map operation is invalid due to overlapping regions being mapped for writing or due to the buffer being created with certain flags.
+-   `InvalidCommandQueue`: The command queue is not valid.
+-   `InvalidContext`: The context associated with the command queue and buffer objects is not valid or not the same.
+-   `InvalidMemObject`: The buffer is not a valid memory object.
+-   `InvalidValue`: The offset, size, or map flags are invalid.
+-   `InvalidEventWaitList`: The event wait list is invalid.
+-   `MisalignedSubBufferOffset`: A sub-buffer object is not aligned correctly.
+-   `MemCopyOverlap`: The source and destination buffers overlap.
+-   `MemObjectAllocationFailure`: There is a failure to allocate memory for the buffer objects.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidOperation`: The map operation is invalid due to overlapping regions being mapped for writing or due to the buffer being created with certain flags.
 
 ## Unmapping Buffers
 
@@ -496,13 +496,13 @@ pub fn unmap(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueUnmapMemObject` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: The command queue is not valid.
--   `"invalid_mem_object"`: The buffer is not a valid memory object.
--   `"invalid_value"`: The mapped pointer is not a valid pointer returned by `clEnqueueMapBuffer` or `clEnqueueMapImage`.
--   `"invalid_event_wait_list"`: The event wait list is invalid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_context"`: The context associated with the command queue and buffer objects is not valid or not the same.
+-   `InvalidCommandQueue`: The command queue is not valid.
+-   `InvalidMemObject`: The buffer is not a valid memory object.
+-   `InvalidValue`: The mapped pointer is not a valid pointer returned by `clEnqueueMapBuffer` or `clEnqueueMapImage`.
+-   `InvalidEventWaitList`: The event wait list is invalid.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidContext`: The context associated with the command queue and buffer objects is not valid or not the same.
 
 ## Retaining a Memory Object
 
@@ -522,9 +522,9 @@ pub fn retain(buffer: Mem) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clRetainMemObject` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_mem_object"`: The buffer is not a valid memory object.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidMemObject`: The buffer is not a valid memory object.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Releasing a Memory Object
 

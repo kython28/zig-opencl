@@ -17,13 +17,13 @@ pub fn create(program: Program, kernel_name: []const u8) OpenCLError!Kernel;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateKernel` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_program"`: The program is not a valid program object.
--   `"invalid_program_executable"`: There is no successfully built executable for the program.
--   `"invalid_kernel_name"`: The kernel name is not found in the program.
--   `"invalid_kernel_definition"`: The function definition for the `__kernel` function given by kernel_name does not match for all devices for which the program executable has been built.
--   `"invalid_value"`: The kernel_name is null.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidProgram`: The program is not a valid program object.
+-   `InvalidProgramExecutable`: There is no successfully built executable for the program.
+-   `InvalidKernelName`: The kernel name is not found in the program.
+-   `InvalidKernelDefinition`: The function definition for the `__kernel` function given by kernel_name does not match for all devices for which the program executable has been built.
+-   `InvalidValue`: The kernel_name is null.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Setting a Kernel Argument
 
@@ -51,16 +51,16 @@ pub fn setArg(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clSetKernelArg` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_kernel"`: The kernel is not a valid kernel object.
--   `"invalid_arg_index"`: The arg_index is not a valid argument index.
--   `"invalid_arg_value"`: The arg_value specified is not a valid value.
--   `"invalid_mem_object"`: For an argument declared to be a memory object, the arg_value is not a valid memory object.
--   `"invalid_sampler"`: For an argument declared to be of type sampler_t, the arg_value is not a valid sampler object.
--   `"invalid_device_queue"`: For an argument declared to be of type queue_t, the arg_value is not a valid device queue object.
--   `"invalid_arg_size"`: The arg_size does not match the size of the data type for an argument that is not a memory object or if the argument is a memory object and arg_size is not equal to `sizeof(cl_mem)` or if arg_size is zero and the argument is declared with the `local` qualifier or if the argument is a sampler and arg_size is not equal to `sizeof(cl_sampler)`.
--   `"max_size_restriction_exceeded"`: The size in bytes of the memory object exceeds a language-specified maximum size restriction for this argument, such as the `MaxByteOffset` SPIR-V decoration.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidKernel`: The kernel is not a valid kernel object.
+-   `InvalidArgIndex`: The arg_index is not a valid argument index.
+-   `InvalidArgValue`: The arg_value specified is not a valid value.
+-   `InvalidMemObject`: For an argument declared to be a memory object, the arg_value is not a valid memory object.
+-   `InvalidSampler`: For an argument declared to be of type sampler_t, the arg_value is not a valid sampler object.
+-   `InvalidDeviceQueue`: For an argument declared to be of type queue_t, the arg_value is not a valid device queue object.
+-   `InvalidArgSize`: The arg_size does not match the size of the data type for an argument that is not a memory object or if the argument is a memory object and arg_size is not equal to `sizeof(cl_mem)` or if arg_size is zero and the argument is declared with the `local` qualifier or if the argument is a sampler and arg_size is not equal to `sizeof(cl_sampler)`.
+-   `MaxSizeRestrictionExceeded`: The size in bytes of the memory object exceeds a language-specified maximum size restriction for this argument, such as the `MaxByteOffset` SPIR-V decoration.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Enqueueing ND Range
 
@@ -94,24 +94,24 @@ pub fn enqueueNdRange(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clEnqueueNDRangeKernel` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_program_executable"`: No successfully built program executable available.
--   `"invalid_command_queue"`: Invalid host command-queue.
--   `"invalid_kernel"`: Invalid kernel object.
--   `"invalid_context"`: Context associated with `command_queue` and `kernel` are not the same.
--   `"invalid_kernel_args"`: Kernel argument values not specified.
--   `"invalid_work_dimension"`: Invalid work dimension.
--   `"invalid_global_work_size"`: Global work size is null or has an invalid value.
--   `"invalid_global_offset"`: Global offset is invalid.
--   `"invalid_work_group_size"`: Local work size is invalid or not consistent.
--   `"invalid_work_item_size"`: Number of work-items specified in any dimension is greater than the corresponding value specified by `CL_DEVICE_MAX_WORK_ITEM_SIZES`.
--   `"misaligned_sub_buffer_offset"`: Offset specified is not aligned.
--   `"invalid_image_size"`: Image size specified is not supported.
--   `"image_format_not_supported"`: Image format specified is not supported.
--   `"out_of_resources"`: Insufficient resources to execute the kernel.
--   `"mem_object_allocation_failure"`: Failure to allocate memory.
--   `"invalid_event_wait_list"`: Event wait list is invalid.
--   `"invalid_operation"`: Invalid operation.
--   `"out_of_host_memory"`: Failure to allocate resources on the host.
+-   `InvalidProgramExecutable`: No successfully built program executable available.
+-   `InvalidCommandQueue`: Invalid host command-queue.
+-   `InvalidKernel`: Invalid kernel object.
+-   `InvalidContext`: Context associated with `command_queue` and `kernel` are not the same.
+-   `InvalidKernelArgs`: Kernel argument values not specified.
+-   `InvalidWorkDimension`: Invalid work dimension.
+-   `InvalidGlobalWorkSize`: Global work size is null or has an invalid value.
+-   `InvalidGlobalOffset`: Global offset is invalid.
+-   `InvalidWorkGroupSize`: Local work size is invalid or not consistent.
+-   `InvalidWorkItemSize`: Number of work-items specified in any dimension is greater than the corresponding value specified by `CL_DEVICE_MAX_WORK_ITEM_SIZES`.
+-   `MisalignedSubBufferOffset`: Offset specified is not aligned.
+-   `InvalidImageSize`: Image size specified is not supported.
+-   `ImageFormatNotSupported`: Image format specified is not supported.
+-   `OutOfResources`: Insufficient resources to execute the kernel.
+-   `MemObjectAllocationFailure`: Failure to allocate memory.
+-   `InvalidEventWaitList`: Event wait list is invalid.
+-   `InvalidOperation`: Invalid operation.
+-   `OutOfHostMemory`: Failure to allocate resources on the host.
 
 ## Retaining a Kernel
 
@@ -131,9 +131,9 @@ pub fn retain(kernel: Kernel) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clRetainKernel` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_kernel"`: The kernel object is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidKernel`: The kernel object is not valid.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Releasing a Kernel
 

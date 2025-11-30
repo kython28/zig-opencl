@@ -18,12 +18,12 @@ pub fn create(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateCommandQueue` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: Values specified in properties are not valid.
--   `"invalid_context"`: If context is not a valid context.
--   `"invalid_device"`: If device is not a valid device or is not associated with context.
--   `"invalid_queue_properties"`: If values specified in properties are valid but are not supported by the device.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidValue`: Values specified in properties are not valid.
+-   `InvalidContext`: If context is not a valid context.
+-   `InvalidDevice`: If device is not a valid device or is not associated with context.
+-   `InvalidQueueProperties`: If values specified in properties are valid but are not supported by the device.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Create a command queue with properties
 
@@ -47,12 +47,12 @@ pub fn createWithProperties(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateCommandQueueWithProperties` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: Values specified in properties are not valid.
--   `"invalid_context"`: Context is not a valid context.
--   `"invalid_device"`: Device is not a valid device or is not associated with context.
--   `"invalid_queue_properties"`: Values specified in properties are valid but are not supported by the device.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidValue`: Values specified in properties are not valid.
+-   `InvalidContext`: Context is not a valid context.
+-   `InvalidDevice`: Device is not a valid device or is not associated with context.
+-   `InvalidQueueProperties`: Values specified in properties are valid but are not supported by the device.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Flush a Command Queue
 
@@ -70,9 +70,9 @@ pub fn flush(command_queue: CommandQueue) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clFlush` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_command_queue"`: If `command_queue` is not a valid host command-queue.
--   `"out_of_resources"`: If there is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: If there is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: If `command_queue` is not a valid host command-queue.
+-   `OutOfResources`: If there is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: If there is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Waiting for Command Queue to Finish
 
@@ -92,9 +92,9 @@ pub fn finish(command_queue: CommandQueue) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clFinish` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The specified command queue is not valid.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
 
 ## Retaining a Command Queue
 
@@ -114,9 +114,9 @@ pub fn retain(command_queue: CommandQueue) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clRetainCommandQueue` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_command_queue"`: The specified command queue is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidCommandQueue`: The specified command queue is not valid.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
 
 ## Releasing a Command Queue
 

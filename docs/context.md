@@ -24,13 +24,13 @@ pub fn create(
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateContext` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The devices list is `null`, the num_devices is zero, or pfn_notify is `null` but user_data is not `null`.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_platform"`: The specified platform is not valid or not specified.
--   `"device_not_available"`: A device in the devices list is currently not available.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"invalid_property"`: The value for a supported property name is not valid, or if the same property name is specified more than once.
--   `"invalid_device"`: Any device in the devices list is not a valid device.
+-   `InvalidValue`: The devices list is `null`, the num_devices is zero, or pfn_notify is `null` but user_data is not `null`.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidPlatform`: The specified platform is not valid or not specified.
+-   `DeviceNotAvailable`: A device in the devices list is currently not available.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `InvalidProperty`: The value for a supported property name is not valid, or if the same property name is specified more than once.
+-   `InvalidDevice`: Any device in the devices list is not a valid device.
 
 ## Creating Context from Type
 
@@ -61,14 +61,14 @@ For a full list of the enum members, refer to the OpenCL PDF documentation or th
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clCreateContextFromType` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_platform"`: No platform is specified in properties and no platform could be selected, or if the platform specified in properties is not a valid platform.
--   `"invalid_property"`: A context property name in properties is not a supported property name, if the value specified for a supported property name is not valid, or if the same property name is specified more than once.
--   `"invalid_value"`: If `pfn_notify` is `null` but `user_data` is not `null`.
--   `"invalid_device_type"`: If `device_type` is not a valid value.
--   `"device_not_available"`: If no devices that match `device_type` and property values specified in properties are currently available.
--   `"device_not_found"`: If no devices that match `device_type` and property values specified in properties were found.
--   `"out_of_resources"`: If there is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: If there is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidPlatform`: No platform is specified in properties and no platform could be selected, or if the platform specified in properties is not a valid platform.
+-   `InvalidProperty`: A context property name in properties is not a supported property name, if the value specified for a supported property name is not valid, or if the same property name is specified more than once.
+-   `InvalidValue`: If `pfn_notify` is `null` but `user_data` is not `null`.
+-   `InvalidDeviceType`: If `device_type` is not a valid value.
+-   `DeviceNotAvailable`: If no devices that match `device_type` and property values specified in properties are currently available.
+-   `DeviceNotFound`: If no devices that match `device_type` and property values specified in properties were found.
+-   `OutOfResources`: If there is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: If there is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Getting Context Information
 
@@ -101,10 +101,10 @@ For a full list of the enum members, refer to the OpenCL PDF documentation or th
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clGetContextInfo` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The function was called with invalid parameters.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_context"`: The specified context is not valid.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `InvalidValue`: The function was called with invalid parameters.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidContext`: The specified context is not valid.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
 
 ### Retain a context
 
@@ -120,9 +120,9 @@ pub fn retain(context: Context) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clRetainContext` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_context"`: If the specified context is not a valid OpenCL context.
--   `"out_of_resources"`: If there is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: If there is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidContext`: If the specified context is not a valid OpenCL context.
+-   `OutOfResources`: If there is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: If there is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Releasing a context
 

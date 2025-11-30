@@ -16,12 +16,12 @@ pub fn waitForMany(events: []const Event) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clWaitForEvents` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The number of events is zero or the event list is null.
--   `"invalid_context"`: Events specified in the event list do not belong to the same context.
--   `"invalid_event"`: Event objects specified in the event list are not valid event objects.
--   `"exec_status_error_for_events_in_wait_list"`: The execution status of any of the events in the event list is a negative integer value (this error code is missing before version 1.1).
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidValue`: The number of events is zero or the event list is null.
+-   `InvalidContext`: Events specified in the event list do not belong to the same context.
+-   `InvalidEvent`: Event objects specified in the event list are not valid event objects.
+-   `ExecStatusErrorForEventsInWaitList`: The execution status of any of the events in the event list is a negative integer value (this error code is missing before version 1.1).
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Waiting for a Single Event
 
@@ -41,12 +41,12 @@ pub fn wait(event: Event) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clWaitForEvents` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The number of events is zero or the event list is null.
--   `"invalid_context"`: The event does not belong to the same context.
--   `"invalid_event"`: The event object is not a valid event object.
--   `"exec_status_error_for_events_in_wait_list"`: The execution status of the event is a negative integer value (this error code is missing before version 1.1).
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidValue`: The number of events is zero or the event list is null.
+-   `InvalidContext`: The event does not belong to the same context.
+-   `InvalidEvent`: The event object is not a valid event object.
+-   `ExecStatusErrorForEventsInWaitList`: The execution status of the event is a negative integer value (this error code is missing before version 1.1).
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Retaining an Event
 
@@ -66,9 +66,9 @@ pub fn retain(event: Event) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clRetainEvent` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_event"`: The event is not a valid event object.
--   `"out_of_resources"`: There is a failure to allocate resources required by the OpenCL implementation on the device.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidEvent`: The event is not a valid event object.
+-   `OutOfResources`: There is a failure to allocate resources required by the OpenCL implementation on the device.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Releasing an Event
 

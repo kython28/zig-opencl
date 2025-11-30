@@ -14,8 +14,8 @@ pub fn getIds(platforms: ?[]PlatformId, num_platforms: ?*u32) OpenCLError!void;
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clGetPlatformIDs` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The function was called with invalid parameters.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidValue`: The function was called with invalid parameters.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
 
 ## Querying Platform Info
 
@@ -47,9 +47,9 @@ For a full list of the enum members, refer to the OpenCL PDF documentation or th
 
 The function uses Zig's error handling features to manage potential OpenCL errors. If the function call to `clGetPlatformInfo` does not return `CL_SUCCESS`, an error is thrown. Possible errors include:
 
--   `"invalid_value"`: The function was called with invalid parameters.
--   `"out_of_host_memory"`: There is a failure to allocate resources required by the OpenCL implementation on the host.
--   `"invalid_platform"`: The specified platform is not valid.
+-   `InvalidValue`: The function was called with invalid parameters.
+-   `OutOfHostMemory`: There is a failure to allocate resources required by the OpenCL implementation on the host.
+-   `InvalidPlatform`: The specified platform is not valid.
 
 ## Getting All Platforms
 
